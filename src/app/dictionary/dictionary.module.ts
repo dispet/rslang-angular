@@ -4,9 +4,11 @@ import {HardWordsComponent} from './hard-words';
 import {DeletedWordsComponent} from './deleted-words';
 import {DictionaryComponent} from "./dictionary.component";
 import {DictionaryRoutingModule} from "./dictionary-routing.module";
+import {SharedModule} from "../shared/shared.module";
 
 @NgModule({
   imports: [
+    SharedModule,
     DictionaryRoutingModule
   ],
   declarations: [
