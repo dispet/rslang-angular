@@ -1,7 +1,7 @@
 import {NgModule} from "@angular/core";
-import {WordsInLearningComponent} from './words-in-learning/words-in-learning.component';
-import {HardWordsComponent} from './hard-words/hard-words.component';
-import {DeletedWordsComponent} from './deleted-words/deleted-words.component';
+import {WordsInLearningComponent} from './words-in-learning';
+import {HardWordsComponent} from './hard-words';
+import {DeletedWordsComponent} from './deleted-words';
 import {DictionaryComponent} from "./dictionary.component";
 import {DictionaryRoutingModule} from "./dictionary-routing.module";
 
