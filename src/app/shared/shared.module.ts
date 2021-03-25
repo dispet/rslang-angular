@@ -4,10 +4,10 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {RouterModule} from "@angular/router";
 import {MaterialModule} from "../material";
 import {HttpClientModule} from "@angular/common/http";
-import { MainLayoutComponent } from './components/main-layout/main-layout.component';
-import { HeaderComponent } from './components/header/header.component';
-import { FooterComponent } from './components/footer/footer.component';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import {MainLayoutComponent} from './components/';
+import {HeaderComponent} from './components';
+import {FooterComponent} from './components';
+import {PageNotFoundComponent} from './components';
 
 @NgModule({
   imports: [
@@ -18,7 +18,11 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
     RouterModule,
     HttpClientModule
   ],
-  declarations: [MainLayoutComponent, HeaderComponent, FooterComponent, PageNotFoundComponent],
+  declarations: [
+    MainLayoutComponent,
+    HeaderComponent,
+    FooterComponent,
+    PageNotFoundComponent],
   exports: [
     CommonModule,
     RouterModule,
@@ -29,4 +33,5 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
   ],
   providers: []
 })
-export class SharedModule {}
+export class SharedModule {
+}
