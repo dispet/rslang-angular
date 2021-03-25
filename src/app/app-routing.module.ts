@@ -2,12 +2,16 @@ import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 import {ElectronicTextbookComponent} from "./electronic-textbook/electronic-textbook.component";
 import {LoginComponent} from "./auth/login";
-import {RegisterComponent} from "./auth/register";
+import {MainLayoutComponent} from "./shared/components/main-layout/main-layout.component";
+import {RegistrationComponent} from "./auth/registration";
 
 const appRoutes: Routes = [
   {
     path: '',
-    component: ElectronicTextbookComponent, // main component
+    component: MainLayoutComponent, children: [ // main component
+      {path: '', redirectTo: '/', pathMatch: 'full'},
+      {path: '', component: ElectronicTextbookComponent},
+    ]
   },
   {
     path: 'login',
@@ -15,7 +19,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'registration',
-    component: RegisterComponent
+    component: RegistrationComponent,
   }
 ];
 

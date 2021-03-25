@@ -4,6 +4,10 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {RouterModule} from "@angular/router";
 import {MaterialModule} from "../material";
 import {HttpClientModule} from "@angular/common/http";
+import { MainLayoutComponent } from './components/main-layout/main-layout.component';
+import { HeaderComponent } from './components/header/header.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 @NgModule({
   imports: [
@@ -14,7 +18,7 @@ import {HttpClientModule} from "@angular/common/http";
     RouterModule,
     HttpClientModule
   ],
-  declarations: [],
+  declarations: [MainLayoutComponent, HeaderComponent, FooterComponent, PageNotFoundComponent],
   exports: [
     CommonModule,
     RouterModule,
