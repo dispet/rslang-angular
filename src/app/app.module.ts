@@ -9,6 +9,7 @@ import {SharedModule} from "./shared/shared.module";
 import {ElectronicTextbookComponent} from './electronic-textbook';
 import {LoginComponent} from './auth/login';
 import {RegistrationComponent} from './auth/registration';
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import {RegistrationComponent} from './auth/registration';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     AppRoutingModule,
     DictionaryModule,
     SharedModule,

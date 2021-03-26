@@ -29,7 +29,6 @@ import {PageNotFoundComponent} from './components';
     FormsModule,
     ReactiveFormsModule,
     MaterialModule,
-    HttpClientModule,
   ],
   providers: []
 })
