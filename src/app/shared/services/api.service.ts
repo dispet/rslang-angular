@@ -73,7 +73,7 @@ export class ApiService {
   }
 
   setUserSettings(settings: IUserSetting): Observable<IUserSetting> {
-    return this.http.put<IUserSetting>(`${this.url}/users/${this.id}/settings`, settings);
+    return this.http.post<IUserSetting>(`${this.url}/users/${this.id}/settings`, settings);
   }
 
   setUserId(id: string): void {
