@@ -3,8 +3,8 @@ import {Routes, RouterModule} from '@angular/router';
 import {ElectronicTextbookComponent} from "./electronic-textbook";
 import {LoginComponent} from "./auth/login";
 import {RegistrationComponent} from "./auth";
-import {MainLayoutComponent} from "./shared/";
-import {PageNotFoundComponent} from "./shared/components/page-not-found";
+import {MainLayoutComponent} from "./core/";
+import {PageNotFoundComponent} from "./core";
 
 const appRoutes: Routes = [
   {
