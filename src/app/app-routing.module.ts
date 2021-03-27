@@ -5,6 +5,7 @@ import {LoginComponent} from "./auth/login";
 import {RegistrationComponent} from "./auth";
 import {MainLayoutComponent} from "./core/";
 import {PageNotFoundComponent} from "./core";
+import { HomePageComponent } from './home-page';
 
 const appRoutes: Routes = [
   {
@@ -20,7 +21,7 @@ const appRoutes: Routes = [
     component: MainLayoutComponent, children: [
       {
         path: '',
-        component: ElectronicTextbookComponent
+        component: HomePageComponent
       }
     ]
   },
