@@ -14,8 +14,8 @@ export class TokenInterceptor implements HttpInterceptor {
   constructor(
     private auth: AuthService,
     private router: Router,
-    private localData: LocalStorageService,
-    private userBlockService: UserService,
+    private localStorageSevice: LocalStorageService,
+    private userService: UserService,
     private apiService: ApiService,
   ) {
   }
@@ -26,7 +26,7 @@ export class TokenInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
 
     if (this.auth.isAuthenticated()) {
-      const userId = this.localData.getUserId();
+      const userId = this.localStorageSevice.getUserId();
       if (req.url.includes(`/users/${userId}/tokens`)) {
         req = this.addToken(req, this.auth.getRefreshToken());
       } else {
@@ -71,9 +71,9 @@ export class TokenInterceptor implements HttpInterceptor {
       this.auth.setToken(null);
       this.auth.setRefreshToken(null);
       this.apiService.setUserId(null);
-      this.localData.clearAuthData();
-      this.userBlockService.setUser(null);
-      this.localData.deleteUser();
+      this.localStorageSevice.clearAuthData();
+      this.userService.setUser(null);
+      this.localStorageSevice.deleteUser();
       const queryParam =
         err.status === Errors.TOKEN_EXPIRED ? 'sessionFailed' : 'accessDenied';
       const queryParams = {};
