@@ -17,7 +17,6 @@ import { HomePageComponent } from './home-page';
 import { MiniGamesComponent } from './mini-games';
 import { StatisticsComponent } from './statistics';
 import { AboutUsComponent } from './about-us/about-us.component';
-
 @NgModule({
   declarations: [
     AppComponent,
