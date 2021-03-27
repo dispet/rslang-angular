@@ -17,7 +17,12 @@ const appRoutes: Routes = [
   },
   {
     path: '',
-    component: MainLayoutComponent,
+    component: MainLayoutComponent, children: [
+      {
+        path: '',
+        component: ElectronicTextbookComponent
+      }
+    ]
   },
   {
     path: '**',
