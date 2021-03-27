@@ -1,6 +1,84 @@
-import {Injectable} from "@angular/core";
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Router} from '@angular/router';
+import {Observable} from 'rxjs';
+import {tap} from 'rxjs/operators';
+import {LocalStorageService} from './localStorage.service';
+import {UserService} from './user.service';
+import {ApiService} from './api.service';
+import {ILoginResponse, IRefreshTokenResponse, IUserCreate, IUserCreateResponse} from '../models';
+import {API_URL} from '../constants'
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class AuthService {}
+export class AuthService {
+  private url = API_URL;
+  private token = null;
+  private refreshToken = null;
+
+  constructor(
+    private http: HttpClient,
+    private localStore: LocalStorageService,
+    private userService: UserService,
+    private router: Router,
+    private apiService: ApiService,
+  ) {
+  }
+
+  login(user: ILoginResponse): Observable<ILoginResponse> {
+    return this.http.post<ILoginResponse>(`${this.url}/signin`, user).pipe(
+      tap(({refreshToken, token, userId}) => {
+        this.localStore.setAuthData({refreshToken, token, userId});
+        this.setToken(token);
+        this.setRefreshToken(refreshToken);
+        this.apiService.setUserId(userId);
+      })
+    );
+  }
+
+  register(user: IUserCreate): Observable<IUserCreateResponse> {
+    return this.http.post<IUserCreateResponse>(`${this.url}/users`, user);
+  }
+
+  updateTokens(): Observable<IRefreshTokenResponse> {
+    const userId = this.localStore.getUserId();
+    return this.http.get<IRefreshTokenResponse>(`${this.url}/users/${userId}/tokens`).pipe(
+      tap(({refreshToken, token}) => {
+        this.localStore.setAuthData({refreshToken, token, userId});
+        this.setToken(token);
+        this.setRefreshToken(refreshToken);
+      })
+    );
+  }
+
+  isAuthenticated(): boolean {
+    return Boolean(this.token);
+  }
+
+  setToken(token): void {
+    this.token = token;
+  }
+
+  getToken(): string {
+    return this.token;
+  }
+
+  setRefreshToken(refreshToken): void {
+    this.refreshToken = refreshToken;
+  }
+
+  getRefreshToken(): string {
+    return this.refreshToken;
+  }
+
+  logout(): void {
+    this.setToken(null);
+    this.setRefreshToken(null);
+    this.userService.setUser(null);
+    this.apiService.setUserId(null);
+    this.localStore.deleteUser();
+    this.localStore.clearAuthData();
+    this.router.navigate(['/login']);
+  }
+}
