@@ -11,6 +11,7 @@ import {LoginComponent} from './auth/login';
 import {RegistrationComponent} from './auth/registration';
 import {HttpClientModule} from "@angular/common/http";
 import {CoreModule} from "./core";
+import { HomePageComponent } from './home-page/home-page.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import {CoreModule} from "./core";
     ElectronicTextbookComponent,
     LoginComponent,
     RegistrationComponent,
+    HomePageComponent,
   ],
   imports: [
     BrowserModule,
