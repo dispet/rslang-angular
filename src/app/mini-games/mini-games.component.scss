@@ -1,7 +1,8 @@
-.text-book {
+.mini-games {
   height: 84%;
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
 
   mat-card {
     align-self: center;
@@ -29,7 +30,7 @@
 }
 
 @media screen and (max-width: 800px) {
-  .text-book {
+  .mini-games {
     height: unset;
     min-height: 84%;
     flex-direction: column;

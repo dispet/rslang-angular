@@ -6,6 +6,9 @@ import {RegistrationComponent} from "./auth";
 import {MainLayoutComponent} from "./core/";
 import {PageNotFoundComponent} from "./core";
 import { HomePageComponent } from './home-page';
+import { MiniGamesComponent } from './mini-games';
+import { StatisticsComponent } from './statistics';
+import { AboutUsComponent } from './about-us/about-us.component';
 
 const appRoutes: Routes = [
   {
@@ -21,9 +24,9 @@ const appRoutes: Routes = [
     component: MainLayoutComponent, children: [
       {path: '', component: HomePageComponent},
       {path: 'text-book', component: ElectronicTextbookComponent},
-      // {path: 'mini-games', component: MiniGamesComponent},
-      // {path: 'statistics', component: StatisticsComponent},
-      // {path: 'about-us', component: AboutUsComponent},
+      {path: 'mini-games', component: MiniGamesComponent},
+      {path: 'statistics', component: StatisticsComponent},
+      {path: 'about-us', component: AboutUsComponent}
     ]
   },
   {
