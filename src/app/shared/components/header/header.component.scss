@@ -1,9 +1,18 @@
 mat-toolbar {
-  height: auto;
+  height: 6%;
 
   .logo {
     display: inline;
     margin-right: 1rem;
+    outline: none;
+    cursor: pointer;
+  }
+  .logo:hover {
+    transform: scale(1.05);
+  }
+
+  .example-spacer {
+    flex: 1 1 auto;
   }
 
   mat-nav-list {
@@ -11,8 +20,8 @@ mat-toolbar {
     flex-direction: row;
   }
 
-  mat-list-item {
-    word-wrap: normal;
+  mat-icon:hover {
+    transform: scale(1.05);
   }
 }
 

@@ -1,7 +1,13 @@
-mat-list-item {
-  height: auto;
-}
+.home-page {
+  min-height: 84%;
+  padding: 1rem 2rem;
+  box-sizing: border-box;
 
-.app-demostration {
-  background-color: rgb(223, 223, 223);
+  mat-list-item {
+    height: auto;
+  }
+
+  .app-demostration {
+    background-color: rgb(223, 223, 223);
+  }
 }
