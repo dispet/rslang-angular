@@ -2,6 +2,7 @@
   height: 84%;
   display: flex;
   justify-content: center;
+  background: linear-gradient(to top, #5433ff, #20bdff, #a5fecb);
 
   mat-card {
     align-self: center;
@@ -9,6 +10,7 @@
     margin: 1rem;
     display: flex;
     flex-direction: column;
+    border-radius: 1rem;
 
     &-header {
       align-self: center;
@@ -24,7 +26,7 @@
     }
   }
   mat-card:hover {
-    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    box-shadow: rgba(5, 5, 5, 0.2) 0px 8px 24px;
   }
 }
 
