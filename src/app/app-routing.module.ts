@@ -19,10 +19,11 @@ const appRoutes: Routes = [
   {
     path: '',
     component: MainLayoutComponent, children: [
-      {
-        path: '',
-        component: HomePageComponent
-      }
+      {path: '', component: HomePageComponent},
+      {path: 'text-book', component: ElectronicTextbookComponent},
+      // {path: 'mini-games', component: MiniGamesComponent},
+      // {path: 'statistics', component: StatisticsComponent},
+      // {path: 'about-us', component: AboutUsComponent},
     ]
   },
   {
