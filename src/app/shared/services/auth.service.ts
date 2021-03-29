@@ -26,7 +26,7 @@ export class AuthService {
   ) {
   }
 
-  login(user: ILoginResponse): Observable<ILoginResponse> {
+  login(user: IUserCreate): Observable<ILoginResponse> {
     return this.http.post<ILoginResponse>(`${this.url}/signin`, user).pipe(
       tap(({refreshToken, token, userId}) => {
         this.localStorageSevice.setAuthData({refreshToken, token, userId});
