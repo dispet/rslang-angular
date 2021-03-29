@@ -37,3 +37,11 @@
     flex-direction: column;
   }
 }
+
+@media screen and (max-width: 800px) {
+  .text-book {
+    height: unset;
+    min-height: 84%;
+    flex-direction: column;
+  }
+}
