@@ -19,7 +19,7 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private localStorageSevice: LocalStorageService,
+    private localStorageService: LocalStorageService,
     private userService: UserService,
     private router: Router,
     private apiService: ApiService,
@@ -29,7 +29,7 @@ export class AuthService {
   login(user: IUserCreate): Observable<ILoginResponse> {
     return this.http.post<ILoginResponse>(`${this.url}/signin`, user).pipe(
       tap(({refreshToken, token, userId}) => {
-        this.localStorageSevice.setAuthData({refreshToken, token, userId});
+        this.localStorageService.setAuthData({refreshToken, token, userId});
         this.setToken(token);
         this.setRefreshToken(refreshToken);
         this.apiService.setUserId(userId);
@@ -42,10 +42,10 @@ export class AuthService {
   }
 
   updateTokens(): Observable<IRefreshTokenResponse> {
-    const userId = this.localStorageSevice.getUserId();
+    const userId = this.localStorageService.getUserId();
     return this.http.get<IRefreshTokenResponse>(`${this.url}/users/${userId}/tokens`).pipe(
       tap(({refreshToken, token}) => {
-        this.localStorageSevice.setAuthData({refreshToken, token, userId});
+        this.localStorageService.setAuthData({refreshToken, token, userId});
         this.setToken(token);
         this.setRefreshToken(refreshToken);
       })
@@ -77,8 +77,8 @@ export class AuthService {
     this.setRefreshToken(null);
     this.userService.setUser(null);
     this.apiService.setUserId(null);
-    this.localStorageSevice.deleteUser();
-    this.localStorageSevice.clearAuthData();
+    this.localStorageService.deleteUser();
+    this.localStorageService.clearAuthData();
     this.router.navigate(['/login']);
   }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Params, Router} from "@angular/router";
-import {AuthService} from "../../shared/services/auth.service";
+import {AuthService} from "../../shared/services";
 import {IUserCreate} from "../../shared/models";
 
 @Component({
@@ -62,7 +62,6 @@ export class LoginComponent implements OnInit {
     // clean form fields and redirect to admin page
     this.auth.login(user).subscribe(() => {
         this.form.reset();
-        this.router.navigate(['/admin', 'dashboard']);
         this.submitted = false;
       },
       () => this.submitted = false);
