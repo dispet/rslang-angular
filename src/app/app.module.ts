@@ -12,6 +12,9 @@ import {RegistrationComponent} from './auth/registration';
 import {HttpClientModule} from "@angular/common/http";
 import {CoreModule} from "./core";
 import { HomePageComponent } from './home-page/home-page.component';
+import { MiniGamesComponent } from './mini-games/mini-games.component';
+import { StatisticsComponent } from './statistics/statistics.component';
+import { AboutUsComponent } from './about-us/about-us.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +23,9 @@ import { HomePageComponent } from './home-page/home-page.component';
     LoginComponent,
     RegistrationComponent,
     HomePageComponent,
+    MiniGamesComponent,
+    StatisticsComponent,
+    AboutUsComponent,
   ],
   imports: [
     BrowserModule,
