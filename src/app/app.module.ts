@@ -9,6 +9,7 @@ import {SharedModule, TokenInterceptor} from "./shared";
 import {ElectronicTextbookComponent} from './electronic-textbook';
 import {LoginComponent} from './auth';
 import {RegistrationComponent} from './auth';
+import {CoreModule} from "./core";
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import {RegistrationComponent} from './auth';
     AppRoutingModule,
     DictionaryModule,
     SharedModule,
+    CoreModule,
   ],
   providers: [{provide: HTTP_INTERCEPTORS, multi: true, useClass: TokenInterceptor}],
   bootstrap: [AppComponent]
