@@ -13,9 +13,9 @@ import {API_URL} from '../constants'
   providedIn: 'root',
 })
 export class AuthService {
-  private url = API_URL;
-  private token = null;
-  private refreshToken = null;
+  private url: string = API_URL;
+  private token: string = '';
+  private refreshToken: string = '';
 
   constructor(
     private http: HttpClient,
