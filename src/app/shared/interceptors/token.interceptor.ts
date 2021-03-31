@@ -37,7 +37,6 @@ export class TokenInterceptor implements HttpInterceptor {
         const tokenPayload: ITokenPayload = JSON.parse(atob(token.match(/\..+\./)[0].slice(1, -1)));
         const tokenExpDate: number = tokenPayload.exp;
         const minutesLeft: number = (tokenExpDate - Date.now() / 1000) / 60;
-
         if (minutesLeft < 120 && !this.isRefreshing) {
           this.isRefreshing = true;
           return this.auth.updateTokens().pipe(

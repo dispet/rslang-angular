@@ -29,10 +29,13 @@ export class AppComponent implements OnInit {
     const refreshToken = this.localStore.getRefreshToken();
     const user = this.localStore.getUser();
     const userId = this.localStore.getUserId();
-    // this.auth.register({ "email": "hello@user.com", "password": "Gfhjkm_123" })
+    // this.auth.register({ "email": "hello1@user.com", "password": "wGfhjkm_123" })
     //   .subscribe((user) => console.log('register ',user));
-    this.auth.login({ "email": "hello@user.com", "password": "Gfhjkm_123" })
-      .subscribe((user) => console.log('login ',user));
+    //  this.auth.login({ "email": "hello1@user.com", "password": "wGfhjkm_123" })
+    //    .subscribe((user) => {console.log('login ',user)
+    //     this.apiService.getWords(0,0).subscribe((words)=>console.log('words ',words))
+    //    });
+
     if (token) {
       this.auth.setToken(token);
     }

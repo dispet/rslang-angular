@@ -8,7 +8,7 @@ import {IUser} from '../models';
 export class UserService {
   updateUser: EventEmitter<IUser> = new EventEmitter<IUser>();
 
-  public setUser(user: IUser) {
+  setUser(user: IUser): void {
     this.updateUser.emit(user);
   }
 }

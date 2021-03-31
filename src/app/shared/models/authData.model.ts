@@ -1,5 +1,5 @@
 export interface IAuthData {
-  token: string | null;
-  userId: string | null;
-  refreshToken: string | null;
+  token: string;
+  userId: string;
+  refreshToken: string;
 }
