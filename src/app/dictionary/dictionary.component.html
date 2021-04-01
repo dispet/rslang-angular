@@ -1,1 +1,37 @@
-<p>dictionary works!</p>
+<mat-button-toggle-group name="dictionarySection" aria-label="">
+  <mat-button-toggle value="app-words-in-learning"
+    >Изучаемые слоав</mat-button-toggle
+  >
+  <mat-button-toggle value="app-hard-words">Сложные слова</mat-button-toggle>
+  <mat-button-toggle value="app-deleted-words"
+    >Удаленный слова</mat-button-toggle
+  >
+</mat-button-toggle-group>
+
+<div *ngIf="dictionarySection === 'app-words-in-learning'">
+  <app-words-in-learning></app-words-in-learning>
+</div>
+
+<div *ngIf="dictionarySection === 'app-hard-words'">
+  <app-hard-words></app-hard-words>
+</div>
+
+<div *ngIf="dictionarySection === 'app-deleted-words'">
+  <app-deleted-words></app-deleted-words>
+</div>
+
+<app-footer></app-footer>
+<!-- <mat-list>
+  <mat-list-item *ngFor="let item of array">
+    {{ item.word }}
+  </mat-list-item>
+</mat-list>
+
+<mat-list>
+  <mat-list-item *ngFor="let item of array">
+    {{ item.word }}
+    <button mat-icon-button (click)="showInfo(link)">
+      <mat-icon>info</mat-icon>
+    </button>
+  </mat-list-item>
+</mat-list> -->

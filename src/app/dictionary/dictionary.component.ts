@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DictionaryComponent implements OnInit {
 
+  dictionarySection = 'app-words-in-learning';
+
   constructor() { }
 
   ngOnInit(): void {

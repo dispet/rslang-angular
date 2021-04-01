@@ -1,1 +1,26 @@
-<p>deleted-words works!</p>
+<div>
+  <mat-list>
+    <mat-list-item *ngFor="let item of array">
+      <mat-icon mat-list-icon>volume_up</mat-icon>
+      <span style="flex-grow: 1">
+        {{ item.word }}
+      </span>
+      <button mat-icon-button (click)="restore(item)">
+        <mat-icon>restore_from_trash</mat-icon>
+      </button>
+      <img matListAvatar src="item.image" alt="{{ item.word }}" />
+      <p matLine>
+        <span>{{ item.transcription }}</span
+        >;
+        <span>{{ item.translate }}</span>
+      </p>
+      <p matLine>
+        <span>{{ item.meaning }}</span> -
+        <span>{{ item.translateMeaning }}</span>
+      </p>
+      <p matLine>
+        {{ item.learningResults }}
+      </p>
+    </mat-list-item>
+  </mat-list>
+</div>
