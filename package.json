@@ -6,9 +6,11 @@
 		"start": "ng serve",
 		"build": "ng build",
 		"test": "ng test",
-		"lint": "ng lint",
+		"lint": "lint-staged",
 		"e2e": "ng e2e",
-		"pretty-quick": "pretty-quick --staged"
+		"pretty-quick": "pretty-quick --staged",
+		"lint-css": "stylelint src/**/*css",
+		"postinstall": "husky install"
 	},
 	"private": true,
 	"dependencies": {
@@ -28,6 +30,7 @@
 		"@ngrx/router-store": "^9.2.0",
 		"@ngrx/store": "^9.2.0",
 		"@ngrx/store-devtools": "^9.2.0",
+		"ng-lint-staged": "^0.1.6",
 		"rxjs": "~6.6.0",
 		"tslib": "^2.0.0",
 		"zone.js": "~0.10.2"
@@ -66,6 +69,10 @@
 		"pretty-quick": "^3.1.0",
 		"protractor": "~7.0.0",
 		"simple-git-hooks": "^2.2.0",
+		"stylelint": "^13.12.0",
+		"stylelint-config-prettier": "^8.0.2",
+		"stylelint-config-standard": "^21.0.0",
+		"stylelint-prettier": "^1.2.0",
 		"ts-node": "~8.3.0",
 		"tslint": "~6.1.0",
 		"tslint-config-prettier": "^1.18.0",
