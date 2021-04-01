@@ -1,2 +1,2 @@
 export * from './components';
-export {CoreModule} from './core.module';
+export { CoreModule } from './core.module';

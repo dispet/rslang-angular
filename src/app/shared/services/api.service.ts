@@ -1,18 +1,11 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
-import {Observable} from 'rxjs';
-import {
-  IAggregatedWord,
-  IUserSetting,
-  IUserUpdate,
-  IUserUpdateResponse,
-  IUsersWords,
-  IWord
-} from '../models';
+import { Observable } from 'rxjs';
+import { IAggregatedWord, IUserSetting, IUserUpdate, IUserUpdateResponse, IUsersWords, IWord } from '../models';
 
-import {API_URL} from "../constants";
-import {Group, Page} from "../types";
+import { API_URL } from '../constants';
+import { Group, Page } from '../types';
 
 @Injectable({
   providedIn: 'root',
@@ -21,10 +14,7 @@ export class ApiService {
   private url = API_URL;
   private id: string;
 
-  constructor(
-    private http: HttpClient,
-  ) {
-  }
+  constructor(private http: HttpClient) {}
 
   updateUser(user: IUserUpdate): Observable<IUserUpdateResponse> {
     return this.http.put<IUserUpdateResponse>(`${this.url}/users/${this.id}`, user);
@@ -38,7 +28,7 @@ export class ApiService {
     let params = new HttpParams();
     params = params.append('group', group.toString());
     params = params.append('page', page.toString());
-    return this.http.get<Array<IWord>>(`${this.url}/words`, {params});
+    return this.http.get<Array<IWord>>(`${this.url}/words`, { params });
   }
 
   getUserWords(): Observable<Array<IUsersWords>> {
