@@ -8,9 +8,8 @@ describe('DeletedWordsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DeletedWordsComponent ]
-    })
-    .compileComponents();
+      declarations: [DeletedWordsComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

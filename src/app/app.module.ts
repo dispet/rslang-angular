@@ -10,6 +10,10 @@ import {ElectronicTextbookComponent} from './electronic-textbook';
 import {LoginComponent} from './auth';
 import {RegistrationComponent} from './auth';
 import {CoreModule} from "./core";
+import { HomePageComponent } from './home-page/home-page.component';
+import { MiniGamesComponent } from './mini-games/mini-games.component';
+import { StatisticsComponent } from './statistics/statistics.component';
+import { AboutUsComponent } from './about-us/about-us.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +21,10 @@ import {CoreModule} from "./core";
     ElectronicTextbookComponent,
     LoginComponent,
     RegistrationComponent,
+    HomePageComponent,
+    MiniGamesComponent,
+    StatisticsComponent,
+    AboutUsComponent,
   ],
   imports: [
     BrowserModule,

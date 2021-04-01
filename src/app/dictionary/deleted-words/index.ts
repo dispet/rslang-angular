@@ -1,1 +1,1 @@
-export * from './deleted-words.component'
+export * from './deleted-words.component';

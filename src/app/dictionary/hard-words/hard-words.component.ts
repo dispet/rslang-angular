@@ -1,15 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-hard-words',
-  templateUrl: './hard-words.component.html',
-  styleUrls: ['./hard-words.component.scss']
+	selector: 'app-hard-words',
+	templateUrl: './hard-words.component.html',
+	styleUrls: ['./hard-words.component.scss'],
 })
-export class HardWordsComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+export class HardWordsComponent {
+	constructor() {}
 }
