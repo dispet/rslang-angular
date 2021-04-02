@@ -1,4 +1,4 @@
-<mat-button-toggle-group name="dictionarySection" aria-label="">
+<mat-button-toggle-group>
   <mat-button-toggle value="app-words-in-learning"
     >Изучаемые слоав</mat-button-toggle
   >
@@ -19,6 +19,7 @@
 <div *ngIf="dictionarySection === 'app-deleted-words'">
   <app-deleted-words></app-deleted-words>
 </div>
+<router-outlet></router-outlet>
 
 <app-footer></app-footer>
 <!-- <mat-list>

@@ -1,1 +1,1 @@
-export {TokenInterceptor} from './token.interceptor'
+export {TokenInterceptor} from './token.interceptor';

@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./deleted-words.component.scss']
 })
 export class DeletedWordsComponent implements OnInit {
+  array = [];
 
   constructor() { }
 

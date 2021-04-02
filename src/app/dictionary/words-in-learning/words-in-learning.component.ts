@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WordsInLearningComponent implements OnInit {
 
+  array = [];
+
   constructor() { }
 
   ngOnInit(): void {
