@@ -1,0 +1,75 @@
+import { Injectable } from '@angular/core';
+
+@Injectable({
+	providedIn: 'root',
+})
+export class SavannaService {
+	storage = window.localStorage;
+	wordsObj = {
+		Испуганный: 'Afraid',
+		Соглашаться: 'Agree',
+		Сердитый: 'Angry',
+		Прибывать: 'Arrive',
+		Атаковать: 'Attack',
+		Низ: 'Bottom',
+		Умный: 'Clever',
+		Жестокий: 'Cruel',
+		'В конце концов': 'Finally',
+		Прятаться: 'Hide',
+		'Охотиться (обычно с гончими)': 'Hunt',
+		Много: 'Lot',
+		Середина: 'Middle',
+		Момент: 'Moment',
+		Довольный: 'Pleased',
+		Обещать: 'Promise',
+		Отвечать: 'Reply',
+		Безопасный: 'Safe',
+		Уловка: 'Trick',
+		Хорошо: 'Well',
+	};
+	russianWords = [
+		'Испуганный',
+		'Соглашаться',
+		'Сердитый',
+		'Прибывать',
+		'Атаковать',
+		'Низ',
+		'Умный',
+		'Жестокий',
+		'В конце концов',
+		'Прятаться',
+		'Охотиться (обычно с гончими)',
+		'Много',
+		'Середина',
+		'Момент',
+		'Довольный',
+		'Обещать',
+		'Отвечать',
+		'Безопасный',
+		'Уловка',
+		'Хорошо',
+	];
+	englishWords = [
+		'Afraid',
+		'Agree',
+		'Angry',
+		'Arrive',
+		'Attack',
+		'Bottom',
+		'Clever',
+		'Cruel',
+		'Finally',
+		'Hide',
+		'Hunt',
+		'Lot',
+		'Middle',
+		'Moment',
+		'Pleased',
+		'Promise',
+		'Reply',
+		'Safe',
+		'Trick',
+		'Well',
+	];
+	constructor() {}
+}

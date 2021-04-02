@@ -1,0 +1,39 @@
+<div class="savanna-game">
+	<div class="savanna-wrapper" [ngStyle]="savannaWrapperHeight">
+		<div class="control">
+			<div class="hearts" *ngFor="let heart of this.game.heartsCount">
+				<div class="heart" [@flyTopDown]="'top'">
+					<mat-icon>favorite</mat-icon>
+				</div>
+			</div>
+			<div class="exit"><div>&times;</div></div>
+		</div>
+		<app-savanna-child
+			*ngIf="!isGameEnd"
+			(passAnswer)="recieveAnswer($event)"
+			(isGameEnd)="gameEnd($event)"
+			[heartsCount]="game.heartsCount.length"
+		></app-savanna-child>
+	</div>
+	<div class="modal">
+		<div class="modal-window">
+			<div class="modal-content">
+				<div>correct answers: {{ this.game.correctAnswers.length }}</div>
+				<div class="correct-answers" *ngFor="let answer of this.game.correctAnswers">
+					<div class="correct-answer" style="color: green">
+						{{ answer }}
+					</div>
+				</div>
+				<div>incorrect answers: {{ this.game.incorrectAnswers.length }}</div>
+				<div class="incorrect-answers" *ngFor="let answer of this.game.incorrectAnswers">
+					<div class="incorrect-answer" style="color: red">
+						{{ answer }}
+					</div>
+				</div>
+				<div class="close-modal">
+					<button (click)="closeModal()">&times;</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
