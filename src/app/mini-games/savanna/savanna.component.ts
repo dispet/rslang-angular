@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, Component, ElementRef, Inject, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef } from '@angular/core';
 import { IGame, IGameAnswer } from '../models/savanna-game.model';
 import { SavannaService } from '../services/savanna.service';
 
@@ -24,10 +24,10 @@ import { SavannaService } from '../services/savanna.service';
 		]),
 	],
 })
-export class SavannaComponent implements OnInit, AfterViewInit {
+export class SavannaComponent implements AfterViewInit {
 	modal!: Element;
 	isHeartRemoved = false;
-	isGameEnd: boolean = false;
+	isGameEnd = false;
 	game: IGame = {
 		answers: [],
 		heartsCount: [`h`, `h`, `h`, `h`, `h`],
@@ -37,8 +37,6 @@ export class SavannaComponent implements OnInit, AfterViewInit {
 	savannaWrapperHeight = { height: '100%' };
 
 	constructor(private savannaSvc: SavannaService, private el: ElementRef) {}
-
-	ngOnInit(): void {}
 
 	ngAfterViewInit() {
 		this.modal = this.el.nativeElement.querySelector('.modal');
