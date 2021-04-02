@@ -31,6 +31,7 @@ const appRoutes: Routes = [
       { path: 'about-us', component: AboutUsComponent },
     ],
   },
+  {path: 'dictionary', loadChildren: () => import('./dictionary/dictionary.module').then(m => m.DictionaryModule)},
   {
     path: '**',
     component: PageNotFoundComponent,
