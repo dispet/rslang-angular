@@ -1,3 +1,3 @@
-import {IUserCreateResponse} from "../models";
+import { IUserCreateResponse } from '../models';
 
 export interface IUserUpdateResponse extends IUserCreateResponse {}

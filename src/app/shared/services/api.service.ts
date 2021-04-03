@@ -23,10 +23,7 @@ export class ApiService {
   private url: string = API_URL;
   private id: string = '';
 
-  constructor(
-    private http: HttpClient,
-  ) {
-  }
+  constructor(private http: HttpClient) {}
 
   updateUser(user: IUserUpdate): Observable<IUserUpdateResponse> {
     return this.http.put<IUserUpdateResponse>(`${this.url}/users/${this.id}`, user);
@@ -40,7 +37,7 @@ export class ApiService {
     let params = new HttpParams();
     params = params.append('group', group.toString());
     params = params.append('page', page.toString());
-    return this.http.get<Array<IWord>>(`${this.url}/words`, {params});
+    return this.http.get<Array<IWord>>(`${this.url}/words`, { params });
   }
 
   getUserWords(): Observable<Array<IUsersWords>> {

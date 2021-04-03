@@ -27,7 +27,7 @@ import {FooterComponent} from './components';
     ReactiveFormsModule,
     MaterialModule,
     HeaderComponent,
-    FooterComponent,
+    FooterComponent
   ],
   providers: []
 })
