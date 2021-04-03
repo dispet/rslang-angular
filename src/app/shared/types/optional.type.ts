@@ -1,23 +1,23 @@
 import {IStatsMiniGamesItem} from '../models';
 
 export type optional = {
-  audiocall: IStatsMiniGamesItem,
+  audioCall: IStatsMiniGamesItem,
   sprint?: never,
   savannah?: never,
-  'own-game'?: never,
+  ownGame?: never,
 } | {
-  audiocall?: never,
+  audioCall?: never,
   sprint: IStatsMiniGamesItem,
   savannah?: never,
-  'own-game'?: never,
+  ownGame?: never,
 } | {
-  audiocall?: never,
+  audioCall?: never,
   sprint?: never,
   savannah: IStatsMiniGamesItem,
-  'own-game'?: never,
+  ownGame?: never,
 } | {
-  audiocall?: never,
+  audioCall?: never,
   sprint?: never,
   savannah?: never,
-  'own-game': IStatsMiniGamesItem,
+  ownGame: IStatsMiniGamesItem,
 };

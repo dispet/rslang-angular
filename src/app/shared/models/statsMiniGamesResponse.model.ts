@@ -1,10 +1,10 @@
-import {IStatsMiniGamesItem} from "./statsMiniGamesItem.model";
+import {IStatsMiniGamesItem} from './statsMiniGamesItem.model';
 
 export interface IStatsMiniGamesResponse {
   optional: {
-    audiocall?: IStatsMiniGamesItem;
+    audioCall?: IStatsMiniGamesItem;
     sprint?: IStatsMiniGamesItem;
     savannah?: IStatsMiniGamesItem;
-    'own-game'?: IStatsMiniGamesItem;
+    ownGame?: IStatsMiniGamesItem;
   };
 }
