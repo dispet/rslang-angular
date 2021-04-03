@@ -1,18 +1,27 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpParams} from '@angular/common/http';
 
-import { Observable } from 'rxjs';
-import { IAggregatedWord, IUserSetting, IUserUpdate, IUserUpdateResponse, IUsersWords, IWord } from '../models';
+import {Observable} from 'rxjs';
+import {
+  IAggregatedWord,
+  IStatsMiniGames,
+  IStatsMiniGamesResponse,
+  IUserSetting,
+  IUserUpdate,
+  IUserUpdateResponse,
+  IUsersWords,
+  IWord
+} from '../models';
 
-import { API_URL } from '../constants';
-import { Group, Page } from '../types';
+import {API_URL} from '../constants';
+import {Group, Page} from '../types';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private url = API_URL;
-  private id: string;
+  private url: string = API_URL;
+  private id: string = '';
 
   constructor(private http: HttpClient) {}
 
@@ -54,6 +63,7 @@ export class ApiService {
   getUserAggregatedWordByWordId(wordId: string): Observable<IAggregatedWord> {
     return this.http.get<IAggregatedWord>(`${this.url}/users/${this.id}/aggregatedWords/${wordId}`);
   }
+
   getUserSettings(): Observable<IUserSetting> {
     return this.http.get<IUserSetting>(`${this.url}/users/${this.id}/settings`);
   }
@@ -64,6 +74,14 @@ export class ApiService {
 
   setUserSettings(settings: IUserSetting): Observable<IUserSetting> {
     return this.http.post<IUserSetting>(`${this.url}/users/${this.id}/settings`, settings);
+  }
+
+  getUserStatistics(): Observable<IStatsMiniGamesResponse> {
+    return this.http.get<IStatsMiniGamesResponse>(`${this.url}/users/${this.id}/statistics`);
+  }
+
+  updateUserStatistics<T extends IStatsMiniGames>(statistic: T): Observable<T> {
+    return this.http.put<T>(`${this.url}/users/${this.id}/statistics`, statistic);
   }
 
   setUserId(id: string): void {
