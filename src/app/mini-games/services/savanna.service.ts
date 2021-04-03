@@ -4,7 +4,6 @@ import { Injectable } from '@angular/core';
 	providedIn: 'root',
 })
 export class SavannaService {
-	storage = window.localStorage;
 	wordsObj = {
 		Испуганный: 'Afraid',
 		Соглашаться: 'Agree',
@@ -27,49 +26,8 @@ export class SavannaService {
 		Уловка: 'Trick',
 		Хорошо: 'Well',
 	};
-	russianWords = [
-		'Испуганный',
-		'Соглашаться',
-		'Сердитый',
-		'Прибывать',
-		'Атаковать',
-		'Низ',
-		'Умный',
-		'Жестокий',
-		'В конце концов',
-		'Прятаться',
-		'Охотиться (обычно с гончими)',
-		'Много',
-		'Середина',
-		'Момент',
-		'Довольный',
-		'Обещать',
-		'Отвечать',
-		'Безопасный',
-		'Уловка',
-		'Хорошо',
-	];
-	englishWords = [
-		'Afraid',
-		'Agree',
-		'Angry',
-		'Arrive',
-		'Attack',
-		'Bottom',
-		'Clever',
-		'Cruel',
-		'Finally',
-		'Hide',
-		'Hunt',
-		'Lot',
-		'Middle',
-		'Moment',
-		'Pleased',
-		'Promise',
-		'Reply',
-		'Safe',
-		'Trick',
-		'Well',
-	];
+
+  russianWords = Object.keys(this.wordsObj);
+  englishWords = Object.values(this.wordsObj);
 	constructor() {}
 }

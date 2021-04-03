@@ -8,6 +8,6 @@ import { SavannaChildComponent } from './savanna/savanna-child/savanna-child.com
 
 @NgModule({
 	declarations: [SavannaComponent, MiniGamesComponent, SavannaChildComponent],
-	imports: [CommonModule, MiniGamesRoutingModule, SharedModule],
+	imports: [ MiniGamesRoutingModule, SharedModule],
 })
 export class MiniGamesModule {}
