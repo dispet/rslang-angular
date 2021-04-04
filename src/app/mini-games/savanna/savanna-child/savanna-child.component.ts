@@ -1,28 +1,16 @@
-import { trigger, state, style, animate, transition, keyframes } from '@angular/animations';
 import { Component, ElementRef, Input, OnInit, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { IGameAnswer } from '../../models/savanna-game.model';
 import { SavannaService } from '../../services/savanna.service';
+import { ApiService } from '../../../shared/services/api.service';
+import { moveTargetWord } from '../../animations/savanna-animations';
+import { IWord } from 'src/app/shared/models/word.model';
 
 @Component({
 	selector: 'app-savanna-child',
 	templateUrl: './savanna-child.component.html',
 	styleUrls: ['./savanna-child.component.scss'],
-	animations: [
-		trigger('moveTargetWord', [
-			state('top', style({ top: '5%' })),
-			state('bottom', style({ top: '70%' })),
-			state('answered', style({ opacity: 0 })),
-			transition('top => bottom', animate('4500ms 500ms')),
-			transition('bottom => top', [
-				animate(500, keyframes([style({ opacity: 0, offset: 0 }), style({ opacity: 0, offset: 0.99 }), style({ opacity: 1, offset: 1 })])),
-			]),
-			transition(
-				'answered => top',
-				animate(500, keyframes([style({ opacity: 0, offset: 0 }), style({ opacity: 0, offset: 0.99 }), style({ opacity: 1, offset: 1 })])),
-			),
-		]),
-	],
+	animations: [moveTargetWord],
 })
 export class SavannaChildComponent implements OnInit, OnDestroy {
 	@Input() heartsCount!: number;
@@ -30,30 +18,39 @@ export class SavannaChildComponent implements OnInit, OnDestroy {
 	@Output() isGameEnd = new EventEmitter<boolean>();
 
 	changeWordsInterval!: NodeJS.Timeout;
-	englishWords = this.savannaSvc.englishWords;
-	russianWords = this.savannaSvc.russianWords;
-	wordsEntries = Object.entries(this.savannaSvc.wordsObj);
+	englishWords = this.savannaService.englishWords;
+	russianWords = this.savannaService.russianWords;
+	wordsEntries = Object.entries(this.savannaService.wordsObj);
+	// the word that comes down from top
 	targetWord!: string;
 	answer!: string;
 	options: string[] = ['', '', '', ''];
+	// the count is used to count 'targetWord's
 	count = 0;
 	clickedButton!: Element;
 	correctButton!: Element;
+	// component pass this object to the savanna component
 	gameAnswer: IGameAnswer = {
 		isCorrect: true,
 		choosenOption: '',
 	};
+	// the buttons should be disabled after first button click event
 	isClicked = false;
+	// targetWord has animation targetWord may be three different states 'top', 'bottom', 'answered'
+	// default state is 'top'
 	targetWordState = 'top';
 	choosenOption = "You haven't choosen.";
+	// these sounds will play after user choose any option or when 'targetWord's state is 'bottom'
 	correctSound = new Audio();
 	wrongSound = new Audio();
 
-	constructor(private el: ElementRef, private router: Router, private savannaSvc: SavannaService) {}
+	constructor(private el: ElementRef, private router: Router, private savannaService: SavannaService, private apiService: ApiService) {}
 
 	ngOnInit(): void {
 		this.correctSound.src = '../../../../assets/savanna-game/correct.wav';
 		this.wrongSound.src = '../../../../assets/savanna-game/wrong.wav';
+
+		// 'changeWordsInterval' begins immediately when component initializes
 		this.beginNewInterval();
 	}
 
@@ -61,22 +58,30 @@ export class SavannaChildComponent implements OnInit, OnDestroy {
 		clearInterval(this.changeWordsInterval);
 	}
 
+	// the words change every exact time
 	changeWord() {
 		this.isClicked = false;
 		this.removeStyles(this.clickedButton);
 		this.removeStyles(this.correctButton);
 		this.targetWord = this.englishWords[this.count++];
+
+		// if words count graeter than or equal 21 the 'changeWordsInterval' should be cleared;
 		if (this.count >= 21) {
 			this.count = 0;
 			this.isGameEnd.emit(true);
-			this.ngOnDestroy();
+			clearInterval(this.changeWordsInterval);
 		}
 	}
 
+	// every game has four different option and one of them is answer
 	makeOptions() {
 		let options: string[] = [];
+
+		// since 'this.russianWords' must not change, we copy russianWords from 'this.russianWords'
 		let russianWords = [...this.russianWords];
 		let answer = '';
+
+		// find answer entry({russianWord: englishWord})
 		let answerEntry = this.wordsEntries.find((entry) => entry[1] === this.targetWord);
 
 		if (answerEntry) {
@@ -85,13 +90,14 @@ export class SavannaChildComponent implements OnInit, OnDestroy {
 
 		this.answer = answer;
 
+		// we should remove answer from russianWords, because it must not be duplicated in the options.
 		russianWords.splice(
 			russianWords.findIndex((word) => word === answer),
 			1,
 		);
 
+		// make random options and then push an answer
 		[options[0], options[1], options[2]] = this.shuffleArray(russianWords);
-
 		options.push(answer);
 		return options;
 	}
@@ -106,8 +112,11 @@ export class SavannaChildComponent implements OnInit, OnDestroy {
 
 	checkAnswer(event: MouseEvent) {
 		this.clickedButton = event.target as Element;
+
+		// make buttons disabled
 		this.isClicked = true;
 
+		// options structure : "1. {{options[1]}}" , we should remove '1. '.
 		this.choosenOption = this.clickedButton.textContent?.slice(3).trim() || "You haven't choosen.";
 		if (this.choosenOption === this.answer) {
 			this.inCaseTheAnswerTrue();
@@ -115,7 +124,10 @@ export class SavannaChildComponent implements OnInit, OnDestroy {
 			this.inCaseTheAnswerFalse();
 		}
 
+		// when the state of targetWord is 'answered', targetWord move to the top(itselves default place).
 		this.targetWordState = 'answered';
+
+		// in order to animation happen we need tick
 		setTimeout(() => {
 			this.beginNewInterval();
 		}, 0);
@@ -123,7 +135,6 @@ export class SavannaChildComponent implements OnInit, OnDestroy {
 
 	inCaseTheAnswerTrue() {
 		this.correctSound.play();
-		this.correctSound;
 		this.clickedButton.classList.add('correct');
 		this.gameAnswer.isCorrect = true;
 		this.gameAnswer.choosenOption = this.choosenOption;
@@ -145,7 +156,7 @@ export class SavannaChildComponent implements OnInit, OnDestroy {
 		this.passAnswer.emit(this.gameAnswer);
 
 		if (this.heartsCount === 1) {
-			this.ngOnDestroy();
+			clearInterval(this.changeWordsInterval);
 			this.isGameEnd.emit(true);
 		}
 	}
@@ -154,6 +165,7 @@ export class SavannaChildComponent implements OnInit, OnDestroy {
 		if (this.targetWordState === 'top') {
 			this.targetWordState = 'bottom';
 		} else {
+			// when user doesn't choose any option we do
 			this.choosenOption = "You haven't choosen";
 			this.inCaseTheAnswerFalse();
 			this.targetWordState = 'top';
@@ -161,24 +173,38 @@ export class SavannaChildComponent implements OnInit, OnDestroy {
 	}
 
 	removeStyles(button: Element) {
-		if (!button) {
-			setTimeout(() => {
-				return '';
-			}, 5000);
-		} else {
+		// beginning of the game button may be undefined
+		if (button) {
 			button.classList.remove('correct');
 			button.classList.remove('incorrect');
 		}
 	}
 
 	beginNewInterval() {
+		// targetWord's state changes during the game therefore
+		// we have to assign  value 'top' to the targetWordState beginning new interval
 		this.targetWordState = 'top';
-		this.ngOnDestroy();
+		// when the state of targetWord is 'answered' , we begin new interwal
+		// so that we have to clear old interval
+		clearInterval(this.changeWordsInterval);
+
+		// when the state of targetWord is 'answered' or 'bottom', our buttons takes styles
+		// these styles will be visible as timeout value(0.5 second in our case)
+		// settimeout works during animation delay.
 		setTimeout(() => {
+			// in the beginning of the game state of targetWord is 'top'
+			// animation starts when the state change so we change the state after 0.5 second
+			// otherwise animaton starts after five second
+
 			this.targetWordState = 'bottom';
+			// change targetWord and options' values
 			this.changeWord();
 			this.options = this.shuffleArray(this.makeOptions());
+
+			// setInterval to change targetWord and options
 			this.changeWordsInterval = setInterval(() => {
+				// animation works only once
+				// in order to make animation infinite we should change animation state every exact time
 				this.changeAnimationState();
 				this.changeWord();
 				this.options = this.shuffleArray(this.makeOptions());

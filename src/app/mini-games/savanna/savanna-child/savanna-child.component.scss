@@ -9,11 +9,13 @@
 
 	.target-word {
 		top: 5%;
+		color: white;
 	}
 
 	.option-words {
-		width: 500px;
+		width: 80%;
 		display: flex;
+		flex-wrap: wrap;
 		justify-content: space-between;
 		top: 75%;
 

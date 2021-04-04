@@ -1,4 +1,17 @@
-<div class="savanna-game">
+<div class="savanna-game" [ngStyle]="backgroundPositionY">
+	<div class="first-modal modal-active">
+		<div class="modal-window">
+			<h1>this is first modal</h1>
+			<div class="choose-difficulty-level">
+				<button mat-raised-button (click)="beginTheGame()">1</button>
+				<button mat-raised-button (click)="beginTheGame()">2</button>
+				<button mat-raised-button (click)="beginTheGame()">3</button>
+				<button mat-raised-button (click)="beginTheGame()">4</button>
+				<button mat-raised-button (click)="beginTheGame()">5</button>
+				<button mat-raised-button (click)="beginTheGame()">6</button>
+			</div>
+		</div>
+	</div>
 	<div class="savanna-wrapper" [ngStyle]="savannaWrapperHeight">
 		<div class="control">
 			<div class="hearts" *ngFor="let heart of this.game.heartsCount">
@@ -9,13 +22,13 @@
 			<div class="exit"><button>&times;</button></div>
 		</div>
 		<app-savanna-child
-			*ngIf="!isGameEnd"
+			*ngIf="!isGameEnd && isGameBegin"
 			(passAnswer)="recieveAnswer($event)"
 			(isGameEnd)="gameEnd($event)"
 			[heartsCount]="game.heartsCount.length"
 		></app-savanna-child>
 	</div>
-	<div class="modal">
+	<div class="results-modal">
 		<div class="modal-window">
 			<div class="modal-content">
 				<div>correct answers: {{ this.game.correctAnswers.length }}</div>

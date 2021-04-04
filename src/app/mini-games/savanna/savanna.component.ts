@@ -1,45 +1,45 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, Component, ElementRef } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit } from '@angular/core';
 import { IGame, IGameAnswer } from '../models/savanna-game.model';
 import { SavannaService } from '../services/savanna.service';
-
+import { flyTopDown } from '../animations/savanna-animations'
 @Component({
 	selector: 'app-savanna',
 	templateUrl: './savanna.component.html',
 	styleUrls: ['./savanna.component.scss'],
 	animations: [
-		trigger('flyTopDown', [
-			state('top', style({ transform: 'translateY(0)' })),
-			transition('void <=> *', [style({ top: '-100%', fontSize: '50px', color: 'blue' }), animate(500)]),
-			transition('* => void', [
-				animate(
-					500,
-					style({
-						top: '100%',
-						color: 'blue',
-						fontSize: '50px',
-					}),
-				),
-			]),
-		]),
+		flyTopDown
 	],
 })
-export class SavannaComponent implements AfterViewInit {
-	modal!: Element;
+export class SavannaComponent implements OnInit, AfterViewInit {
+	resultsModal!: Element;
+	firstModal!: Element;
 	isHeartRemoved = false;
 	isGameEnd = false;
+	isGameBegin = false;
 	game: IGame = {
 		answers: [],
 		heartsCount: [`h`, `h`, `h`, `h`, `h`],
 		correctAnswers: [],
 		incorrectAnswers: [],
 	};
+	apiWords = this.savannaService.apiWords;
 	savannaWrapperHeight = { height: '100%' };
 
-	constructor(private savannaSvc: SavannaService, private el: ElementRef) {}
+	bgpY = '100%';
+	backgroundPositionY = { 'background-position-y': this.bgpY };
+
+	constructor(private savannaService: SavannaService, private el: ElementRef) {}
+	ngOnInit(): void {}
 
 	ngAfterViewInit() {
-		this.modal = this.el.nativeElement.querySelector('.modal');
+		this.firstModal = this.el.nativeElement.querySelector('.first-modal');
+		this.resultsModal = this.el.nativeElement.querySelector('.results-modal');
+	}
+
+	beginTheGame() {
+		this.isGameBegin = true;
+		this.firstModal.classList.remove('modal-active');
+		console.log(this.savannaService.apiWords);
 	}
 
 	recieveAnswer(answerObject: IGameAnswer) {
@@ -50,6 +50,8 @@ export class SavannaComponent implements AfterViewInit {
 			this.game.correctAnswers.push(answerObject.choosenOption);
 		}
 		this.game.answers.push(answerObject.isCorrect);
+		this.bgpY = `${+this.bgpY.replace(/\%/g, '') - 5}%`;
+		this.backgroundPositionY = { 'background-position-y': this.bgpY };
 	}
 
 	decreaseHeart() {
@@ -68,12 +70,12 @@ export class SavannaComponent implements AfterViewInit {
 	}
 
 	openModal() {
-		this.modal.classList.add('modal-active');
+		this.resultsModal.classList.add('modal-active');
 		this.savannaWrapperHeight = { height: '0%' };
 	}
 
 	closeModal() {
 		this.savannaWrapperHeight = { height: '100%' };
-		this.modal.classList.remove('modal-active');
+		this.resultsModal.classList.remove('modal-active');
 	}
 }

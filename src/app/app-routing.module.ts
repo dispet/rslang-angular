@@ -22,11 +22,11 @@ const appRoutes: Routes = [
 		path: '',
 		component: MainLayoutComponent,
 		children: [
-			{ path: '', component: HomePageComponent },
 			{ path: 'text-book', component: ElectronicTextbookComponent },
-			{ path: 'mini-games', loadChildren: () => import('./mini-games/mini-games.module').then((m) => m.MiniGamesModule) },
 			{ path: 'statistics', component: StatisticsComponent },
 			{ path: 'about-us', component: AboutUsComponent },
+			{ path: 'mini-games', loadChildren: () => import('./mini-games/mini-games.module').then((m) => m.MiniGamesModule) },
+			{ path: '', component: HomePageComponent },
 		],
 	},
 	{

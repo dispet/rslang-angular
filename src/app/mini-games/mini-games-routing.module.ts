@@ -4,8 +4,8 @@ import { MiniGamesComponent } from './mini-games.component';
 import { SavannaComponent } from './savanna/savanna.component';
 
 const routes: Routes = [
-	{ path: '', component: MiniGamesComponent },
 	{ path: 'savanna', component: SavannaComponent },
+	{ path: '', component: MiniGamesComponent },
 ];
 
 @NgModule({

@@ -2,54 +2,73 @@
 	width: 100%;
 	height: 100%;
 	background: url("../../../assets/savanna-game/savanna.jpg");
-
 	.savanna-wrapper {
+		background-color: rgba(0, 0, 0, 0.5);
 		position: relative;
 		.control {
 			display: flex;
 			justify-content: flex-end;
-      padding: 10px;
+			padding: 10px;
 			.hearts {
 				display: flex;
 				.heart {
-          margin: 10px;
-          mat-icon {
-            color: red;
-          }
+					margin: 10px;
+					mat-icon {
+						color: red;
+					}
 				}
 			}
 
 			.exit {
-        margin: 10px 20px;
-        button {
-          background-color: transparent;
-          border: none;
-          color: white;
-          font: {
-            size: 20px;
-            weight: bold;
-          }
-        }
-      }
+				margin: 10px 20px;
+				button {
+					background-color: transparent;
+					border: none;
+					color: white;
+					font: {
+						size: 20px;
+						weight: bold;
+					}
+				}
+			}
 		}
 	}
 
-	.modal {
-		z-index: -1;
-		opacity: 0;
+	.first-modal,
+	.results-modal {
 		width: 100%;
 		height: 100%;
 		background-color: rgba(0, 0, 0, 0.5);
 		position: fixed;
+		opacity: 0;
 
 		.modal-window {
-			background-color: darkcyan;
-			color: lightcyan;
 			padding: 40px;
 			position: absolute;
 			top: 50%;
 			left: 50%;
 			transform: translate(-50%, -50%);
+		}
+	}
+
+	.first-modal {
+		.modal-window {
+			background-color: darkslateblue;
+			color: lightsalmon;
+
+			.choose-difficulty-level {
+				button {
+					margin: 10px;
+				}
+			}
+		}
+	}
+
+	.results-modal {
+		z-index: -1;
+		.modal-window {
+			background-color: darkcyan;
+			color: lightcyan;
 		}
 	}
 

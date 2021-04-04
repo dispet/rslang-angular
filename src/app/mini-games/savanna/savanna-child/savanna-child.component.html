@@ -1,27 +1,27 @@
 <div class="savanna-game-wrapper">
-  <div class="target-word" [@moveTargetWord]="targetWordState">
-    {{ targetWord }}
-  </div>
-  <div class="option-words">
-    <div class="option-word">
-      <button (click)="checkAnswer($event)" [disabled]="isClicked">
-        1. {{ options[0] }}
-      </button>
-    </div>
-    <div class="option-word">
-      <button (click)="checkAnswer($event)" [disabled]="isClicked">
-        2. {{ options[1] }}
-      </button>
-    </div>
-    <div class="option-word">
-      <button (click)="checkAnswer($event)" [disabled]="isClicked">
-        3. {{ options[2] }}
-      </button>
-    </div>
-    <div class="option-word">
-      <button (click)="checkAnswer($event)" [disabled]="isClicked">
-        4. {{ options[3] }}
-      </button>
-    </div>
-  </div>
+	<div class="target-word" [@moveTargetWord]="targetWordState">
+		{{ targetWord }}
+	</div>
+	<div class="option-words">
+		<div class="option-word">
+			<button (click)="checkAnswer($event)" [disabled]="isClicked">
+				1. {{ options[0] }}
+			</button>
+		</div>
+		<div class="option-word">
+			<button (click)="checkAnswer($event)" [disabled]="isClicked">
+				2. {{ options[1] }}
+			</button>
+		</div>
+		<div class="option-word">
+			<button (click)="checkAnswer($event)" [disabled]="isClicked">
+				3. {{ options[2] }}
+			</button>
+		</div>
+		<div class="option-word">
+			<button (click)="checkAnswer($event)" [disabled]="isClicked">
+				4. {{ options[3] }}
+			</button>
+		</div>
+	</div>
 </div>
