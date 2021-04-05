@@ -1,14 +1,15 @@
 import { AfterViewInit, Component, ElementRef, OnInit } from '@angular/core';
 import { IGame, IGameAnswer } from '../models/savanna-game.model';
 import { SavannaService } from '../services/savanna.service';
-import { flyTopDown } from '../animations/savanna-animations'
+import { flyTopDown } from '../animations/savanna-animations';
+import { ApiService } from 'src/app/shared';
+import { IWord } from 'src/app/shared/models';
+import { Group } from 'src/app/shared/types';
 @Component({
 	selector: 'app-savanna',
 	templateUrl: './savanna.component.html',
 	styleUrls: ['./savanna.component.scss'],
-	animations: [
-		flyTopDown
-	],
+	animations: [flyTopDown],
 })
 export class SavannaComponent implements OnInit, AfterViewInit {
 	resultsModal!: Element;
@@ -16,30 +17,47 @@ export class SavannaComponent implements OnInit, AfterViewInit {
 	isHeartRemoved = false;
 	isGameEnd = false;
 	isGameBegin = false;
+	isResponseReached = this.savannaService.responseReached;
 	game: IGame = {
 		answers: [],
 		heartsCount: [`h`, `h`, `h`, `h`, `h`],
 		correctAnswers: [],
 		incorrectAnswers: [],
 	};
-	apiWords = this.savannaService.apiWords;
 	savannaWrapperHeight = { height: '100%' };
-
+	responseArray: IWord;
 	bgpY = '100%';
 	backgroundPositionY = { 'background-position-y': this.bgpY };
 
-	constructor(private savannaService: SavannaService, private el: ElementRef) {}
-	ngOnInit(): void {}
+	constructor(private savannaService: SavannaService, private el: ElementRef, private apiService: ApiService) {}
+	ngOnInit(): void {
+		let waitResponse;
+		waitResponse = setInterval(() => {
+			this.isResponseReached = this.savannaService.responseReached;
+
+			if (this.isResponseReached === true) {
+				this.clearGivenInterval(waitResponse);
+			}
+		}, 500);
+	}
 
 	ngAfterViewInit() {
 		this.firstModal = this.el.nativeElement.querySelector('.first-modal');
 		this.resultsModal = this.el.nativeElement.querySelector('.results-modal');
 	}
 
-	beginTheGame() {
+	clearGivenInterval(intervalId) {
+		clearInterval(intervalId);
+	}
+
+	beginTheGame(button: MouseEvent) {
+		let level = +(button.target as Element).innerHTML as Group;
 		this.isGameBegin = true;
+		console.log((button.target as Element).innerHTML, typeof level);
+
+		this.savannaService.choosenGroup = level;
+		this.savannaService.getChoosenWords();
 		this.firstModal.classList.remove('modal-active');
-		console.log(this.savannaService.apiWords);
 	}
 
 	recieveAnswer(answerObject: IGameAnswer) {

@@ -4,7 +4,6 @@ import { IGameAnswer } from '../../models/savanna-game.model';
 import { SavannaService } from '../../services/savanna.service';
 import { ApiService } from '../../../shared/services/api.service';
 import { moveTargetWord } from '../../animations/savanna-animations';
-import { IWord } from 'src/app/shared/models/word.model';
 
 @Component({
 	selector: 'app-savanna-child',
@@ -18,9 +17,8 @@ export class SavannaChildComponent implements OnInit, OnDestroy {
 	@Output() isGameEnd = new EventEmitter<boolean>();
 
 	changeWordsInterval!: NodeJS.Timeout;
-	englishWords = this.savannaService.englishWords;
-	russianWords = this.savannaService.russianWords;
-	wordsEntries = Object.entries(this.savannaService.wordsObj);
+	englishWords = this.savannaService.responseWords.map((wordObj) => wordObj.word);
+	russianWords = this.savannaService.responseWords.map((wordObj) => wordObj.wordTranslate);
 	// the word that comes down from top
 	targetWord!: string;
 	answer!: string;
@@ -44,7 +42,7 @@ export class SavannaChildComponent implements OnInit, OnDestroy {
 	correctSound = new Audio();
 	wrongSound = new Audio();
 
-	constructor(private el: ElementRef, private router: Router, private savannaService: SavannaService, private apiService: ApiService) {}
+	constructor(private el: ElementRef, private savannaService: SavannaService, private apiService: ApiService) {}
 
 	ngOnInit(): void {
 		this.correctSound.src = '../../../../assets/savanna-game/correct.wav';
@@ -81,11 +79,10 @@ export class SavannaChildComponent implements OnInit, OnDestroy {
 		let russianWords = [...this.russianWords];
 		let answer = '';
 
-		// find answer entry({russianWord: englishWord})
-		let answerEntry = this.wordsEntries.find((entry) => entry[1] === this.targetWord);
-
-		if (answerEntry) {
-			answer = answerEntry[0];
+		// find answer index from english words array then find answer
+		let answerIndex = this.englishWords.findIndex((word) => word === this.targetWord);
+		if (answerIndex !== -1) {
+			answer = this.russianWords[answerIndex];
 		}
 
 		this.answer = answer;
