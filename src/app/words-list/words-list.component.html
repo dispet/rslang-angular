@@ -1,0 +1,48 @@
+<mat-button-toggle-group>
+  <mat-button-toggle value="0">1</mat-button-toggle>
+  <mat-button-toggle value="1">2</mat-button-toggle>
+  <mat-button-toggle value="2">3</mat-button-toggle>
+  <mat-button-toggle value="3">4</mat-button-toggle>
+  <mat-button-toggle value="4">5</mat-button-toggle>
+  <mat-button-toggle value="5">6</mat-button-toggle>
+</mat-button-toggle-group>
+
+<div class="settings"></div>
+
+<mat-list>
+  <mat-list-item *ngFor="let item of words$">
+    <mat-icon mat-list-icon>volume_up</mat-icon>
+    <span style="flex-grow: 1">
+      {{ item.word }}
+    </span>
+    <button mat-icon-button (click)="restore(item)">
+      <mat-icon>restore_from_trash</mat-icon>
+    </button>
+    <img matListAvatar src="item.image" alt="{{ item.word }}" />
+    <p matLine>
+      <span>{{ item.transcription }}</span
+      >;
+      <span>{{ item.translate }}</span>
+    </p>
+    <p matLine>
+      <span>{{ item.meaning }}</span> -
+      <span>{{ item.translateMeaning }}</span>
+    </p>
+    <p matLine>
+      {{ item.learningResults }}
+    </p>
+  </mat-list-item>
+</mat-list>
+
+<aside>
+  <a href="">Саванна</a>
+  <a href="">Аудиовызов</a>
+  <a href="">Спринт</a>
+  <a href="">Своя игра</a>
+</aside>
+
+<nav>
+  <div class="prev-page"></div>
+  <div class="current-page">{{ pageNumber$ | async }}</div>
+  <div class="next-page"></div>
+</nav>

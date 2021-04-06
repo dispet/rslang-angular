@@ -6,13 +6,13 @@ import { HardWordsComponent } from "./hard-words";
 import { WordsInLearningComponent } from "./words-in-learning";
 
 const routes: Routes = [
-  {path: 'dictionary', component: DictionaryComponent},
-  // // children: [
-  //   // {path: '', component: WordsInLearningComponent},
-  //   // {path: '', component: HardWordsComponent},
-  //   // {path: '', component: DeletedWordsComponent},
-  // // ],
-
+  {path: '', component: DictionaryComponent,
+  children: [
+    {path: '', component: WordsInLearningComponent},
+    {path: 'hard-words', component: HardWordsComponent},
+    {path: 'deleted-words', component: DeletedWordsComponent},
+  ],
+  }
 ]
 
 @NgModule({
