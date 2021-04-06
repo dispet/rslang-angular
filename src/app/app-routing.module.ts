@@ -26,13 +26,14 @@ const appRoutes: Routes = [
       {path: '', component: HomePageComponent},
       {path: 'text-book', component: ElectronicTextbookComponent},
       // {path: 'dictionary', loadChildren: "./dictionary/dictionary.module.ts"},
-      // {path: 'dictionary', loadChildren: () => import('./dictionary/dictionary.module').then(m => m.DictionaryModule)},
+      {path: 'dictionary', loadChildren: () => import('./dictionary/dictionary.module').then(m => m.DictionaryModule)},
+      {path: 'words-list', loadChildren: () => import('./words-list/words-list.module').then(m => m.WordsListModule)},
       {path: 'mini-games', component: MiniGamesComponent},
       {path: 'statistics', component: StatisticsComponent},
       {path: 'about-us', component: AboutUsComponent}
     ]
   },
-  {path: 'dictionary', loadChildren: () => import('./dictionary/dictionary.module').then(m => m.DictionaryModule)},
+  // {path: 'dictionary', loadChildren: () => import('./dictionary/dictionary.module').then(m => m.DictionaryModule)},
   {
     path: '**',
     component: PageNotFoundComponent,

@@ -34,7 +34,7 @@ export class ApiService {
     return this.http.delete<void>(`${this.url}/users/${this.id}`);
   }
 
-  getWords(group: Group, page: Page): Observable<Array<IWord>> {
+  getWords(group: Group = 0, page: Page = 0): Observable<Array<IWord>> {
     let params = new HttpParams();
     params = params.append('group', group.toString());
     params = params.append('page', page.toString());

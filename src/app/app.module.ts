@@ -14,6 +14,8 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { MiniGamesComponent } from './mini-games/mini-games.component';
 import { StatisticsComponent } from './statistics/statistics.component';
 import { AboutUsComponent } from './about-us/about-us.component';
+import { WordsListModule } from './words-list/words-list.module';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,6 +33,7 @@ import { AboutUsComponent } from './about-us/about-us.component';
     HttpClientModule,
     AppRoutingModule,
     DictionaryModule,
+    WordsListModule,
     SharedModule,
     CoreModule,
   ],
