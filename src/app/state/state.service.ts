@@ -1,6 +1,5 @@
-import { EventEmitter, Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
-import { tap } from "rxjs/operators";
 import { IPagination, IWord } from "../shared/models";
 import { Group, Page } from "../shared/types";
 
@@ -21,16 +20,7 @@ export class StateService {
 
   readonly translationDisplay$ = this.translationDisplaySubject$.asObservable();
   readonly controlsDisplay$ = this.controlsDisplaySubject$.asObservable();
-  readonly groupNumber$ = this.groupNumberSubject$.asObservable().pipe(
-    tap({
-      next: (group) => this.updatePagination({ group })
-    })
-  );
-  readonly pageNumber$ = this.pageNumberSubject$.asObservable().pipe(
-    tap({
-      next: (page) => this.updatePagination({ page })
-    })
-  );
+
   readonly words$ = this.wordsSubject$.asObservable();
   readonly pagination$ = this.paginationSubject$.asObservable();
 
@@ -38,40 +28,32 @@ export class StateService {
   readonly MIN_PAGE_COUNT = 0;
 
 
-  setTranslationDisplay(display: boolean) {
+  setTranslationDisplay(display: boolean): void {
     this.translationDisplaySubject$.next(display);
   }
 
-  setControlsDisplay(display: boolean) {
+  setControlsDisplay(display: boolean): void {
     this.controlsDisplaySubject$.next(display);
   }
 
-  // getGroupNumberValue() {
-  //   return this.groupNumberSubject$.value;
-  // }
-
   setGroupNumber(number: number): void {
-    this.groupNumberSubject$.next(number as Group);
+    this.updatePagination({group: number as Group})
   }
-
-  // getPageNumberValue() {
-  //   return this.pageNumberSubject$.value;
-  // }
 
   setPageNumber(number: number): void {
-    this.pageNumberSubject$.next(number as Page);
+    this.updatePagination({page: number as Page});
   }
 
-  setNextPageNumber() {
-    const currentPageValue = this.pageNumberSubject$.getValue();
-    const nextValue = currentPageValue === this.MAX_PAGE_COUNT ? -1 : currentPageValue;
-    this.pageNumberSubject$.next((nextValue + 1) as Page);
+  setNextPageNumber(): void {
+    const currentPaginationValue = this.paginationSubject$.getValue();
+    currentPaginationValue.page = (currentPaginationValue.page === this.MAX_PAGE_COUNT ? 0 : currentPaginationValue.page + 1) as Page;
+    this.updatePagination(currentPaginationValue);
   }
 
-  setPrevPageNumber() {
-    const currentPageValue = this.pageNumberSubject$.getValue();
-    const prevValue = currentPageValue === this.MIN_PAGE_COUNT ? 30 : currentPageValue;
-    this.pageNumberSubject$.next((prevValue - 1) as Page);
+  setPrevPageNumber(): void {
+    const currentPaginationValue = this.paginationSubject$.getValue();
+    currentPaginationValue.page = (currentPaginationValue.page === this.MIN_PAGE_COUNT ? 29 : currentPaginationValue.page - 1) as Page;
+    this.updatePagination(currentPaginationValue);
   }
 
   setWords(words: IWord[]): void {
@@ -80,8 +62,8 @@ export class StateService {
 
   private updatePagination(value: IPagination): void {
     const nextValue = this.paginationSubject$.getValue();
-    nextValue.group = value.group || nextValue.group;
-    nextValue.page = value.page || nextValue.page;
+    nextValue.group = value.group ?? nextValue.group;
+    nextValue.page = value.page ?? nextValue.page;
     this.paginationSubject$.next(nextValue);
   }
 }

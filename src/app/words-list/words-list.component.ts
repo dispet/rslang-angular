@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { IWord } from '../shared/models';
-import { Group, Page } from '../shared/types';
 import { SettingsFacade } from '../state/settings-facade.service';
 import { FacadeService } from '../state/state-facade.service';
 
@@ -16,19 +15,13 @@ export class WordsListComponent implements OnInit, OnDestroy {
 
   isTranslationDisplay$: Observable<boolean> = this.settingsFacade.isTranslationDisplay$;
   isConstrolsDisplay$: Observable<boolean> = this.settingsFacade.isConstrolsDisplay$;
-  pageNumber$: Observable<Page> = this.stateFacade.page;
   words$: Observable<Array<IWord>> = this.stateFacade.words$;
-  words: IWord[];
+  pagination$ = this.stateFacade.pagination$;
 
   private destroy$ = new Subject<void>();
 
   ngOnInit(): void {
-    this.stateFacade.loadWords().pipe(takeUntil(this.destroy$)).subscribe(
-      words => {
-      this.words = words;
-      console.log(this.words);
-    });
-    // this.getWords();
+    this.stateFacade.loadWords().pipe(takeUntil(this.destroy$)).subscribe();
   }
 
   ngOnDestroy() {
@@ -36,19 +29,9 @@ export class WordsListComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  // getWords() {
-  //   this.words$.subscribe(words => {
-  //     this.words = words;
-  //   })
-  // }
-
   pickGroup(group: number): void {
     this.stateFacade.setGroup(group);
   }
-
-  // setGroupNumber(number: Group) {
-  //   this.stateFacade.setGroupNumber(number);
-  // }
 
   nextPage(): void {
     this.stateFacade.setNextPage();
