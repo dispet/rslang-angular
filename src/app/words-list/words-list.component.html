@@ -1,14 +1,10 @@
 <mat-button-toggle-group>
-  <mat-button-toggle #firstGroup value="0" (click)="pickGroup(0)"
-    >1</mat-button-toggle
-  >
-  <mat-button-toggle #secondGroup value="1" (click)="pickGroup(1)"
-    >2</mat-button-toggle
-  >
-  <mat-button-toggle value="2">3</mat-button-toggle>
-  <mat-button-toggle value="3">4</mat-button-toggle>
-  <mat-button-toggle value="4">5</mat-button-toggle>
-  <mat-button-toggle value="5">6</mat-button-toggle>
+  <mat-button-toggle (click)="pickGroup(0)">1</mat-button-toggle>
+  <mat-button-toggle (click)="pickGroup(1)">2</mat-button-toggle>
+  <mat-button-toggle (click)="pickGroup(2)">3</mat-button-toggle>
+  <mat-button-toggle (click)="pickGroup(3)">4</mat-button-toggle>
+  <mat-button-toggle (click)="pickGroup(4)">5</mat-button-toggle>
+  <mat-button-toggle (click)="pickGroup(5)">6</mat-button-toggle>
 </mat-button-toggle-group>
 
 <div class="settings"></div>
@@ -16,21 +12,28 @@
 <mat-list>
   <mat-list-item *ngFor="let item of words$ | async">
     <mat-icon mat-list-icon>volume_up</mat-icon>
-    <span style="flex-grow: 1">
-      {{ item.word }}
-    </span>
     <button mat-icon-button (click)="restore(item)">
       <mat-icon>restore_from_trash</mat-icon>
     </button>
-    <img matListAvatar src="item.image" alt="{{ item.word }}" />
+    <img
+      matListAvatar
+      src="https://dispet.github.io/rslang-data/{{ item.image }}"
+      alt="{{ item.word }}"
+    />
     <p matLine>
-      <span>{{ item.transcription }}</span
-      >;
-      <span>{{ item.translate }}</span>
+      <span style="flex-grow: 1">
+        {{ item.word }}
+      </span>
+      <span>{{ item.transcription }}</span> -
+      <span>{{ item.wordTranslate }}</span>
     </p>
     <p matLine>
-      <span>{{ item.meaning }}</span> -
-      <span>{{ item.translateMeaning }}</span>
+      <span>{{ item.textMeaning }}</span> -
+      <span>{{ item.textMeaningTranslate }}</span>
+    </p>
+    <p matLine>
+      <span>{{ item.textExample }}</span> -
+      <span>{{ item.textExampleTranslate }}</span>
     </p>
     <p matLine>
       {{ item.learningResults }}
@@ -45,16 +48,12 @@
   <a href="">Своя игра</a>
 </aside>
 
-<!-- <nav>
-  <div class="prev-page"></div>
-  <div class="current-page">{{ pageNumber$ | async }}</div>
-  <div class="next-page"></div>
-</nav> -->
-
 <mat-button-toggle-group>
   <mat-button-toggle (click)="firstPage()"><<</mat-button-toggle>
   <mat-button-toggle (click)="prevPage()"><</mat-button-toggle>
-  <div class="current-page">{{ pageNumber$ | async }}</div>
+  <div class="current-page" *ngIf="pagination$ | async as pagination">
+    {{ pagination.page + 1 }}
+  </div>
   <mat-button-toggle (click)="nextPage()">></mat-button-toggle>
   <mat-button-toggle (click)="lastPage()">>></mat-button-toggle>
 </mat-button-toggle-group>
