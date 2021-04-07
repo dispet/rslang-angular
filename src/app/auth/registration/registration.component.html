@@ -26,13 +26,18 @@
 		</div>
 
 		<div *ngIf="form.get('password').touched && form.get('password').invalid" class="validation">
-			<small *ngIf="form.get('password').errors.required"> Password is required </small>
+			<small *ngIf="form.get('password').errors.required"> Password is required </small><br />
 			<small *ngIf="form.get('password').errors.minlength">
 				Password length must be
 				{{ form.get("password").errors.minlength.requiredLength }} or more symbols. Now it is
-				{{ form.get("password").errors.minlength.actualLength }}
+				{{ form.get("password").errors.minlength.actualLength }} </small
+			><br />
+			<small *ngIf="form.get('password').errors.passFormat">
+				Maximum 10000 characters, at least one uppercase letter, one lowercase letter, one number and one special character
+				<pre><code>-+_@$!%*?&amp;#.,;:</code></pre>
 			</small>
 		</div>
+		<div *ngIf="form.get('formatPassword')"></div>
 
 		<div [ngClass]="{ invalid: form.get('confirmPassword').touched && form.get('confirmPassword').invalid }" class="form-control">
 			<label for="password">Repeate password</label>

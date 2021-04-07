@@ -3,7 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../shared/services';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { IUserCreate } from '../../shared/models';
-import { MismatchValidator } from './password.validator';
+import { MismatchValidator } from './password-mismatch.validator';
+import { PasswordFormatValidator } from './password-format.validator';
 
 @Component({
 	selector: 'app-registration',
@@ -25,18 +26,21 @@ export class RegistrationComponent {
 	initForm(): void {
 		this.form = new FormGroup({
 			email: new FormControl(null, [Validators.email, Validators.required]),
-			password: new FormControl(null, [Validators.required, Validators.minLength(6)]),
+			password: new FormControl(null),
 			confirmPassword: new FormControl(null),
 		});
 	}
 
 	setValidators(): void {
-		console.log('set');
 		const formValidators = {
 			confirmPassword: Validators.compose([Validators.required, MismatchValidator.mismatch(this.form.get('password'))]),
 		};
+		const passwordFormatValidators = {
+			password: Validators.compose([Validators.required, Validators.minLength(8), PasswordFormatValidator.passFormat()]),
+		};
 
 		this.form.get('confirmPassword').setValidators(formValidators['confirmPassword']);
+		this.form.get('password').setValidators(passwordFormatValidators['password']);
 	}
 
 	submit(): void {
