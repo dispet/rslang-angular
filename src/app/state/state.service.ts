@@ -1,7 +1,7 @@
 import { EventEmitter, Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
-import { ApiService } from "../shared";
-import { IWord } from "../shared/models";
+import { tap } from "rxjs/operators";
+import { IPagination, IWord } from "../shared/models";
 import { Group, Page } from "../shared/types";
 
 
@@ -9,53 +9,79 @@ import { Group, Page } from "../shared/types";
   providedIn: 'root',
 })
 export class StateService {
-  private readonly _translationDisplay$ = new BehaviorSubject<boolean>(true);
-  private readonly _controlsDisplay$ = new BehaviorSubject<boolean>(true);
-  private readonly _groupNumber$ = new BehaviorSubject<Group>(0);
-  private readonly _pageNumber$ = new BehaviorSubject<Page>(0);
-  private readonly _words$ = new BehaviorSubject<IWord[]>(null);
+  private readonly translationDisplaySubject$ = new BehaviorSubject<boolean>(true);
+  private readonly controlsDisplaySubject$ = new BehaviorSubject<boolean>(true);
+  private readonly groupNumberSubject$ = new BehaviorSubject<Group>(0);
+  private readonly pageNumberSubject$ = new BehaviorSubject<Page>(0);
+  private readonly wordsSubject$ = new BehaviorSubject<IWord[]>(null);
+  private readonly paginationSubject$ = new BehaviorSubject<IPagination>({
+    group: 0,
+    page: 0
+  })
 
-  constructor(private apiService: ApiService) {}
+  readonly translationDisplay$ = this.translationDisplaySubject$.asObservable();
+  readonly controlsDisplay$ = this.controlsDisplaySubject$.asObservable();
+  readonly groupNumber$ = this.groupNumberSubject$.asObservable().pipe(
+    tap({
+      next: (group) => this.updatePagination({ group })
+    })
+  );
+  readonly pageNumber$ = this.pageNumberSubject$.asObservable().pipe(
+    tap({
+      next: (page) => this.updatePagination({ page })
+    })
+  );
+  readonly words$ = this.wordsSubject$.asObservable();
+  readonly pagination$ = this.paginationSubject$.asObservable();
 
-  readonly translationDisplay$ = this._translationDisplay$.asObservable();
-  readonly controlsDisplay$ = this._controlsDisplay$.asObservable();
-  readonly groupNumber$ = this._groupNumber$.asObservable();
-  readonly pageNumber$ = this._pageNumber$.asObservable();
-  readonly words$ = this._words$.asObservable();
+  readonly MAX_PAGE_COUNT = 29;
+  readonly MIN_PAGE_COUNT = 0;
 
-  readonly triggerLoadingWords$ = new EventEmitter<void>();
 
   setTranslationDisplay(display: boolean) {
-    this._translationDisplay$.next(display);
+    this.translationDisplaySubject$.next(display);
   }
 
   setControlsDisplay(display: boolean) {
-    this._controlsDisplay$.next(display);
+    this.controlsDisplaySubject$.next(display);
   }
 
-  getGroupNumberValue() {
-    return this._groupNumber$.value;
-  }
-
-  setGroupNumber(number: Group): void {
-    this._groupNumber$.next(number);
-    this.triggerLoadingWords$.emit();
-  }
-
-  getPageNumberValue() {
-    return this._pageNumber$.value;
-  }
-
-  setPageNumber(number: Page): void {
-    this._pageNumber$.next(number);
-    this.triggerLoadingWords$.emit();
-  }
-
-  // loadWords() {
-  //   return this.apiService.getWords(this._groupNumber$.value, this._pageNumber$.value);
+  // getGroupNumberValue() {
+  //   return this.groupNumberSubject$.value;
   // }
 
+  setGroupNumber(number: number): void {
+    this.groupNumberSubject$.next(number as Group);
+  }
+
+  // getPageNumberValue() {
+  //   return this.pageNumberSubject$.value;
+  // }
+
+  setPageNumber(number: number): void {
+    this.pageNumberSubject$.next(number as Page);
+  }
+
+  setNextPageNumber() {
+    const currentPageValue = this.pageNumberSubject$.getValue();
+    const nextValue = currentPageValue === this.MAX_PAGE_COUNT ? -1 : currentPageValue;
+    this.pageNumberSubject$.next((nextValue + 1) as Page);
+  }
+
+  setPrevPageNumber() {
+    const currentPageValue = this.pageNumberSubject$.getValue();
+    const prevValue = currentPageValue === this.MIN_PAGE_COUNT ? 30 : currentPageValue;
+    this.pageNumberSubject$.next((prevValue - 1) as Page);
+  }
+
   setWords(words: IWord[]): void {
-    this._words$.next(words);
+    this.wordsSubject$.next(words);
+  }
+
+  private updatePagination(value: IPagination): void {
+    const nextValue = this.paginationSubject$.getValue();
+    nextValue.group = value.group || nextValue.group;
+    nextValue.page = value.page || nextValue.page;
+    this.paginationSubject$.next(nextValue);
   }
 }

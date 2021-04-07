@@ -1,6 +1,10 @@
 <mat-button-toggle-group>
-  <mat-button-toggle value="0">1</mat-button-toggle>
-  <mat-button-toggle value="1">2</mat-button-toggle>
+  <mat-button-toggle #firstGroup value="0" (click)="pickGroup(0)"
+    >1</mat-button-toggle
+  >
+  <mat-button-toggle #secondGroup value="1" (click)="pickGroup(1)"
+    >2</mat-button-toggle
+  >
   <mat-button-toggle value="2">3</mat-button-toggle>
   <mat-button-toggle value="3">4</mat-button-toggle>
   <mat-button-toggle value="4">5</mat-button-toggle>
@@ -10,7 +14,7 @@
 <div class="settings"></div>
 
 <mat-list>
-  <mat-list-item *ngFor="let item of words$">
+  <mat-list-item *ngFor="let item of words$ | async">
     <mat-icon mat-list-icon>volume_up</mat-icon>
     <span style="flex-grow: 1">
       {{ item.word }}
@@ -41,8 +45,16 @@
   <a href="">Своя игра</a>
 </aside>
 
-<nav>
+<!-- <nav>
   <div class="prev-page"></div>
   <div class="current-page">{{ pageNumber$ | async }}</div>
   <div class="next-page"></div>
-</nav>
+</nav> -->
+
+<mat-button-toggle-group>
+  <mat-button-toggle (click)="firstPage()"><<</mat-button-toggle>
+  <mat-button-toggle (click)="prevPage()"><</mat-button-toggle>
+  <div class="current-page">{{ pageNumber$ | async }}</div>
+  <mat-button-toggle (click)="nextPage()">></mat-button-toggle>
+  <mat-button-toggle (click)="lastPage()">>></mat-button-toggle>
+</mat-button-toggle-group>

@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { IWord } from '../shared/models';
 import { Group, Page } from '../shared/types';
 import { SettingsFacade } from '../state/settings-facade.service';
@@ -10,31 +11,59 @@ import { FacadeService } from '../state/state-facade.service';
   templateUrl: './words-list.component.html',
   styleUrls: ['./words-list.component.scss']
 })
-export class WordsListComponent implements OnInit {
+export class WordsListComponent implements OnInit, OnDestroy {
+  constructor(private stateFacade: FacadeService, private settingsFacade: SettingsFacade) {}
 
-  words$: Observable<Array<IWord>>;
-  isTranslationDisplay$: Observable<boolean>;
-  isConstrolsDisplay$: Observable<boolean>;
-  pageNumber$: Observable<Page>;
+  isTranslationDisplay$: Observable<boolean> = this.settingsFacade.isTranslationDisplay$;
+  isConstrolsDisplay$: Observable<boolean> = this.settingsFacade.isConstrolsDisplay$;
+  pageNumber$: Observable<Page> = this.stateFacade.page;
+  words$: Observable<Array<IWord>> = this.stateFacade.words$;
+  words: IWord[];
 
-  constructor(private stateFacade: FacadeService, private settingsFacade: SettingsFacade) {
-    this.words$ = stateFacade.words$;
-    this.isTranslationDisplay$ = settingsFacade.isTranslationDisplay$;
-    this.isConstrolsDisplay$ = settingsFacade.isConstrolsDisplay$;
-    this.pageNumber$ = stateFacade.pageNumber$;
-  }
+  private destroy$ = new Subject<void>();
 
   ngOnInit(): void {
-    this.stateFacade.loadWords();
-    console.log(this.words$);
+    this.stateFacade.loadWords().pipe(takeUntil(this.destroy$)).subscribe(
+      words => {
+      this.words = words;
+      console.log(this.words);
+    });
+    // this.getWords();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  // getWords() {
+  //   this.words$.subscribe(words => {
+  //     this.words = words;
+  //   })
+  // }
+
+  pickGroup(group: number): void {
+    this.stateFacade.setGroup(group);
   }
 
   // setGroupNumber(number: Group) {
   //   this.stateFacade.setGroupNumber(number);
   // }
 
-  pickGroup(number: Group) {
-    this.stateFacade.pickGroup(number);
+  nextPage(): void {
+    this.stateFacade.setNextPage();
+  }
+
+  prevPage(): void {
+    this.stateFacade.setPrevPage();
+  }
+
+  firstPage(): void {
+    this.stateFacade.setFirstPage();
+  }
+
+  lastPage(): void {
+    this.stateFacade.setLastPage();
   }
 
 }
