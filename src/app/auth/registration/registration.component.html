@@ -8,39 +8,37 @@
 		<!--       *ngIf="auth.error$ | async as error"-->
 		<!--  >{{error}}</div>-->
 
-		<div class="alert alert-danger" *ngIf="message">{{ message }}</div>
-
 		<div [ngClass]="{ invalid: form.get('email').touched && form.get('email').invalid }" class="form-control">
-			<label for="email">Email</label>
+			<label for="email">Почта</label>
 			<input id="email" type="email" formControlName="email" />
 		</div>
 
 		<div *ngIf="form.get('email').touched && form.get('email').invalid" class="validation">
-			<small *ngIf="form.get('email').errors.required"> Email is required </small>
-			<small *ngIf="form.get('email').errors.email"> Put email in format email@email.com </small>
+			<small *ngIf="form.get('email').errors.required"> Поле "Почта" обязательно </small>
+			<small *ngIf="form.get('email').errors.email"> Введите поле "Почта" в формате email@email.com </small>
 		</div>
 
 		<div [ngClass]="{ invalid: form.get('password').touched && form.get('password').invalid }" class="form-control">
-			<label for="password">Password</label>
+			<label for="password">Пароль</label>
 			<input id="password" type="password" formControlName="password" />
 		</div>
 
 		<div *ngIf="form.get('password').touched && form.get('password').invalid" class="validation">
-			<small *ngIf="form.get('password').errors.required"> Password is required </small><br />
+			<small *ngIf="form.get('password').errors.required"> Поле "Пароль" обязательно </small><br />
 			<small *ngIf="form.get('password').errors.minlength">
-				Password length must be
-				{{ form.get("password").errors.minlength.requiredLength }} or more symbols. Now it is
-				{{ form.get("password").errors.minlength.actualLength }} </small
+				Пароль должен быть длинной в
+				{{ form.get("password").errors.minlength.requiredLength }} символов. Сейчас длина пароля составляет
+				{{ form.get("password").errors.minlength.actualLength }} символов </small
 			><br />
 			<small *ngIf="form.get('password').errors.passFormat">
-				Maximum 10000 characters, at least one uppercase letter, one lowercase letter, one number and one special character
+				Максимум 10000 символов, как минимум одна большая латинская буква, одна маленькая, одна цифра и один спецсимвол
 				<pre><code>-+_@$!%*?&amp;#.,;:</code></pre>
 			</small>
 		</div>
 		<div *ngIf="form.get('formatPassword')"></div>
 
 		<div [ngClass]="{ invalid: form.get('confirmPassword').touched && form.get('confirmPassword').invalid }" class="form-control">
-			<label for="password">Repeate password</label>
+			<label for="password">Повторите пароль</label>
 			<input id="confirmPassword" type="password" formControlName="confirmPassword" />
 		</div>
 

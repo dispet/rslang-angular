@@ -1,26 +1,31 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../shared/services';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { IUserCreate } from '../../shared/models';
 import { MismatchValidator } from './password-mismatch.validator';
 import { PasswordFormatValidator } from './password-format.validator';
+import { Subscription } from 'rxjs';
 
 @Component({
 	selector: 'app-registration',
 	templateUrl: './registration.component.html',
 	styleUrls: ['./registration.component.scss'],
 })
-export class RegistrationComponent {
+export class RegistrationComponent implements OnInit, OnDestroy {
 	form: FormGroup;
 	submitted = false;
-	message: string;
+	authSubscription: Subscription;
 
 	constructor(public auth: AuthService, private router: Router, private route: ActivatedRoute) {}
 
 	ngOnInit(): void {
 		this.initForm();
 		this.setValidators();
+	}
+
+	ngOnDestroy() {
+		this.authSubscription.unsubscribe();
 	}
 
 	initForm(): void {
@@ -31,10 +36,14 @@ export class RegistrationComponent {
 		});
 	}
 
+	// if create validators inside form initializing they can't see the form
 	setValidators(): void {
+		// validator for password confirmation
 		const formValidators = {
 			confirmPassword: Validators.compose([Validators.required, MismatchValidator.mismatch(this.form.get('password'))]),
 		};
+
+		// validator for passing password to the special requirement (see PasswordFormatValidator)
 		const passwordFormatValidators = {
 			password: Validators.compose([Validators.required, Validators.minLength(8), PasswordFormatValidator.passFormat()]),
 		};
@@ -44,10 +53,6 @@ export class RegistrationComponent {
 	}
 
 	submit(): void {
-		if (this.form.invalid) {
-			return;
-		}
-
 		// to disable button 'submit' if form was already submitted
 		this.submitted = true;
 
@@ -58,7 +63,7 @@ export class RegistrationComponent {
 		};
 
 		// clean form fields and redirect to admin page
-		this.auth.register(user).subscribe(
+		this.authSubscription = this.auth.register(user).subscribe(
 			() => {
 				this.form.reset();
 				this.submitted = false;
