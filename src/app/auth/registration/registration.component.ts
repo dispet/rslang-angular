@@ -8,68 +8,70 @@ import { PasswordFormatValidator } from './password-format.validator';
 import { Subscription } from 'rxjs';
 
 @Component({
-	selector: 'app-registration',
-	templateUrl: './registration.component.html',
-	styleUrls: ['./registration.component.scss'],
+  selector: 'app-registration',
+  templateUrl: './registration.component.html',
+  styleUrls: ['./registration.component.scss'],
 })
 export class RegistrationComponent implements OnInit, OnDestroy {
-	form: FormGroup;
-	submitted = false;
-	authSubscription: Subscription;
+  form: FormGroup;
+  submitted = false;
+  authSubscription: Subscription;
 
-	constructor(public auth: AuthService, private router: Router, private route: ActivatedRoute) {}
+  constructor(public auth: AuthService, private router: Router, private route: ActivatedRoute) {}
 
-	ngOnInit(): void {
-		this.initForm();
-		this.setValidators();
-	}
+  ngOnInit(): void {
+    this.initForm();
+    this.setValidators();
+  }
 
-	ngOnDestroy() {
-		this.authSubscription.unsubscribe();
-	}
+  ngOnDestroy() {
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
+  }
 
-	initForm(): void {
-		this.form = new FormGroup({
-			email: new FormControl(null, [Validators.email, Validators.required]),
-			password: new FormControl(null),
-			confirmPassword: new FormControl(null),
-		});
-	}
+  initForm(): void {
+    this.form = new FormGroup({
+      email: new FormControl(null, [Validators.email, Validators.required]),
+      password: new FormControl(null),
+      confirmPassword: new FormControl(null),
+    });
+  }
 
-	// if create validators inside form initializing they can't see the form
-	setValidators(): void {
-		// validator for password confirmation
-		const formValidators = {
-			confirmPassword: Validators.compose([Validators.required, MismatchValidator.mismatch(this.form.get('password'))]),
-		};
+  // if create validators inside form initializing they can't see the form
+  setValidators(): void {
+    // validator for password confirmation
+    const formValidators = {
+      confirmPassword: Validators.compose([Validators.required, MismatchValidator.mismatch(this.form.get('password'))]),
+    };
 
-		// validator for passing password to the special requirement (see PasswordFormatValidator)
-		const passwordFormatValidators = {
-			password: Validators.compose([Validators.required, Validators.minLength(8), PasswordFormatValidator.passFormat()]),
-		};
+    // validator for passing password to the special requirement (see PasswordFormatValidator)
+    const passwordFormatValidators = {
+      password: Validators.compose([Validators.required, Validators.minLength(8), PasswordFormatValidator.passFormat()]),
+    };
 
-		this.form.get('confirmPassword').setValidators(formValidators['confirmPassword']);
-		this.form.get('password').setValidators(passwordFormatValidators['password']);
-	}
+    this.form.get('confirmPassword').setValidators(formValidators['confirmPassword']);
+    this.form.get('password').setValidators(passwordFormatValidators['password']);
+  }
 
-	submit(): void {
-		// to disable button 'submit' if form was already submitted
-		this.submitted = true;
+  submit(): void {
+    // to disable button 'submit' if form was already submitted
+    this.submitted = true;
 
-		// create user, get user data from UI
-		const user: IUserCreate = {
-			email: this.form.value.email,
-			password: this.form.value.password,
-		};
+    // create user, get user data from UI
+    const user: IUserCreate = {
+      email: this.form.value.email,
+      password: this.form.value.password,
+    };
 
-		// clean form fields and redirect to admin page
-		this.authSubscription = this.auth.register(user).subscribe(
-			() => {
-				this.form.reset();
-				this.submitted = false;
-				this.router.navigate(['login']);
-			},
-			() => (this.submitted = false),
-		);
-	}
+    // clean form fields and redirect to admin page
+    this.authSubscription = this.auth.register(user).subscribe(
+      () => {
+        this.form.reset();
+        this.submitted = false;
+        this.router.navigate(['login']);
+      },
+      () => (this.submitted = false),
+    );
+  }
 }
