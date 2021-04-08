@@ -48,6 +48,7 @@
 			top: 50%;
 			left: 50%;
 			transform: translate(-50%, -50%);
+			overflow: auto;
 		}
 	}
 
@@ -57,8 +58,17 @@
 			color: lightsalmon;
 
 			.choose-difficulty-level {
+				display: flex;
+				justify-content: space-between;
+				flex-wrap: wrap;
+				flex-direction: row;
 				button {
+					border-color: rosybrown;
+					border-radius: 10px;
+					background-color: rosybrown;
+					color: seashell;
 					margin: 10px;
+					padding: 10px;
 				}
 			}
 		}
@@ -69,6 +79,29 @@
 		.modal-window {
 			background-color: darkcyan;
 			color: lightcyan;
+			height: 80%;
+			.modal-content {
+				.single-answer {
+					display: flex;
+
+					.answer {
+						text-align: left;
+						padding-left: 20px;
+					}
+
+					mat-icon {
+						display: block;
+						color: gainsboro;
+
+						&:hover {
+							cursor: pointer;
+						}
+						&:active {
+							color: blue;
+						}
+					}
+				}
+			}
 		}
 	}
 

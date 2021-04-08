@@ -1,44 +1,49 @@
-import { AfterViewInit, Component, ElementRef, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { IGame, IGameAnswer } from '../models/savanna-game.model';
-import { SavannaService } from '../services/savanna.service';
 import { flyTopDown } from '../animations/savanna-animations';
 import { ApiService } from 'src/app/shared';
 import { IWord } from 'src/app/shared/models';
-import { Group } from 'src/app/shared/types';
+import { Group, Page } from 'src/app/shared/types';
 @Component({
 	selector: 'app-savanna',
 	templateUrl: './savanna.component.html',
 	styleUrls: ['./savanna.component.scss'],
 	animations: [flyTopDown],
 })
-export class SavannaComponent implements OnInit, AfterViewInit {
+export class SavannaComponent implements OnInit, AfterViewInit, OnDestroy {
 	resultsModal!: Element;
 	firstModal!: Element;
 	isHeartRemoved = false;
 	isGameEnd = false;
 	isGameBegin = false;
-	isResponseReached = this.savannaService.responseReached;
+	isResponseReached = false;
+
+	//
+	choosenGroup: Group;
+	randomPage: Page;
+	responseWordsArray!: IWord[];
+	//
 	game: IGame = {
 		answers: [],
 		heartsCount: [`h`, `h`, `h`, `h`, `h`],
 		correctAnswers: [],
 		incorrectAnswers: [],
+		correctAnswersTranslate: [],
+		incorrectAnswersTranslate: [],
+		correctAnswerAudios: [],
+		incorrectAnswerAudios: [],
 	};
+	difficultyGroups = [1, 2, 3, 4, 5, 6];
 	savannaWrapperHeight = { height: '100%' };
-	responseArray: IWord;
 	bgpY = '100%';
 	backgroundPositionY = { 'background-position-y': this.bgpY };
 
-	constructor(private savannaService: SavannaService, private el: ElementRef, private apiService: ApiService) {}
-	ngOnInit(): void {
-		let waitResponse;
-		waitResponse = setInterval(() => {
-			this.isResponseReached = this.savannaService.responseReached;
+	constructor(private el: ElementRef, private apiService: ApiService) {}
 
-			if (this.isResponseReached === true) {
-				this.clearGivenInterval(waitResponse);
-			}
-		}, 500);
+	ngOnInit(): void {}
+
+	ngOnDestroy(): void {
+		this.isResponseReached = false;
 	}
 
 	ngAfterViewInit() {
@@ -46,30 +51,53 @@ export class SavannaComponent implements OnInit, AfterViewInit {
 		this.resultsModal = this.el.nativeElement.querySelector('.results-modal');
 	}
 
-	clearGivenInterval(intervalId) {
+	clearGivenInterval(intervalId: number) {
 		clearInterval(intervalId);
 	}
 
 	beginTheGame(button: MouseEvent) {
-		let level = +(button.target as Element).innerHTML as Group;
+		let level = +(button.target as Element).innerHTML;
 		this.isGameBegin = true;
-		console.log((button.target as Element).innerHTML, typeof level);
-
-		this.savannaService.choosenGroup = level;
-		this.savannaService.getChoosenWords();
+		this.choosenGroup = (level - 1) as Group;
+		this.getChoosenGroupWords();
 		this.firstModal.classList.remove('modal-active');
+	}
+
+	getChoosenGroupWords() {
+		this.randomPage = Math.floor(Math.random() * 20) as Page;
+		this.apiService.getWords(this.choosenGroup, this.randomPage).subscribe((response) => {
+			this.responseWordsArray = response;
+			this.isResponseReached = true;
+		});
 	}
 
 	recieveAnswer(answerObject: IGameAnswer) {
 		if (answerObject.isCorrect === false) {
 			this.decreaseHeart();
-			this.game.incorrectAnswers.push(answerObject.choosenOption);
+			this.game.incorrectAnswers.push(answerObject.answer.answer);
+			this.game.incorrectAnswersTranslate.push(answerObject.answer.answerTranslate);
+			this.game.incorrectAnswerAudios.push(answerObject.audio);
 		} else {
-			this.game.correctAnswers.push(answerObject.choosenOption);
+			this.game.correctAnswers.push(answerObject.answer.answer);
+			this.game.correctAnswersTranslate.push(answerObject.answer.answerTranslate);
+			this.game.correctAnswerAudios.push(answerObject.audio);
 		}
-		this.game.answers.push(answerObject.isCorrect);
 		this.bgpY = `${+this.bgpY.replace(/\%/g, '') - 5}%`;
 		this.backgroundPositionY = { 'background-position-y': this.bgpY };
+	}
+
+	playWordAudio(event: MouseEvent) {
+		let button = event.target as Element;
+		let currentAudio;
+		let idC = Array.from(button.classList).find((className) => className.includes('playAudioButtonForC'));
+		let idIn = Array.from(button.classList).find((className) => className.includes('playAudioButtonForIn'));
+		let id = (idC || idIn).replace(/\D/g, '');
+		if (idIn) {
+			currentAudio = this.el.nativeElement.querySelector(`.audioIn${id}`);
+		} else {
+			currentAudio = this.el.nativeElement.querySelector(`.audioC${id}`);
+		}
+		currentAudio.play();
 	}
 
 	decreaseHeart() {

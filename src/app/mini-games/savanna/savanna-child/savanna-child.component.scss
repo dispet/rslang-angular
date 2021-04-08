@@ -9,7 +9,10 @@
 
 	.target-word {
 		top: 5%;
-		color: white;
+		color: black;
+		background-color: white;
+		padding: 10px;
+		border-radius: 10px;
 	}
 
 	.option-words {
@@ -29,6 +32,7 @@
 				background-color: transparent;
 				border-radius: 10px;
 				color: white;
+				background-color: black;
 				font: {
 					weight: bold;
 				}

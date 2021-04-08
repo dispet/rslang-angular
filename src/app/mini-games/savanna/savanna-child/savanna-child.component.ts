@@ -1,9 +1,7 @@
-import { Component, ElementRef, Input, OnInit, EventEmitter, Output, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, ElementRef, Input, OnInit, EventEmitter, Output, OnDestroy, HostListener } from '@angular/core';
 import { IGameAnswer } from '../../models/savanna-game.model';
-import { SavannaService } from '../../services/savanna.service';
-import { ApiService } from '../../../shared/services/api.service';
 import { moveTargetWord } from '../../animations/savanna-animations';
+import { IWord } from 'src/app/shared/models/word.model';
 
 @Component({
 	selector: 'app-savanna-child',
@@ -13,53 +11,75 @@ import { moveTargetWord } from '../../animations/savanna-animations';
 })
 export class SavannaChildComponent implements OnInit, OnDestroy {
 	@Input() heartsCount!: number;
+	@Input() responseWordsArray!: IWord[];
 	@Output() passAnswer = new EventEmitter<IGameAnswer>();
 	@Output() isGameEnd = new EventEmitter<boolean>();
 
 	changeWordsInterval!: NodeJS.Timeout;
-	englishWords = this.savannaService.responseWords.map((wordObj) => wordObj.word);
-	russianWords = this.savannaService.responseWords.map((wordObj) => wordObj.wordTranslate);
+	englishWords: string[];
+	russianWords: string[];
 	// the word that comes down from top
 	targetWord!: string;
 	answer!: string;
 	options: string[] = ['', '', '', ''];
 	// the count is used to count 'targetWord's
 	count = 0;
-	clickedButton!: Element;
+	choosenButton!: Element;
 	correctButton!: Element;
 	// component pass this object to the savanna component
 	gameAnswer: IGameAnswer = {
 		isCorrect: true,
-		choosenOption: '',
+		answer: {
+			answer: '',
+			answerTranslate: '',
+		},
+		audio: '',
 	};
 	// the buttons should be disabled after first button click event
 	isClicked = false;
 	// targetWord has animation targetWord may be three different states 'top', 'bottom', 'answered'
 	// default state is 'top'
 	targetWordState = 'top';
-	choosenOption = "You haven't choosen.";
+	choosenOption = '';
 	// these sounds will play after user choose any option or when 'targetWord's state is 'bottom'
 	correctSound = new Audio();
 	wrongSound = new Audio();
 
-	constructor(private el: ElementRef, private savannaService: SavannaService, private apiService: ApiService) {}
+	constructor(private el: ElementRef) {}
 
 	ngOnInit(): void {
 		this.correctSound.src = '../../../../assets/savanna-game/correct.wav';
 		this.wrongSound.src = '../../../../assets/savanna-game/wrong.wav';
+
+		this.englishWords = this.responseWordsArray.map((wordObj) => wordObj.word);
+		this.russianWords = this.responseWordsArray.map((wordObj) => wordObj.wordTranslate);
 
 		// 'changeWordsInterval' begins immediately when component initializes
 		this.beginNewInterval();
 	}
 
 	ngOnDestroy(): void {
-		clearInterval(this.changeWordsInterval);
+		this.clearGivenInterval(this.changeWordsInterval);
+	}
+
+	@HostListener('window:keydown', ['$event'])
+	checkOnKeyboardEvent(event: KeyboardEvent) {
+		this.choosenButton = this.el.nativeElement.querySelectorAll('.option-word button')[+event.key - 1];
+		this.checkAnswer();
+	}
+
+	shuffleArray(array: string[]) {
+		for (let i = array.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[array[i], array[j]] = [array[j], array[i]];
+		}
+		return array;
 	}
 
 	// the words change every exact time
 	changeWord() {
 		this.isClicked = false;
-		this.removeStyles(this.clickedButton);
+		this.removeStyles(this.choosenButton);
 		this.removeStyles(this.correctButton);
 		this.targetWord = this.englishWords[this.count++];
 
@@ -67,7 +87,7 @@ export class SavannaChildComponent implements OnInit, OnDestroy {
 		if (this.count >= 21) {
 			this.count = 0;
 			this.isGameEnd.emit(true);
-			clearInterval(this.changeWordsInterval);
+			this.clearGivenInterval(this.changeWordsInterval);
 		}
 	}
 
@@ -99,29 +119,24 @@ export class SavannaChildComponent implements OnInit, OnDestroy {
 		return options;
 	}
 
-	shuffleArray(array: string[]) {
-		for (let i = array.length - 1; i > 0; i--) {
-			const j = Math.floor(Math.random() * (i + 1));
-			[array[i], array[j]] = [array[j], array[i]];
-		}
-		return array;
+	checkOnClickEvent(event: MouseEvent) {
+		this.choosenButton = event.target as Element;
+		this.checkAnswer();
 	}
 
-	checkAnswer(event: MouseEvent) {
-		this.clickedButton = event.target as Element;
-
+	checkAnswer() {
 		// make buttons disabled
 		this.isClicked = true;
 
 		// options structure : "1. {{options[1]}}" , we should remove '1. '.
-		this.choosenOption = this.clickedButton.textContent?.slice(3).trim() || "You haven't choosen.";
+		this.choosenOption = this.choosenButton.textContent?.slice(3).trim() || "You haven't choosen.";
 		if (this.choosenOption === this.answer) {
 			this.inCaseTheAnswerTrue();
 		} else {
 			this.inCaseTheAnswerFalse();
 		}
 
-		// when the state of targetWord is 'answered', targetWord move to the top(itselves default place).
+		// when the state of targetWord is 'answered', targetWord moves to the top(itselves default place).
 		this.targetWordState = 'answered';
 
 		// in order to animation happen we need tick
@@ -132,41 +147,29 @@ export class SavannaChildComponent implements OnInit, OnDestroy {
 
 	inCaseTheAnswerTrue() {
 		this.correctSound.play();
-		this.clickedButton.classList.add('correct');
-		this.gameAnswer.isCorrect = true;
-		this.gameAnswer.choosenOption = this.choosenOption;
-		this.passAnswer.emit(this.gameAnswer);
+		this.choosenButton.classList.add('correct');
+		this.passGameAnswer(true);
 	}
 
 	inCaseTheAnswerFalse() {
-		this.wrongSound.play();
-		this.correctButton = Array.from(this.el.nativeElement.querySelectorAll('.option-word button') as Element[]).find((button: Element) => {
-			return button.textContent?.slice(3).trim() === this.answer;
-		}) as Element;
-
-		this.correctButton.classList.add('correct');
-		if (this.clickedButton) {
-			this.clickedButton.classList.add('incorrect');
-		}
-		this.gameAnswer.isCorrect = false;
-		this.gameAnswer.choosenOption = this.choosenOption;
-		this.passAnswer.emit(this.gameAnswer);
-
 		if (this.heartsCount === 1) {
-			clearInterval(this.changeWordsInterval);
+			this.clearGivenInterval(this.changeWordsInterval);
 			this.isGameEnd.emit(true);
-		}
-	}
-
-	changeAnimationState() {
-		if (this.targetWordState === 'top') {
-			this.targetWordState = 'bottom';
 		} else {
-			// when user doesn't choose any option we do
-			this.choosenOption = "You haven't choosen";
-			this.inCaseTheAnswerFalse();
-			this.targetWordState = 'top';
+			this.wrongSound.play();
+			this.correctButton = Array.from(this.el.nativeElement.querySelectorAll('.option-word button') as Element[]).find(
+				(button: Element) => {
+					return button.textContent?.slice(3).trim() === this.answer;
+				},
+			) as Element;
+
+			this.correctButton.classList.add('correct');
+			if (this.choosenButton) {
+				this.choosenButton.classList.add('incorrect');
+			}
 		}
+
+		this.passGameAnswer(false);
 	}
 
 	removeStyles(button: Element) {
@@ -177,13 +180,54 @@ export class SavannaChildComponent implements OnInit, OnDestroy {
 		}
 	}
 
+	findAudio(choosenOption: string) {
+		let audioSrc = this.responseWordsArray.find((word) => {
+			return word.wordTranslate === choosenOption;
+		}).audio;
+		return audioSrc;
+	}
+
+	passGameAnswer(isCorrect: boolean) {
+		if (isCorrect) {
+			this.gameAnswer.isCorrect = true;
+			this.gameAnswer.answer = {
+				answer: this.choosenOption,
+				answerTranslate: this.targetWord,
+			};
+			this.gameAnswer.audio = this.findAudio(this.choosenOption);
+		} else {
+			this.gameAnswer.isCorrect = false;
+			this.gameAnswer.answer = {
+				answer: this.answer,
+				answerTranslate: this.targetWord,
+			};
+			this.gameAnswer.audio = this.findAudio(this.answer);
+		}
+		this.passAnswer.emit(this.gameAnswer);
+	}
+
+	changeAnimationState() {
+		if (this.targetWordState === 'top') {
+			this.targetWordState = 'bottom';
+		} else {
+			// when user doesn't choose any option we do
+			this.choosenOption = "You haven't choosen";
+			this.targetWordState = 'top';
+			this.inCaseTheAnswerFalse();
+		}
+	}
+
+	clearGivenInterval(intervalId: NodeJS.Timeout) {
+		clearInterval(intervalId);
+	}
+
 	beginNewInterval() {
 		// targetWord's state changes during the game therefore
 		// we have to assign  value 'top' to the targetWordState beginning new interval
 		this.targetWordState = 'top';
 		// when the state of targetWord is 'answered' , we begin new interwal
 		// so that we have to clear old interval
-		clearInterval(this.changeWordsInterval);
+		this.clearGivenInterval(this.changeWordsInterval);
 
 		// when the state of targetWord is 'answered' or 'bottom', our buttons takes styles
 		// these styles will be visible as timeout value(0.5 second in our case)
