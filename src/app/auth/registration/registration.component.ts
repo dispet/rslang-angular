@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroupDirective, NgForm, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../shared/services';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { IUserCreate } from '../../shared/models';
 import { MismatchValidator } from './password-mismatch.validator';
 import { PasswordFormatValidator } from './password-format.validator';
 import { Subscription } from 'rxjs';
+import { ErrorStateMatcher } from '@angular/material/core';
 
 @Component({
   selector: 'app-registration',
@@ -16,6 +17,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   form: FormGroup;
   submitted = false;
   authSubscription: Subscription;
+  hide = true;
 
   constructor(public auth: AuthService, private router: Router, private route: ActivatedRoute) {}
 
