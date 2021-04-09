@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AuthService } from '../../shared/services';
 import { IUserCreate } from '../../shared/models';
 import { Subscription } from 'rxjs';
+import { mergeMap, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -14,17 +15,15 @@ export class LoginComponent implements OnInit, OnDestroy {
   form: FormGroup;
   submitted = false;
   authSubscription: Subscription;
+  message = '';
+  hide = true;
 
-  constructor(public auth: AuthService, private router: Router) {}
+  constructor(public auth: AuthService, private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    // if you are not logged in and try to go to dashboard,
-    // you get in url query param loginAgain=true.
-    // Then get this url like observable and check this queryParam
-
     this.form = new FormGroup({
       email: new FormControl(null, [Validators.email, Validators.required]),
-      password: new FormControl(null, [Validators.required, Validators.minLength(8)]),
+      password: new FormControl(null, [Validators.required]),
     });
   }
 
@@ -55,7 +54,12 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.submitted = false;
         this.router.navigate(['text-book']);
       },
-      () => (this.submitted = false),
+      (error) => {
+        this.submitted = false;
+        if (!error.ok) {
+          this.message = 'Неверные логин или пароль';
+        }
+      },
     );
   }
 }
