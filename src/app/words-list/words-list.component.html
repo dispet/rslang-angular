@@ -1,17 +1,21 @@
-<mat-button-toggle-group>
-  <mat-button-toggle (click)="pickGroup(0)">1</mat-button-toggle>
-  <mat-button-toggle (click)="pickGroup(1)">2</mat-button-toggle>
-  <mat-button-toggle (click)="pickGroup(2)">3</mat-button-toggle>
-  <mat-button-toggle (click)="pickGroup(3)">4</mat-button-toggle>
-  <mat-button-toggle (click)="pickGroup(4)">5</mat-button-toggle>
-  <mat-button-toggle (click)="pickGroup(5)">6</mat-button-toggle>
-</mat-button-toggle-group>
+<div class="actions">
+  <button type="button" mat-button (click)="drawer.toggle()">
+    Выбрать игру
+  </button>
 
-<button class="settings" mat-icon-button routerLink="settings">
-  <mat-icon mat-list-icon>settings</mat-icon>
-</button>
+  <mat-button-toggle-group class="actions-group">
+    <mat-button-toggle (click)="pickGroup(0)">1</mat-button-toggle>
+    <mat-button-toggle (click)="pickGroup(1)">2</mat-button-toggle>
+    <mat-button-toggle (click)="pickGroup(2)">3</mat-button-toggle>
+    <mat-button-toggle (click)="pickGroup(3)">4</mat-button-toggle>
+    <mat-button-toggle (click)="pickGroup(4)">5</mat-button-toggle>
+    <mat-button-toggle (click)="pickGroup(5)">6</mat-button-toggle>
+  </mat-button-toggle-group>
 
-<button type="button" mat-button (click)="drawer.toggle()">Choose game</button>
+  <button class="settings" mat-icon-button routerLink="settings">
+    <mat-icon mat-list-icon>settings</mat-icon>
+  </button>
+</div>
 
 <mat-drawer-container>
   <mat-drawer #drawer position="end">
@@ -27,41 +31,43 @@
     </mat-button-toggle-group>
   </mat-drawer>
 
-  <ul>
+  <ul class="list">
     <li *ngFor="let item of words$ | async" class="list-item">
       <div class="list-item-container">
         <div class="item-image">
-          <img
-            src="https://dispet.github.io/rslang-data/{{ item.image }}"
-            alt="{{ item.word }}"
-          />
+          <img src="{{ url }}{{ item.image }}" alt="{{ item.word }}" />
         </div>
         <div class="item-content">
           <div class="item-title">
-            <p>
-              <span style="flex-grow: 1">
-                {{ item.word }}
-              </span>
-              -
-              <span>{{ item.wordTranslate }}</span>
-            </p>
-          </div>
-          <div class="item-subtitle">
-            <p>
-              <span>{{ item.transcription }}</span>
-            </p>
+            <button
+              mat-icon-button
+              (click)="
+                playAudio(item.audio, item.audioMeaning, item.audioExample)
+              "
+            >
+              <mat-icon mat-list-icon>volume_up</mat-icon>
+            </button>
+            <span>
+              {{ item.word }}
+            </span>
+            :
+            <span>{{ item.transcription }}</span>
+            <span *ngIf="isTranslationDisplay$ | async">
+              - {{ item.wordTranslate }}</span
+            >
           </div>
           <div class="item-description">
             <p>
-              <span [innerHTML]="item.textMeaning"></span> -
-              <span>{{ item.textMeaningTranslate }}</span>
+              <span [innerHTML]="item.textMeaning"></span>
+              <span *ngIf="isTranslationDisplay$ | async">
+                - {{ item.textMeaningTranslate }}</span
+              >
             </p>
             <p>
               <span [innerHTML]="item.textExample"></span>
-              -
-              <span style="word-wrap: break-word; width: 100%">{{
-                item.textExampleTranslate
-              }}</span>
+              <span *ngIf="isTranslationDisplay$ | async">
+                - {{ item.textExampleTranslate }}</span
+              >
             </p>
             <p>
               {{ item.learningResults }}
@@ -69,97 +75,42 @@
           </div>
         </div>
 
-        <div class="item-controls">
-          <button mat-icon-button>
-            <mat-icon mat-list-icon>volume_up</mat-icon>
-          </button>
-          <button mat-icon-button (click)="console.log('add to difficult')">
+        <div class="item-controls" *ngIf="isControlsDisplay$ | async">
+          <button (click)="console.log('add to difficult')">
             <mat-icon>new_label</mat-icon>
           </button>
-          <button mat-icon-button (click)="console.log('add to difficult')">
+          <button (click)="console.log('add to difficult')">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
-        <mat-divider></mat-divider>
       </div>
+      <mat-divider></mat-divider>
     </li>
   </ul>
-  <!-- <mat-list>
-    <mat-list-item *ngFor="let item of words$ | async">
-      <mat-card>
-        <img
-          mat-card-iamge
-          src="https://dispet.github.io/rslang-data/{{ item.image }}"
-          alt="{{ item.word }}"
-        />
-        <mat-card-content>
-          <mat-card-title>
-            <p>
-              <span style="flex-grow: 1">
-                {{ item.word }}
-              </span>
-              -
-              <span>{{ item.wordTranslate }}</span>
-            </p>
-          </mat-card-title>
-          <mat-card-subtitle>
-            <p>
-              <span>{{ item.transcription }}</span>
-            </p>
-          </mat-card-subtitle>
-          <p>
-            <span [innerHTML]="item.textMeaning"></span> -
-            <span>{{ item.textMeaningTranslate }}</span>
-          </p>
-          <p>
-            <span [innerHTML]="item.textExample"></span>
-            -
-            <span style="word-wrap: break-word; width: 100%">{{
-              item.textExampleTranslate
-            }}</span>
-          </p>
-          <p>
-            {{ item.learningResults }}
-          </p>
-        </mat-card-content>
 
-        <mat-card-actions>
-          <button mat-icon-button>
-            <mat-icon mat-list-icon>volume_up</mat-icon>
-          </button>
-          <button mat-icon-button (click)="console.log('add to difficult')">
-            <mat-icon>new_label</mat-icon>
-          </button>
-          <button mat-icon-button (click)="console.log('add to difficult')">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </mat-card-actions>
-        <mat-divider></mat-divider>
-      </mat-card>
-    </mat-list-item>
-  </mat-list> -->
+  <div class="paginator">
+    <mat-button-toggle-group>
+      <mat-button-toggle (click)="firstPage()">
+        <mat-icon mat-list-icon>first_page</mat-icon>
+      </mat-button-toggle>
 
-  <mat-button-toggle-group>
-    <mat-button-toggle (click)="firstPage()">
-      <mat-icon mat-list-icon>first_page</mat-icon>
-    </mat-button-toggle>
+      <mat-button-toggle (click)="prevPage()">
+        <mat-icon mat-list-icon>chevron_left</mat-icon>
+      </mat-button-toggle>
 
-    <mat-button-toggle (click)="prevPage()">
-      <mat-icon mat-list-icon>chevron_left</mat-icon>
-    </mat-button-toggle>
+      <div class="current-page" *ngIf="pagination$ | async as pagination">
+        <b>{{ pagination.page + 1 }} / 30</b>
+      </div>
 
-    <div class="current-page" *ngIf="pagination$ | async as pagination">
-      <b>{{ pagination.page + 1 }} / 30</b>
-    </div>
+      <mat-button-toggle (click)="nextPage()">
+        <mat-icon mat-list-icon>chevron_right</mat-icon>
+      </mat-button-toggle>
 
-    <mat-button-toggle (click)="nextPage()">
-      <mat-icon mat-list-icon>chevron_right</mat-icon>
-    </mat-button-toggle>
-
-    <mat-button-toggle (click)="lastPage()">
-      <mat-icon mat-list-icon>last_page</mat-icon>
-    </mat-button-toggle>
-  </mat-button-toggle-group>
+      <mat-button-toggle (click)="lastPage()">
+        <mat-icon mat-list-icon>last_page</mat-icon>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
 </mat-drawer-container>
 
 <app-footer></app-footer>
