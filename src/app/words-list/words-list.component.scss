@@ -1,0 +1,12 @@
+.list-item {
+  list-style: none;
+
+  &-container {
+    min-height: 10rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+  }
+}

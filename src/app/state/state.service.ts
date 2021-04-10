@@ -10,8 +10,6 @@ import { Group, Page } from "../shared/types";
 export class StateService {
   private readonly translationDisplaySubject$ = new BehaviorSubject<boolean>(true);
   private readonly controlsDisplaySubject$ = new BehaviorSubject<boolean>(true);
-  private readonly groupNumberSubject$ = new BehaviorSubject<Group>(0);
-  private readonly pageNumberSubject$ = new BehaviorSubject<Page>(0);
   private readonly wordsSubject$ = new BehaviorSubject<IWord[]>(null);
   private readonly paginationSubject$ = new BehaviorSubject<IPagination>({
     group: 0,
@@ -28,12 +26,12 @@ export class StateService {
   readonly MIN_PAGE_COUNT = 0;
 
 
-  setTranslationDisplay(display: boolean): void {
-    this.translationDisplaySubject$.next(display);
+  setTranslationDisplay(): void {
+    this.translationDisplaySubject$.next(!this.translationDisplaySubject$.getValue());
   }
 
-  setControlsDisplay(display: boolean): void {
-    this.controlsDisplaySubject$.next(display);
+  setControlsDisplay(): void {
+    this.controlsDisplaySubject$.next(!this.controlsDisplaySubject$.getValue());
   }
 
   setGroupNumber(number: number): void {
