@@ -1,0 +1,27 @@
+<div class="results-modal">
+	<div class="modal-window">
+		<div class="modal-content">
+			<h1>Results</h1>
+			<h2>Correct answers: {{ data.correctAnswers.length }}</h2>
+			<div class="correct-answers" *ngFor="let answer of data.correctAnswers; let i = index">
+				<div class="single-answer">
+					<audio class="audioC{{ i }}" src="https://dispet.github.io/rslang-data/{{ data.correctAnswerAudios[i] }}"></audio>
+					<mat-icon style="color: green" class="playAudioButtonForC{{ i }}" (click)="playWordAudio($event)">volume_up</mat-icon>
+					<div style="color: green" class="answer">{{ data.correctAnswersTranslate[i] }} - {{ answer }}</div>
+				</div>
+			</div>
+			<h2>Incorrect answers: {{ data.incorrectAnswers.length }}</h2>
+			<div class="incorrect-answers" *ngFor="let answer of data.incorrectAnswers; let i = index">
+				<div class="single-answer">
+					<audio class="audioIn{{ i }}" src="https://dispet.github.io/rslang-data/{{ data.incorrectAnswerAudios[i] }}"></audio>
+					<mat-icon style="color: red" class="playAudioButtonForIn{{ i }}" (click)="playWordAudio($event)">volume_up</mat-icon>
+					<div class="answer" style="color: red">{{ data.incorrectAnswersTranslate[i] }} - {{ answer }}</div>
+				</div>
+			</div>
+			<div class="action-buttons">
+				<button mat-raised-button color="primary" (click)="reload()">Restart</button>
+				<button mat-raised-button color="accent"><a routerLink="../../mini-games">Return to mini-games</a></button>
+			</div>
+		</div>
+	</div>
+</div>

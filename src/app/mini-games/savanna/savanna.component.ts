@@ -4,6 +4,7 @@ import { flyTopDown } from '../animations/savanna-animations';
 import { ApiService } from 'src/app/shared';
 import { IWord } from 'src/app/shared/models';
 import { Group, Page } from 'src/app/shared/types';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
 	selector: 'app-savanna',
 	templateUrl: './savanna.component.html',
@@ -17,12 +18,10 @@ export class SavannaComponent implements OnInit, AfterViewInit, OnDestroy {
 	isGameEnd = false;
 	isGameBegin = false;
 	isResponseReached = false;
-
-	//
 	choosenGroup: Group;
 	randomPage: Page;
 	responseWordsArray!: IWord[];
-	//
+	subscription;
 	game: IGame = {
 		answers: [],
 		heartsCount: [`h`, `h`, `h`, `h`, `h`],
@@ -33,17 +32,17 @@ export class SavannaComponent implements OnInit, AfterViewInit, OnDestroy {
 		correctAnswerAudios: [],
 		incorrectAnswerAudios: [],
 	};
-	difficultyGroups = [1, 2, 3, 4, 5, 6];
 	savannaWrapperHeight = { height: '100%' };
 	bgpY = '100%';
 	backgroundPositionY = { 'background-position-y': this.bgpY };
 
-	constructor(private el: ElementRef, private apiService: ApiService) {}
+	constructor(private el: ElementRef, private apiService: ApiService, public dialog: MatDialog) {}
 
 	ngOnInit(): void {}
 
 	ngOnDestroy(): void {
 		this.isResponseReached = false;
+		this.subscription.unsubscribe();
 	}
 
 	ngAfterViewInit() {
@@ -51,21 +50,16 @@ export class SavannaComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.resultsModal = this.el.nativeElement.querySelector('.results-modal');
 	}
 
-	clearGivenInterval(intervalId: number) {
-		clearInterval(intervalId);
-	}
-
-	beginTheGame(button: MouseEvent) {
-		let level = +(button.target as Element).innerHTML;
+	beginTheGame(level: Group) {
 		this.isGameBegin = true;
-		this.choosenGroup = (level - 1) as Group;
+		this.choosenGroup = level;
 		this.getChoosenGroupWords();
 		this.firstModal.classList.remove('modal-active');
 	}
 
 	getChoosenGroupWords() {
 		this.randomPage = Math.floor(Math.random() * 20) as Page;
-		this.apiService.getWords(this.choosenGroup, this.randomPage).subscribe((response) => {
+		this.subscription = this.apiService.getWords(this.choosenGroup, this.randomPage).subscribe((response) => {
 			this.responseWordsArray = response;
 			this.isResponseReached = true;
 		});
@@ -86,20 +80,6 @@ export class SavannaComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.backgroundPositionY = { 'background-position-y': this.bgpY };
 	}
 
-	playWordAudio(event: MouseEvent) {
-		let button = event.target as Element;
-		let currentAudio;
-		let idC = Array.from(button.classList).find((className) => className.includes('playAudioButtonForC'));
-		let idIn = Array.from(button.classList).find((className) => className.includes('playAudioButtonForIn'));
-		let id = (idC || idIn).replace(/\D/g, '');
-		if (idIn) {
-			currentAudio = this.el.nativeElement.querySelector(`.audioIn${id}`);
-		} else {
-			currentAudio = this.el.nativeElement.querySelector(`.audioC${id}`);
-		}
-		currentAudio.play();
-	}
-
 	decreaseHeart() {
 		this.isHeartRemoved = true;
 		this.game.heartsCount.pop();
@@ -110,8 +90,8 @@ export class SavannaComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	gameEnd(isGameEnd: boolean) {
 		if (isGameEnd === true) {
-			this.openModal();
 			this.isGameEnd = true;
+			this.openModal();
 		}
 	}
 

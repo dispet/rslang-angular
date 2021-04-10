@@ -3,17 +3,8 @@
 		{{ targetWord }}
 	</div>
 	<div class="option-words">
-		<div class="option-word">
-			<button (click)="checkOnClickEvent($event)" [disabled]="isClicked">1. {{ options[0] }}</button>
-		</div>
-		<div class="option-word">
-			<button (click)="checkOnClickEvent($event)" [disabled]="isClicked">2. {{ options[1] }}</button>
-		</div>
-		<div class="option-word">
-			<button (click)="checkOnClickEvent($event)" [disabled]="isClicked">3. {{ options[2] }}</button>
-		</div>
-		<div class="option-word">
-			<button (click)="checkOnClickEvent($event)" [disabled]="isClicked">4. {{ options[3] }}</button>
+		<div class="option-word" *ngFor="let option of options; let i = index">
+			<button (click)="checkOnClickEvent($event)" [disabled]="isClicked">{{ i + 1 }}. {{ option }}</button>
 		</div>
 	</div>
 </div>
