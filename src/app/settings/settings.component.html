@@ -1,1 +1,45 @@
-<p>settings works!</p>
+<div class="controls">
+  <h2 class="controls-title">Настройки</h2>
+
+  <mat-card class="control-translation">
+    <mat-card-content>
+      <h3 class="translation-subtitle">Хочу смотреть перевод</h3>
+
+      <section class="slider-section">
+        <mat-slide-toggle
+          #toggler
+          class="slider-margin"
+          color="primary"
+          (click)="setTranslationDisplay()"
+          [checked]="isTranslationDisplay$"
+        >
+          <span *ngIf="isTranslationDisplay$ | async; else no">Да</span>
+          <ng-template #no><span>Нет</span></ng-template>
+        </mat-slide-toggle>
+        <pre>{{ isTranslationDisplay$ | async | json }}</pre>
+      </section>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-divider></mat-divider>
+
+  <mat-card class="control-buttons">
+    <mat-card-content>
+      <h3 class="buttons-subtitle">
+        Хочу добавлять слова в "Сложные" "Удаленные"
+      </h3>
+
+      <section class="slider-section">
+        <mat-slide-toggle
+          class="slider-margin"
+          color="primary"
+          [checked]="isControlsDisplay$"
+          (click)="setControlsDisplay()"
+        >
+          <span *ngIf="isControlsDisplay$ | async; else no">Да</span>
+          <ng-template #no><span>Нет</span></ng-template>
+        </mat-slide-toggle>
+      </section>
+    </mat-card-content>
+  </mat-card>
+</div>

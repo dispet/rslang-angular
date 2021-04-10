@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
 import { StateService } from "./state.service";
 
 @Injectable({
@@ -11,11 +10,11 @@ export class SettingsFacade {
   readonly isTranslationDisplay$ = this.stateService.translationDisplay$;
   readonly isConstrolsDisplay$ = this.stateService.controlsDisplay$;
 
-  setTranslationDisplay(flag: boolean) {
-    this.stateService.setTranslationDisplay(flag);
+  setTranslationDisplay(): void {
+    this.stateService.setTranslationDisplay();
   }
 
-  setControlsDisplay(flag: boolean) {
-    this.stateService.setControlsDisplay(flag);
+  setControlsDisplay(): void {
+    this.stateService.setControlsDisplay();
   }
 }

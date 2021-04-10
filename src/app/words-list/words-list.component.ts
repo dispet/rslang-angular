@@ -1,9 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { IWord } from '../shared/models';
 import { SettingsFacade } from '../state/settings-facade.service';
-import { FacadeService } from '../state/state-facade.service';
+import { FacadeService } from '../state';
 
 @Component({
   selector: 'app-words-list',
@@ -13,9 +12,9 @@ import { FacadeService } from '../state/state-facade.service';
 export class WordsListComponent implements OnInit, OnDestroy {
   constructor(private stateFacade: FacadeService, private settingsFacade: SettingsFacade) {}
 
-  isTranslationDisplay$: Observable<boolean> = this.settingsFacade.isTranslationDisplay$;
-  isConstrolsDisplay$: Observable<boolean> = this.settingsFacade.isConstrolsDisplay$;
-  words$: Observable<Array<IWord>> = this.stateFacade.words$;
+  isTranslationDisplay$ = this.settingsFacade.isTranslationDisplay$;
+  isConstrolsDisplay$ = this.settingsFacade.isConstrolsDisplay$;
+  words$ = this.stateFacade.words$;
   pagination$ = this.stateFacade.pagination$;
 
   private destroy$ = new Subject<void>();
