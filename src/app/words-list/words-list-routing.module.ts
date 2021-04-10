@@ -4,8 +4,8 @@ import { SettingsComponent } from '../settings';
 import { WordsListComponent } from './words-list.component';
 
 const routes: Routes = [
-  { path: '', component: WordsListComponent },
-  { path: 'settings', component: SettingsComponent}
+  { path: 'settings', component: SettingsComponent},
+  { path: '', component: WordsListComponent }
 ]
 
 @NgModule({

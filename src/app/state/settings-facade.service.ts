@@ -8,7 +8,7 @@ export class SettingsFacade {
   constructor(private stateService: StateService) {}
 
   readonly isTranslationDisplay$ = this.stateService.translationDisplay$;
-  readonly isConstrolsDisplay$ = this.stateService.controlsDisplay$;
+  readonly isControlsDisplay$ = this.stateService.controlsDisplay$;
 
   setTranslationDisplay(): void {
     this.stateService.setTranslationDisplay();

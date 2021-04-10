@@ -12,7 +12,7 @@ export class SettingsComponent implements OnInit {
   @ViewChild('toggler') toggler: MatSlideToggle;
 
   isTranslationDisplay$ = this.settingsFacade.isTranslationDisplay$;
-  isControlsDisplay$ = this.settingsFacade.isConstrolsDisplay$;
+  isControlsDisplay$ = this.settingsFacade.isControlsDisplay$;
 
   private destroy$ = new Subject<void>();
 
