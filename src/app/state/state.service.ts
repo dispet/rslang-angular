@@ -9,7 +9,7 @@ import { Group, Page } from "../shared/types";
 })
 export class StateService {
   private readonly translationDisplaySubject$ = new BehaviorSubject<boolean>(true);
-  private readonly controlsDisplaySubject$ = new BehaviorSubject<boolean>(true);
+  private readonly controlsDisplaySubject$ = new BehaviorSubject<boolean>(false);
   private readonly wordsSubject$ = new BehaviorSubject<IWord[]>(null);
   private readonly paginationSubject$ = new BehaviorSubject<IPagination>({
     group: 0,
