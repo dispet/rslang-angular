@@ -28,10 +28,11 @@ const appRoutes: Routes = [
       { path: 'mini-games', component: MiniGamesComponent },
       { path: 'statistics', component: StatisticsComponent, canActivate: [AuthGuard] },
       { path: 'about-us', component: AboutUsComponent },
+      { path: 'dictionary', loadChildren: () => import('./dictionary/dictionary.module').then((m) => m.DictionaryModule) },
+      { path: 'words-list', loadChildren: () => import('./words-list/words-list.module').then((m) => m.WordsListModule) },
       { path: '', component: HomePageComponent },
     ],
   },
-  // {path: 'dictionary', loadChildren: () => import('./dictionary/dictionary.module').then(m => m.DictionaryModule)},
   {
     path: '**',
     component: PageNotFoundComponent,
