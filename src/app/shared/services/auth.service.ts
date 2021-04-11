@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { LocalStorageService } from './localStorage.service';
 import { UserService } from './user.service';
@@ -17,9 +17,11 @@ export class AuthService {
   private token = '';
   private refreshToken = '';
 
+  isAuthSubject = new BehaviorSubject<boolean>(false);
+
   constructor(
     private http: HttpClient,
-    private localStorageSevice: LocalStorageService,
+    private localStorageService: LocalStorageService,
     private userService: UserService,
     private router: Router,
     private apiService: ApiService,
@@ -28,7 +30,7 @@ export class AuthService {
   login(user: IUserCreate): Observable<ILoginResponse> {
     return this.http.post<ILoginResponse>(`${this.url}/signin`, user).pipe(
       tap(({ refreshToken, token, userId }) => {
-        this.localStorageSevice.setAuthData({ refreshToken, token, userId });
+        this.localStorageService.setAuthData({ refreshToken, token, userId });
         this.setToken(token);
         this.setRefreshToken(refreshToken);
         this.apiService.setUserId(userId);
@@ -41,10 +43,10 @@ export class AuthService {
   }
 
   updateTokens(): Observable<IRefreshTokenResponse> {
-    const userId = this.localStorageSevice.getUserId();
+    const userId = this.localStorageService.getUserId();
     return this.http.get<IRefreshTokenResponse>(`${this.url}/users/${userId}/tokens`).pipe(
       tap(({ refreshToken, token }) => {
-        this.localStorageSevice.setAuthData({ refreshToken, token, userId });
+        this.localStorageService.setAuthData({ refreshToken, token, userId });
         this.setToken(token);
         this.setRefreshToken(refreshToken);
       }),
@@ -52,7 +54,12 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return Boolean(this.token);
+    return Boolean(this.localStorageService.getToken());
+  }
+
+  getAuthStatus(): void {
+    const isAuth = this.isAuthenticated();
+    isAuth ? this.isAuthSubject.next(true) : this.isAuthSubject.next(false);
   }
 
   setToken(token): void {
@@ -76,8 +83,8 @@ export class AuthService {
     this.setRefreshToken(null);
     this.userService.setUser(null);
     this.apiService.setUserId(null);
-    this.localStorageSevice.deleteUser();
-    this.localStorageSevice.clearAuthData();
+    this.localStorageService.deleteUser();
+    this.localStorageService.clearAuthData();
     this.router.navigate(['/login']);
   }
 }
