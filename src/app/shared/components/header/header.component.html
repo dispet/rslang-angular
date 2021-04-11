@@ -1,9 +1,10 @@
 <mat-toolbar>
   <span class="logo" routerLink="">RS Lang</span>
   <mat-nav-list>
-    <a mat-list-item routerLink="text-book"> Электронный учебник </a>
+    <a mat-list-item routerLink="/text-book"> Электронный учебник </a>
     <a mat-list-item routerLink="/mini-games">Мини-игры</a>
-    <a *ngIf="isLogin" mat-list-item routerLink="statistics">Статистика</a>
+    <a *ngIf="isLogin" mat-list-item routerLink="/statistics">Статистика</a>
+    <a *ngIf="isLogin" mat-list-item routerLink="/dictionary">Словарь</a>
     <a mat-list-item routerLink="about-us">О нас</a>
   </mat-nav-list>
   <span class="example-spacer"></span>
