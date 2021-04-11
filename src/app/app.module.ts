@@ -1,26 +1,27 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http"
-import {AppRoutingModule} from './app-routing.module';
-import {AppComponent} from './app.component';
-import {DictionaryModule} from "./dictionary";
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { SharedModule, TokenInterceptor } from "./shared";
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AppRoutingModule } from './app-routing.module';
+import { CoreModule } from './core';
+
+import { SharedModule, TokenInterceptor } from './shared';
+import { DictionaryModule } from './dictionary';
+import { LoginModule } from './auth/login/login.module';
+import { RegistrationModule } from './auth/registration/registration.module';
+
+import { AppComponent } from './app.component';
 import { ElectronicTextbookComponent } from './electronic-textbook';
-import { LoginComponent } from './auth/login';
-import { RegistrationComponent } from './auth/registration';
-import { CoreModule } from "./core";
-import { HomePageComponent } from './home-page/home-page.component';
-import { MiniGamesComponent } from './mini-games/mini-games.component';
-import { StatisticsComponent } from './statistics/statistics.component';
+import { RegistrationComponent } from './auth';
+import { HomePageComponent } from './home-page';
+import { MiniGamesComponent } from './mini-games';
+import { StatisticsComponent } from './statistics';
 import { AboutUsComponent } from './about-us/about-us.component';
-import { WordsListModule } from './words-list/words-list.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     ElectronicTextbookComponent,
-    LoginComponent,
     RegistrationComponent,
     HomePageComponent,
     MiniGamesComponent,
@@ -33,12 +34,12 @@ import { WordsListModule } from './words-list/words-list.module';
     HttpClientModule,
     AppRoutingModule,
     DictionaryModule,
-    WordsListModule,
+    LoginModule,
+    RegistrationModule,
     SharedModule,
     CoreModule,
   ],
-  providers: [{provide: HTTP_INTERCEPTORS, multi: true, useClass: TokenInterceptor}],
-  bootstrap: [AppComponent]
+  providers: [{ provide: HTTP_INTERCEPTORS, multi: true, useClass: TokenInterceptor }],
+  bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule {}

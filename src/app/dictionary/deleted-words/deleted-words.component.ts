@@ -1,16 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-deleted-words',
   templateUrl: './deleted-words.component.html',
-  styleUrls: ['./deleted-words.component.scss']
+  styleUrls: ['./deleted-words.component.scss'],
 })
-export class DeletedWordsComponent implements OnInit {
-  array = [];
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+export class DeletedWordsComponent {
+  constructor() {}
 }
