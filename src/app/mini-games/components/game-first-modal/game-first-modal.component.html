@@ -1,10 +1,10 @@
-<div class="first-modal modal-active">
+<div class="first-modal">
 	<div class="modal-window">
 		<h1>Hi welcome to the Savanna game.</h1>
 		<p>You can choose answer with 1, 2, 3, and 4 on your keyboard.</p>
 		<p>Please choose group:</p>
 		<div class="choose-difficulty-level">
-			<button *ngFor="let group of difficultyGroups" (click)="chooseGameLevel($event)">{{ group }}</button>
+			<button *ngFor="let group of difficultyGroups" (click)="chooseGameLevel(group)">{{ group }}</button>
 		</div>
 	</div>
 </div>

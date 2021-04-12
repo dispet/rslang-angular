@@ -14,9 +14,7 @@ export class GameFirstModalComponent implements OnInit {
 
 	ngOnInit(): void {}
 
-	chooseGameLevel(event: MouseEvent) {
-		let level = +(event.target as Element).innerHTML;
-		level = +level - 1;
-		this.passGameLevel.emit(level as Group);
+	chooseGameLevel(group: Number) {
+		this.passGameLevel.emit((+group - 1) as Group);
 	}
 }
