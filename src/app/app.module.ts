@@ -14,9 +14,9 @@ import { AppComponent } from './app.component';
 import { ElectronicTextbookComponent } from './electronic-textbook';
 import { RegistrationComponent } from './auth';
 import { HomePageComponent } from './home-page';
-import { MiniGamesComponent } from './mini-games';
 import { StatisticsComponent } from './statistics';
 import { AboutUsComponent } from './about-us/about-us.component';
+import { MiniGamesModule } from './mini-games/mini-games.module';
 
 @NgModule({
   declarations: [
@@ -24,7 +24,6 @@ import { AboutUsComponent } from './about-us/about-us.component';
     ElectronicTextbookComponent,
     RegistrationComponent,
     HomePageComponent,
-    MiniGamesComponent,
     StatisticsComponent,
     AboutUsComponent,
   ],
@@ -38,6 +37,7 @@ import { AboutUsComponent } from './about-us/about-us.component';
     RegistrationModule,
     SharedModule,
     CoreModule,
+    MiniGamesModule,
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, multi: true, useClass: TokenInterceptor }],
   bootstrap: [AppComponent],

@@ -1,0 +1,13 @@
+<app-header></app-header>
+
+<div *ngIf="words; else loading">
+  <mat-tab-group dynamicHeight>
+    <mat-tab label="{{ i + 1 }}" *ngFor="let word of words; let i = index">
+      <div class="example-large-box mat-elevation-z4">
+        <app-item-audio-call [word]="word" variantsMax="3" [VariantsRu]="VariantsRu"> </app-item-audio-call>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+<div>Результат</div>
+<ng-template #loading>Слова не загрузились</ng-template>
