@@ -1,5 +1,6 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Group } from 'src/app/shared/types';
+import { IGameInfo } from '../../models/game.model';
 
 @Component({
 	selector: 'app-game-first-modal',
@@ -8,6 +9,8 @@ import { Group } from 'src/app/shared/types';
 })
 export class GameFirstModalComponent implements OnInit {
 	@Output() passGameLevel = new EventEmitter<Group>();
+	@Input() info!: IGameInfo;
+
 	difficultyGroups = [1, 2, 3, 4, 5, 6];
 
 	constructor() {}

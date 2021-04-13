@@ -8,20 +8,34 @@
 	z-index: 99;
 
 	.modal-window {
-		padding: 40px;
+		padding: 30px;
 		position: absolute;
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
 		overflow: auto;
-		background-color: white;
+		background-color: rgba(255, 255, 255, 0.75);
 		color: black;
 		border-radius: 5px;
-		height: 70%;
+		height: max-content;
+		font-size: 20px;
+
+		.game-info {
+			.title {
+				color: brown;
+				text-transform: uppercase;
+				text-align: center;
+				font-size: 2rem;
+			}
+		}
+
+		hr {
+			color: brown;
+		}
 
 		.choose-difficulty-level {
 			display: flex;
-			justify-content: space-between;
+			justify-content: space-evenly;
 			flex-wrap: wrap;
 			flex-direction: row;
 			button {
@@ -31,12 +45,17 @@
 				color: white;
 				margin: 10px;
 				padding: 10px;
+				font-size: 20px;
+
+				&:not(.learned-words) {
+					max-width: 75px;
+					min-width: 50px;
+				}
+			}
+
+			.learned-words {
+				width: 100%;
 			}
 		}
 	}
-}
-
-.modal-active {
-	z-index: 99;
-	opacity: 1;
 }

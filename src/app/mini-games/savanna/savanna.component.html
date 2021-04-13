@@ -1,5 +1,5 @@
 <div class="savanna-game" [ngStyle]="backgroundPositionY">
-	<app-game-first-modal (passGameLevel)="beginTheGame($event)" *ngIf="displayFirstModal"></app-game-first-modal>
+	<app-game-first-modal (passGameLevel)="beginTheGame($event)" *ngIf="displayFirstModal" [info]="gameInfo"></app-game-first-modal>
 	<app-game-results-modal [data]="game" *ngIf="displayResultsModal"></app-game-results-modal>
 	<div class="savanna-wrapper" *ngIf="!isGameOver && (words$ | async) as words" [ngStyle]="savannaWrapperHeight">
 		<div class="control">

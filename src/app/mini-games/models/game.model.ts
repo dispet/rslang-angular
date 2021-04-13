@@ -17,3 +17,8 @@ export interface IGame {
 	correctAnswerAudios: string[];
 	incorrectAnswerAudios: string[];
 }
+
+export interface IGameInfo {
+	name: string;
+	info: string;
+}

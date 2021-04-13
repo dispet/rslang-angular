@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, EventEmitter, Output, OnDestroy, HostListener } from '@angular/core';
-import { IGameAnswer } from '../../models/savanna-game.model';
+import { IGameAnswer } from '../../models/game.model';
 import { moveTargetWord } from '../../animations/savanna-animations';
 import { IWord } from 'src/app/shared/models/word.model';
 
@@ -143,7 +143,9 @@ export class SavannaChildComponent implements OnInit, OnDestroy {
 		let russianWords = [...this.russianWords];
 
 		// find answer from english words array
-		this.answer = this.englishWords.find((word) => word === this.targetWord);
+		this.answer = this.words.find((word) => {
+			return word.word === this.targetWord;
+		}).wordTranslate;
 
 		// we should remove answer from russianWords, because it must not be duplicated in the options.
 		russianWords.splice(
@@ -154,6 +156,7 @@ export class SavannaChildComponent implements OnInit, OnDestroy {
 		// make random options and then push the answer
 		[options[0], options[1], options[2]] = this.shuffleArray(russianWords);
 		options.push(this.answer);
+
 		return options;
 	}
 
@@ -231,6 +234,7 @@ export class SavannaChildComponent implements OnInit, OnDestroy {
 	}
 
 	findAudio(choosenOption: string) {
+		// console.log(this.words, choosenOption);
 		let audioSrc = this.words.find((word) => {
 			return word.wordTranslate === choosenOption;
 		}).audio;
