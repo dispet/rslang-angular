@@ -6,6 +6,6 @@ import { Component } from '@angular/core';
 	styleUrls: ['./words-in-learning.component.scss'],
 })
 export class WordsInLearningComponent {
-  array = [];
+  words = [];
 	constructor() {}
 }
