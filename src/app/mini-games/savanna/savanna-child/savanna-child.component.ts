@@ -165,9 +165,11 @@ export class SavannaChildComponent implements OnInit, OnDestroy {
 	checkOnKeyboardEvent(event: KeyboardEvent) {
 		let key = +event.key;
 		// we have only four posssible keys
-		if (key === 1 || key === 2 || key === 3 || key === 4) {
-			this.choosenButton = this.el.nativeElement.querySelectorAll('.option-word button')[key - 1];
-			this.checkAnswer();
+		if (!this.isClicked) {
+			if (key === 1 || key === 2 || key === 3 || key === 4) {
+				this.choosenButton = this.el.nativeElement.querySelectorAll('.option-word button')[key - 1];
+				this.checkAnswer();
+			}
 		}
 	}
 

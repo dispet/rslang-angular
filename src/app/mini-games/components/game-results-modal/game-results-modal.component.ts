@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { IGame, IGameInfo } from '../../models/game.model';
+import { IGameAnswers } from '../../models/game.model';
 
 @Component({
 	selector: 'app-game-results-modal',
@@ -8,10 +8,11 @@ import { IGame, IGameInfo } from '../../models/game.model';
 	styleUrls: ['./game-results-modal.component.scss'],
 })
 export class GameResultsModalComponent implements OnInit {
-	@Input() data!: IGame;
+	@Input() data!: IGameAnswers;
 	currentUrl = this.router.url;
 	correct: number;
 	incorrect: number;
+
 	constructor(private el: ElementRef, private router: Router) {}
 	ngOnInit(): void {
 		this.correct = this.data.correctAnswers.length;

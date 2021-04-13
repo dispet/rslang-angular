@@ -7,9 +7,7 @@ export interface IGameAnswer {
 	audio: string;
 }
 
-export interface IGame {
-	answers: boolean[];
-	heartsCount: string[];
+export interface IGameAnswers {
 	correctAnswers: string[];
 	incorrectAnswers: string[];
 	correctAnswersTranslate: string[];

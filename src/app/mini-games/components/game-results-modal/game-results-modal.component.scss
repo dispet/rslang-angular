@@ -23,32 +23,37 @@
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
-		overflow: auto;
 		background-color: white;
 		color: black;
-		height: 70%;
+		height: max-content;
 		font-size: 20px;
 
 		.modal-content {
 			box-shadow: inset 3px 3px 3px 3px white;
 			border-radius: 5px;
-			.single-answer {
-				display: flex;
 
-				.answer {
-					text-align: left;
-					padding-left: 20px;
-				}
+			.answers {
+				overflow: auto;
+				height: 60vh;
+				margin: 20px 0;
+				.single-answer {
+					display: flex;
 
-				mat-icon {
-					display: block;
-					color: gainsboro;
-
-					&:hover {
-						cursor: pointer;
+					.answer {
+						text-align: left;
+						padding-left: 20px;
 					}
-					&:active {
-						opacity: 0.5;
+
+					mat-icon {
+						display: block;
+						color: gainsboro;
+
+						&:hover {
+							cursor: pointer;
+						}
+						&:active {
+							opacity: 0.5;
+						}
 					}
 				}
 			}

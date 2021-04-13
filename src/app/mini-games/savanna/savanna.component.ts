@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IGame, IGameAnswer, IGameInfo } from '../models/game.model';
+import { IGameAnswer, IGameAnswers, IGameInfo } from '../models/game.model';
 import { flyTopDown } from '../animations/savanna-animations';
 import { ApiService } from 'src/app/shared';
 import { IWord } from 'src/app/shared/models';
@@ -17,9 +17,8 @@ export class SavannaComponent {
 	displayResultsModal = false;
 	words$!: Observable<IWord[]>;
 	isGameOver = false;
-	game: IGame = {
-		answers: [],
-		heartsCount: Array(5).fill('h'),
+	heartsCount = Array(5).fill('h');
+	game: IGameAnswers = {
 		correctAnswers: [],
 		incorrectAnswers: [],
 		correctAnswersTranslate: [],
@@ -31,8 +30,8 @@ export class SavannaComponent {
 	private bgpY = '100%';
 	backgroundPositionY = { 'background-position-y': this.bgpY };
 	gameInfo: IGameInfo = {
-		name: 'Savannah',
-		info: 'You can choose answer with 1, 2, 3, and 4 on your keyboard or via mouse.',
+		name: 'Саванна',
+		info: 'Вы можете выбрать ответ с помощью цифр 1, 2, 3 или 4 на клавиатуре или с помощью мыши.',
 	};
 	constructor(private apiService: ApiService, public dialog: MatDialog) {}
 
@@ -77,8 +76,8 @@ export class SavannaComponent {
 	}
 
 	private decreaseHeart() {
-		this.game.heartsCount.pop();
-		if (this.game.heartsCount.length === 0) {
+		this.heartsCount.pop();
+		if (this.heartsCount.length === 0) {
 			this.endGame();
 		}
 	}
