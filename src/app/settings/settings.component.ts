@@ -1,7 +1,8 @@
-import {Component, OnInit, ViewChild } from '@angular/core';
-import { MatSlideToggle } from '@angular/material/slide-toggle';
-import { Subject } from 'rxjs';
+import {Component, OnInit } from '@angular/core';
+import { combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { SettingsFacade } from '../state/settings-facade.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-settings',
@@ -9,16 +10,19 @@ import { SettingsFacade } from '../state/settings-facade.service';
   styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit {
-  @ViewChild('toggler') toggler: MatSlideToggle;
 
   isTranslationDisplay$ = this.settingsFacade.isTranslationDisplay$;
   isControlsDisplay$ = this.settingsFacade.isControlsDisplay$;
+  settings$: Observable<any>;
 
-  private destroy$ = new Subject<void>();
-
-  constructor(private settingsFacade: SettingsFacade) { }
+  constructor(private settingsFacade: SettingsFacade, private location: Location) { }
 
   ngOnInit(): void {
+    this.settings$ = combineLatest([this.isTranslationDisplay$, this.isControlsDisplay$]).pipe(
+      map(([translation, controls]) => {
+        return {translation, controls};
+      })
+    )
   }
 
   setTranslationDisplay(): void {
@@ -27,5 +31,9 @@ export class SettingsComponent implements OnInit {
 
   setControlsDisplay(): void {
     this.settingsFacade.setControlsDisplay();
+  }
+
+  backToPreviousPage() {
+    this.location.back();
   }
 }

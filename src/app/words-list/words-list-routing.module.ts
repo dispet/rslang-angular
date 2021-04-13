@@ -5,7 +5,8 @@ import { WordsListComponent } from './words-list.component';
 
 const routes: Routes = [
   { path: 'settings', component: SettingsComponent},
-  { path: '', component: WordsListComponent }
+  { path: ':group/:page', component: WordsListComponent },
+  { path: '', redirectTo: '1/1', pathMatch: 'full'}
 ]
 
 @NgModule({

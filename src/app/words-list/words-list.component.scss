@@ -68,6 +68,10 @@
   display: flex;
   justify-content: center;
 
+  mat-button-toggle {
+    outline: none;
+  }
+
   .current-page {
     display: flex;
     align-items: center;

@@ -1,24 +1,40 @@
-.controls {
-  padding: 2rem;
+.settings {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: stretch;
 
-  &-title {
-    margin-left: 1rem;
+  .back-button {
+    padding: 2rem 0;
+
+    button {
+      height: 100%;
+    }
   }
 
-  .translation-subtitle,
-  .buttons-subtitle {
-    margin: 1rem;
-  }
+  .controls {
+    padding: 2rem;
+    flex-grow: 1;
 
-  .eslider-section {
-    height: 3rem;
-    margin-left: 1rem;
-    display: flex;
-    align-content: center;
-    align-items: center;
-  }
+    &-title {
+      margin-left: 1rem;
+    }
 
-  .slider-margin {
-    margin: 10px;
+    .translation-subtitle,
+    .buttons-subtitle {
+      margin: 1rem;
+    }
+
+    .eslider-section {
+      height: 3rem;
+      margin-left: 1rem;
+      display: flex;
+      align-content: center;
+      align-items: center;
+    }
+
+    .slider-margin {
+      margin: 10px;
+    }
   }
 }

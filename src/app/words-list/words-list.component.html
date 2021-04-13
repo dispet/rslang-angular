@@ -1,28 +1,26 @@
 <div class="actions">
-  <button type="button" mat-button (click)="drawer.toggle()">
-    Выбрать игру
-  </button>
+  <button type="button" mat-button (click)="drawer.toggle()">Выбрать игру</button>
 
   <mat-button-toggle-group class="actions-group">
-    <mat-button-toggle (click)="pickGroup(0)">1</mat-button-toggle>
-    <mat-button-toggle (click)="pickGroup(1)">2</mat-button-toggle>
-    <mat-button-toggle (click)="pickGroup(2)">3</mat-button-toggle>
-    <mat-button-toggle (click)="pickGroup(3)">4</mat-button-toggle>
-    <mat-button-toggle (click)="pickGroup(4)">5</mat-button-toggle>
-    <mat-button-toggle (click)="pickGroup(5)">6</mat-button-toggle>
+    <mat-button-toggle (click)="pickGroup(1)">1</mat-button-toggle>
+    <mat-button-toggle (click)="pickGroup(2)">2</mat-button-toggle>
+    <mat-button-toggle (click)="pickGroup(3)">3</mat-button-toggle>
+    <mat-button-toggle (click)="pickGroup(4)">4</mat-button-toggle>
+    <mat-button-toggle (click)="pickGroup(5)">5</mat-button-toggle>
+    <mat-button-toggle (click)="pickGroup(6)">6</mat-button-toggle>
   </mat-button-toggle-group>
 
-  <button class="settings" mat-icon-button routerLink="settings">
+  <button class="settings" mat-icon-button routerLink="/words-list/settings">
     <mat-icon mat-list-icon>settings</mat-icon>
   </button>
 </div>
 
 <mat-drawer-container>
   <mat-drawer #drawer position="end">
-    <!-- <a href=""Саванна></a>
-    <a href="">Аудиовызов</a>
-    <a href="">Спринт</a>
-    <a href="">Своя игра</a> -->
+    <!-- <a >Саванна</a>
+    <a >Аудиовызов</a>
+    <a >Спринт</a>
+    <a >Своя игра</a> -->
     <mat-button-toggle-group vertical>
       <mat-button-toggle>Саванна</mat-button-toggle>
       <mat-button-toggle>Аудиовызов</mat-button-toggle>
@@ -35,16 +33,11 @@
     <li *ngFor="let item of words$ | async" class="list-item">
       <div class="list-item-container">
         <div class="item-image">
-          <img src="{{ url }}{{ item.image }}" alt="{{ item.word }}" />
+          <img src="{{ url }}/{{ item.image }}" alt="{{ item.word }}" />
         </div>
         <div class="item-content">
           <div class="item-title">
-            <button
-              mat-icon-button
-              (click)="
-                playAudio(item.audio, item.audioMeaning, item.audioExample)
-              "
-            >
+            <button mat-icon-button (click)="playAudio(item.audio, item.audioMeaning, item.audioExample)">
               <mat-icon mat-list-icon>volume_up</mat-icon>
             </button>
             <span>
@@ -52,22 +45,16 @@
             </span>
             :
             <span>{{ item.transcription }}</span>
-            <span *ngIf="isTranslationDisplay$ | async">
-              - {{ item.wordTranslate }}</span
-            >
+            <span *ngIf="isTranslationDisplay$ | async"> - {{ item.wordTranslate }}</span>
           </div>
           <div class="item-description">
             <p>
               <span [innerHTML]="item.textMeaning"></span>
-              <span *ngIf="isTranslationDisplay$ | async">
-                - {{ item.textMeaningTranslate }}</span
-              >
+              <span *ngIf="isTranslationDisplay$ | async"> - {{ item.textMeaningTranslate }}</span>
             </p>
             <p>
               <span [innerHTML]="item.textExample"></span>
-              <span *ngIf="isTranslationDisplay$ | async">
-                - {{ item.textExampleTranslate }}</span
-              >
+              <span *ngIf="isTranslationDisplay$ | async"> - {{ item.textExampleTranslate }}</span>
             </p>
             <p>
               {{ item.learningResults }}
@@ -94,15 +81,15 @@
         <mat-icon mat-list-icon>first_page</mat-icon>
       </mat-button-toggle>
 
-      <mat-button-toggle (click)="prevPage()">
+      <mat-button-toggle (click)="prevPage()" [disabled]="isFirstPage()">
         <mat-icon mat-list-icon>chevron_left</mat-icon>
       </mat-button-toggle>
 
       <div class="current-page" *ngIf="pagination$ | async as pagination">
-        <b>{{ pagination.page + 1 }} / 30</b>
+        <b>{{ page }} / 30</b>
       </div>
 
-      <mat-button-toggle (click)="nextPage()">
+      <mat-button-toggle (click)="nextPage()" [disabled]="isLastPage()">
         <mat-icon mat-list-icon>chevron_right</mat-icon>
       </mat-button-toggle>
 
