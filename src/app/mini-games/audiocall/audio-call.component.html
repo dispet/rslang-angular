@@ -1,23 +1,14 @@
 <app-header></app-header>
-
 <div *ngIf="words; else loading">
   <mat-tab-group dynamicHeight>
     <mat-tab label="{{ i + 1 }}" *ngFor="let word of words; let i = index">
       <div class="example-large-box mat-elevation-z4">
-        <app-item-audio-call [word]="word" [getVariantsRu]="variantsRuAll[i]" (answer)="getAnswer($event)"></app-item-audio-call>
+        <app-item-audio-call [word]="word" [getVariantsRu]="rusVariantsSubArray[i]" (answer)="getAnswer($event)"></app-item-audio-call>
       </div>
     </mat-tab>
   </mat-tab-group>
 </div>
 <div>
   <h3>Результат: {{ resultCounter }} / {{ maxWords }}</h3>
-  <hr />
-  <p>Чтобы получить доступ к расширенным возможностям игры, необходимо войти в личный кабинет.</p>
-  <p>
-    <button mat-raised-button color="primary">Зарегистрироваться</button>
-  </p>
-  <p>
-    <button mat-raised-button color="primary">Войти</button>
-  </p>
 </div>
 <ng-template #loading>Слова не загрузились</ng-template>

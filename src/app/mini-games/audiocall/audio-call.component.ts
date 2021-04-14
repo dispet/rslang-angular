@@ -14,8 +14,8 @@ export class AudioCallComponent implements OnInit, OnDestroy {
   colorTub = '#22ca06';
   maxWords = 7;
   resultCounter = 0;
-  variantsRuAll: string[][];
-  allVariantsRu: string[];
+  rusVariantsSubArray: string[][];
+  rusVariantsArray: string[];
   words: IWord[];
 
   constructor(private apiService: ApiService) {}
@@ -32,8 +32,8 @@ export class AudioCallComponent implements OnInit, OnDestroy {
     this.subscription = this.apiService.getWords(1, 1).subscribe(
       (words) => {
         this.words = this.getRandomWords(words, this.maxWords);
-        this.allVariantsRu = this.getAllVariantsRu(words);
-        this.variantsRuAll = this.getVariantsRu(this.words, this.allVariantsRu, this.variantsMax);
+        this.rusVariantsArray = this.getAllVariantsRu(words);
+        this.rusVariantsSubArray = this.getVariantsRu(this.words, this.rusVariantsArray, this.variantsMax);
       },
       (error) => console.error(error),
     );
@@ -43,6 +43,7 @@ export class AudioCallComponent implements OnInit, OnDestroy {
     let result: IWord[] = [],
       len = arr.length;
     if (n > len) {
+      // для вывода информации в консоль при разработке
       console.error('Заданное количество слов для теста превышает предоставленный набор');
     }
     while (n) {

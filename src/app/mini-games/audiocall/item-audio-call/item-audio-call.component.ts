@@ -9,9 +9,9 @@ import { IWord } from '../../../shared/models';
 })
 export class ItemAudioCallComponent implements OnInit {
   private url = 'https://dispet.github.io/rslang-data/';
-  disabledButton = false;
+  isAnswerButtonDisable = false;
   correctAnswer = '';
-  val: number;
+  isTrue: number;
   @Input() getVariantsRu: string[];
   @Input() word: IWord;
   @Output() answer = new EventEmitter<number>();
@@ -20,9 +20,9 @@ export class ItemAudioCallComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  playAudio(url1: string): void {
-    const audio = new Audio();
-    audio.src = this.url + url1;
+  playAudio(url: string): void {
+    let audio = new Audio();
+    audio.src = this.url + url;
     audio.load();
     audio.play();
     audio.addEventListener('ended', function () {
@@ -35,9 +35,9 @@ export class ItemAudioCallComponent implements OnInit {
   }
 
   sendResult(v: string) {
-    this.val = v === this.word.wordTranslate ? 1 : 0;
-    this.disabledButton = true;
+    this.isTrue = v === this.word.wordTranslate ? 1 : 0;
+    this.isAnswerButtonDisable = true;
     this.correctAnswer = this.word.wordTranslate;
-    this.answer.emit(this.val);
+    this.answer.emit(this.isTrue);
   }
 }

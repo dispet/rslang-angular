@@ -2,13 +2,13 @@
   <button mat-icon-button (click)="playAudio(word.audio)">
     <mat-icon mat-list-icon>volume_up</mat-icon>
   </button>
-  <span [ngClass]="{ red: !val, green: val }">{{ correctAnswer }}</span>
+  <span [ngClass]="{ red: !isTrue, green: isTrue }">{{ correctAnswer }}</span>
   <hr />
   <button
     *ngFor="let variant of getVariantsRu; let i = index"
     mat-raised-button
     color="basic"
-    [disabled]="disabledButton"
+    [disabled]="isAnswerButtonDisable"
     (click)="sendResult(variant)"
   >
     {{ variant }}
