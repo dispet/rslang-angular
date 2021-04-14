@@ -7,8 +7,9 @@
       </div>
     </mat-tab>
   </mat-tab-group>
+  <div>
+    <h3>Результат: {{ resultCounter }} / {{ MAX_WORDS_COUNT }}</h3>
+  </div>
 </div>
-<div>
-  <h3>Результат: {{ resultCounter }} / {{ maxWords }}</h3>
-</div>
+
 <ng-template #loading>Слова не загрузились</ng-template>

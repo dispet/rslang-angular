@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { IWord } from '../../shared/models';
-import { ApiService } from '../../shared/services';
+import { IWord } from '../../../shared/models';
+import { ApiService } from '../../../shared/services';
 import { Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-audio-call',
@@ -9,29 +10,51 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./audio-call.component.scss'],
 })
 export class AudioCallComponent implements OnInit, OnDestroy {
-  private subscription: Subscription;
+  private groupFromUrl: string;
+  private pageFromUrl: string;
+  private subscription1$: Subscription;
+  private subscription2$: Subscription;
   private variantsMax = 4;
-  colorTub = '#22ca06';
-  maxWords = 7;
+  readonly MAX_WORDS_COUNT = 7;
   resultCounter = 0;
   rusVariantsSubArray: string[][];
   rusVariantsArray: string[];
   words: IWord[];
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private activateRouter: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.getWords();
+    this.getWords(1, 1);
+    this.loadDataFromRoute();
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.subscription1$.unsubscribe();
+    this.subscription2$.unsubscribe();
   }
 
-  getWords() {
-    this.subscription = this.apiService.getWords(1, 1).subscribe(
+  loadDataFromRoute() {
+    this.subscription2$ = this.activateRouter.paramMap.subscribe((params) => {
+      this.groupFromUrl = params.get('group');
+      this.pageFromUrl = params.get('page');
+      if (this.groupFromUrl && this.pageFromUrl) {
+        console.log('groupFromUrl: ' + this.groupFromUrl + ' / pageFromUrl: ' + this.pageFromUrl);
+        // this.getWords(groupFromUrl, groupFromUrl);
+      } else if (this.groupFromUrl) {
+        console.log('groupFromUrl: ' + this.groupFromUrl);
+        // this.getWords(this.groupFromUrl, 1);
+      } else {
+        console.log('groupFromUrl и pageFromUrl не получены');
+        // this.getWords(1, 1);
+      }
+    });
+  }
+
+  getWords(group, page) {
+    this.loadDataFromRoute();
+    this.subscription1$ = this.apiService.getWords(group, page).subscribe(
       (words) => {
-        this.words = this.getRandomWords(words, this.maxWords);
+        this.words = this.getRandomWords(words, this.MAX_WORDS_COUNT);
         this.rusVariantsArray = this.getAllVariantsRu(words);
         this.rusVariantsSubArray = this.getVariantsRu(this.words, this.rusVariantsArray, this.variantsMax);
       },
