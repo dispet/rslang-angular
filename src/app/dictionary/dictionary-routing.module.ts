@@ -8,9 +8,9 @@ import { WordsInLearningComponent } from "./words-in-learning";
 const routes: Routes = [
   {path: '', component: DictionaryComponent,
   children: [
-    {path: '', component: WordsInLearningComponent},
     {path: 'hard-words', component: HardWordsComponent},
     {path: 'deleted-words', component: DeletedWordsComponent},
+    {path: '', component: WordsInLearningComponent}
   ],
   }
 ]

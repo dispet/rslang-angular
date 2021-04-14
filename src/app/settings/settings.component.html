@@ -17,7 +17,6 @@
             <span *ngIf="settings.translation; else no">Да</span>
             <ng-template #no><span>Нет</span></ng-template>
           </mat-slide-toggle>
-          <pre>{{ isTranslationDisplay$ | async | json }}</pre>
         </section>
       </mat-card-content>
     </mat-card>
@@ -33,7 +32,6 @@
             <span *ngIf="settings.controls; else no">Да</span>
             <ng-template #no><span>Нет</span></ng-template>
           </mat-slide-toggle>
-          <pre>{{ isControlsDisplay$ | async | json }}</pre>
         </section>
       </mat-card-content>
     </mat-card>

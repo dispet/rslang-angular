@@ -2,12 +2,7 @@
   <button type="button" mat-button (click)="drawer.toggle()">Выбрать игру</button>
 
   <mat-button-toggle-group class="actions-group">
-    <mat-button-toggle (click)="pickGroup(1)">1</mat-button-toggle>
-    <mat-button-toggle (click)="pickGroup(2)">2</mat-button-toggle>
-    <mat-button-toggle (click)="pickGroup(3)">3</mat-button-toggle>
-    <mat-button-toggle (click)="pickGroup(4)">4</mat-button-toggle>
-    <mat-button-toggle (click)="pickGroup(5)">5</mat-button-toggle>
-    <mat-button-toggle (click)="pickGroup(6)">6</mat-button-toggle>
+    <mat-button-toggle *ngFor="let group of groupsAmount" (click)="pickGroup(group)">{{ group }}</mat-button-toggle>
   </mat-button-toggle-group>
 
   <button class="settings" mat-icon-button routerLink="/words-list/settings">
@@ -17,10 +12,6 @@
 
 <mat-drawer-container>
   <mat-drawer #drawer position="end">
-    <!-- <a >Саванна</a>
-    <a >Аудиовызов</a>
-    <a >Спринт</a>
-    <a >Своя игра</a> -->
     <mat-button-toggle-group vertical>
       <mat-button-toggle>Саванна</mat-button-toggle>
       <mat-button-toggle>Аудиовызов</mat-button-toggle>
@@ -29,51 +20,54 @@
     </mat-button-toggle-group>
   </mat-drawer>
 
-  <ul class="list">
-    <li *ngFor="let item of words$ | async" class="list-item">
-      <div class="list-item-container">
-        <div class="item-image">
-          <img src="{{ url }}/{{ item.image }}" alt="{{ item.word }}" />
-        </div>
-        <div class="item-content">
-          <div class="item-title">
-            <button mat-icon-button (click)="playAudio(item.audio, item.audioMeaning, item.audioExample)">
-              <mat-icon mat-list-icon>volume_up</mat-icon>
-            </button>
-            <span>
-              {{ item.word }}
-            </span>
-            :
-            <span>{{ item.transcription }}</span>
-            <span *ngIf="isTranslationDisplay$ | async"> - {{ item.wordTranslate }}</span>
+  <ng-template #content>
+    <ul class="list">
+      <li *ngFor="let item of words$ | async" class="list-item">
+        <div class="list-item-container">
+          <div class="item-image">
+            <img src="{{ url }}/{{ item.image }}" alt="{{ item.word }}" />
           </div>
-          <div class="item-description">
-            <p>
-              <span [innerHTML]="item.textMeaning"></span>
-              <span *ngIf="isTranslationDisplay$ | async"> - {{ item.textMeaningTranslate }}</span>
-            </p>
-            <p>
-              <span [innerHTML]="item.textExample"></span>
-              <span *ngIf="isTranslationDisplay$ | async"> - {{ item.textExampleTranslate }}</span>
-            </p>
-            <p>
-              {{ item.learningResults }}
-            </p>
+          <div class="item-content">
+            <div class="item-title">
+              <button mat-icon-button (click)="playAudio(item.audio, item.audioMeaning, item.audioExample)">
+                <mat-icon mat-list-icon>volume_up</mat-icon>
+              </button>
+              <span>
+                {{ item.word }}
+              </span>
+              <span>: {{ item.transcription }}</span>
+              <span *ngIf="isTranslationDisplay$ | async"> - {{ item.wordTranslate }}</span>
+            </div>
+            <div class="item-description">
+              <p>
+                <span [innerHTML]="item.textMeaning"></span>
+                <span *ngIf="isTranslationDisplay$ | async"> - {{ item.textMeaningTranslate }}</span>
+              </p>
+              <p>
+                <span [innerHTML]="item.textExample"></span>
+                <span *ngIf="isTranslationDisplay$ | async"> - {{ item.textExampleTranslate }}</span>
+              </p>
+              <p>
+                {{ item.learningResults }}
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div class="item-controls" *ngIf="isControlsDisplay$ | async">
-          <button (click)="console.log('add to difficult')">
-            <mat-icon>new_label</mat-icon>
-          </button>
-          <button (click)="console.log('add to difficult')">
-            <mat-icon>delete</mat-icon>
-          </button>
+          <div class="item-controls" *ngIf="isControlsDisplay$ | async">
+            <button (click)="console.log('add to difficult')">
+              <mat-icon>new_label</mat-icon>
+            </button>
+            <button (click)="console.log('add to difficult')">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
         </div>
-      </div>
-      <mat-divider></mat-divider>
-    </li>
-  </ul>
+        <mat-divider></mat-divider>
+      </li>
+    </ul>
+  </ng-template>
+
+  <mat-spinner *ngIf="isLoading$ | async; else content"></mat-spinner>
 
   <div class="paginator">
     <mat-button-toggle-group>

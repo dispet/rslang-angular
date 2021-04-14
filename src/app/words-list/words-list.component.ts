@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, Subscription } from 'rxjs';
-import { mergeMap, switchMap, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { switchMap, takeUntil } from 'rxjs/operators';
 import { SettingsFacade } from '../state/settings-facade.service';
 import { FacadeService } from '../state';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,13 +19,15 @@ export class WordsListComponent implements OnInit, OnDestroy {
   isControlsDisplay$ = this.settingsFacade.isControlsDisplay$;
   words$ = this.stateFacade.words$;
   pagination$ = this.stateFacade.pagination$;
+  isLoading$ = this.stateFacade.isLoading$;
   url = DATA_URL;
 
   private destroy$ = new Subject<void>();
 
-  private subscription: Subscription;
   group: number;
   page: number;
+
+  readonly groupsAmount: Array<number> = [1, 2, 3, 4, 5, 6];
 
   readonly MAX_GROUP_COUNT = 6;
   readonly MIN_GROUP_COUNT = 1;
