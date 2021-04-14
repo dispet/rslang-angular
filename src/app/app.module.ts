@@ -17,6 +17,7 @@ import { HomePageComponent } from './home-page';
 import { MiniGamesComponent } from './mini-games';
 import { StatisticsComponent } from './statistics';
 import { AboutUsComponent } from './about-us/about-us.component';
+import { WordsListModule } from './words-list/words-list.module';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { AboutUsComponent } from './about-us/about-us.component';
     DictionaryModule,
     LoginModule,
     RegistrationModule,
+    WordsListModule,
     SharedModule,
     CoreModule,
   ],

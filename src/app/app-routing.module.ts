@@ -24,11 +24,13 @@ const appRoutes: Routes = [
     path: '',
     component: MainLayoutComponent,
     children: [
-      { path: '', component: HomePageComponent },
       { path: 'text-book', component: ElectronicTextbookComponent },
       { path: 'mini-games', component: MiniGamesComponent },
       { path: 'statistics', component: StatisticsComponent, canActivate: [AuthGuard] },
       { path: 'about-us', component: AboutUsComponent },
+      { path: 'dictionary', loadChildren: () => import('./dictionary/dictionary.module').then((m) => m.DictionaryModule) },
+      { path: 'words-list', loadChildren: () => import('./words-list/words-list.module').then((m) => m.WordsListModule) },
+      { path: '', component: HomePageComponent },
     ],
   },
   {
