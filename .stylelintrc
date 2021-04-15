@@ -17,6 +17,7 @@
     "no-descending-specificity": null,
     "no-empty-source": null,
     "length-zero-no-unit": null,
-    "rule-empty-line-before": null
+    "rule-empty-line-before": null,
+    "selector-pseudo-element-no-unknown": null
   }
 }

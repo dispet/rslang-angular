@@ -1,14 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { AuthGuard } from './shared/services';
+import { AuthGuard } from './shared';
 
 import { ElectronicTextbookComponent } from './electronic-textbook';
 import { MainLayoutComponent } from './core/';
 import { PageNotFoundComponent } from './core';
 import { HomePageComponent } from './home-page';
 import { MiniGamesComponent } from './mini-games';
-import { StatisticsComponent } from './statistics';
 import { AboutUsComponent } from './about-us/about-us.component';
 
 const appRoutes: Routes = [
@@ -26,7 +25,11 @@ const appRoutes: Routes = [
     children: [
       { path: 'text-book', component: ElectronicTextbookComponent },
       { path: 'mini-games', component: MiniGamesComponent },
-      { path: 'statistics', component: StatisticsComponent, canActivate: [AuthGuard] },
+      {
+        path: 'statistics',
+        canActivate: [AuthGuard],
+        loadChildren: () => import('./statistics/statistics.module').then((m) => m.StatisticsModule),
+      },
       { path: 'about-us', component: AboutUsComponent },
       { path: 'dictionary', loadChildren: () => import('./dictionary/dictionary.module').then((m) => m.DictionaryModule) },
       { path: 'words-list', loadChildren: () => import('./words-list/words-list.module').then((m) => m.WordsListModule) },

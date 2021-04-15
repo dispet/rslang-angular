@@ -27,6 +27,7 @@ export class AppComponent implements OnInit {
     const refreshToken = this.localStore.getRefreshToken();
     const user = this.localStore.getUser();
     const userId = this.localStore.getUserId();
+
     // this.auth.register({ "email": "hello3@user.com", "password": "q123" })
     //   .subscribe((user) => console.log('register ',user),
     //       err => console.log('error',err.error.error.errors[0].message));
