@@ -10,21 +10,20 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./audio-call.component.scss'],
 })
 export class AudioCallComponent implements OnInit, OnDestroy {
-  private groupFromUrl: string;
-  private pageFromUrl: string;
+  private groupFromUrl: number;
+  private pageFromUrl: number;
   private subscription1$: Subscription;
   private subscription2$: Subscription;
-  private variantsMax = 4;
+  readonly MAX_VARIANTS_COUNT = 4;
   readonly MAX_WORDS_COUNT = 7;
   resultCounter = 0;
   rusVariantsSubArray: string[][];
   rusVariantsArray: string[];
   words: IWord[];
 
-  constructor(private apiService: ApiService, private activateRouter: ActivatedRoute) {}
+  constructor(private apiService: ApiService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.getWords(1, 1);
     this.loadDataFromRoute();
   }
 
@@ -34,68 +33,65 @@ export class AudioCallComponent implements OnInit, OnDestroy {
   }
 
   loadDataFromRoute() {
-    this.subscription2$ = this.activateRouter.paramMap.subscribe((params) => {
-      this.groupFromUrl = params.get('group');
-      this.pageFromUrl = params.get('page');
+    this.subscription2$ = this.route.paramMap.subscribe((params) => {
+      this.groupFromUrl = +params.get('group');
+      this.pageFromUrl = +params.get('page');
       if (this.groupFromUrl && this.pageFromUrl) {
-        console.log('groupFromUrl: ' + this.groupFromUrl + ' / pageFromUrl: ' + this.pageFromUrl);
-        // this.getWords(groupFromUrl, groupFromUrl);
+        this.getWords(this.groupFromUrl - 1, this.groupFromUrl - 1);
       } else if (this.groupFromUrl) {
-        console.log('groupFromUrl: ' + this.groupFromUrl);
-        // this.getWords(this.groupFromUrl, 1);
+        const pageNumber = Math.floor(Math.random() * 30) - 1;
+        this.getWords(this.groupFromUrl - 1, pageNumber);
       } else {
-        console.log('groupFromUrl и pageFromUrl не получены');
-        // this.getWords(1, 1);
+        this.getWords(1, 1);
       }
     });
   }
 
   getWords(group, page) {
-    this.loadDataFromRoute();
     this.subscription1$ = this.apiService.getWords(group, page).subscribe(
       (words) => {
         this.words = this.getRandomWords(words, this.MAX_WORDS_COUNT);
         this.rusVariantsArray = this.getAllVariantsRu(words);
-        this.rusVariantsSubArray = this.getVariantsRu(this.words, this.rusVariantsArray, this.variantsMax);
+        this.rusVariantsSubArray = this.getVariantsRu(this.words, this.rusVariantsArray, this.MAX_VARIANTS_COUNT);
       },
       (error) => console.error(error),
     );
   }
 
-  getRandomWords(arr: IWord[], n: number): IWord[] {
-    let result: IWord[] = [],
-      len = arr.length;
-    if (n > len) {
+  getRandomWords(arr: IWord[], wordsCount: number): IWord[] {
+    const result: IWord[] = [];
+    let length = arr.length;
+    if (wordsCount > length) {
       // для вывода информации в консоль при разработке
       console.error('Заданное количество слов для теста превышает предоставленный набор');
     }
-    while (n) {
-      let x = Math.floor(Math.random() * len);
+    while (wordsCount) {
+      let x = Math.floor(Math.random() * length);
       if (!result.includes(arr[x])) {
         result.push(arr[x]);
-        n--;
+        wordsCount--;
       }
     }
     return result;
   }
 
   getAllVariantsRu(words: IWord[]) {
-    let collectionWords = [];
+    const collectionWords = [];
     for (let i = 0; i < words.length; i++) {
       collectionWords.push(words[i].wordTranslate);
     }
     return collectionWords;
   }
 
-  getVariantsRu(words: IWord[], allVariantsRu: string[], varNum: number) {
-    let len = allVariantsRu.length;
+  getVariantsRu(words: IWord[], allVariantsRu: string[], variantsCount: number) {
+    let length = allVariantsRu.length;
     let resultArr: Array<string[]> = [];
     for (let i = 0; i < words.length; i++) {
       let result: string[] = [];
       result.push(words[i].wordTranslate);
-      let n = varNum;
+      let n = variantsCount;
       while (n - 1) {
-        let x = Math.floor(Math.random() * len);
+        let x = Math.floor(Math.random() * length);
         if (!result.includes(allVariantsRu[x])) {
           result.push(allVariantsRu[x]);
           n--;
