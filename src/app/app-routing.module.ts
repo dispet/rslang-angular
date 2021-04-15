@@ -8,7 +8,6 @@ import { MainLayoutComponent } from './core/';
 import { PageNotFoundComponent } from './core';
 import { HomePageComponent } from './home-page';
 import { MiniGamesComponent } from './mini-games';
-import { StatisticsComponent } from './statistics';
 import { AboutUsComponent } from './about-us/about-us.component';
 
 const appRoutes: Routes = [
@@ -29,9 +28,8 @@ const appRoutes: Routes = [
       { path: 'mini-games', component: MiniGamesComponent },
       {
         path: 'statistics',
-        component: StatisticsComponent,
         canActivate: [AuthGuard],
-        loadChildren: () => import('./statistics/statistics.module').then((module) => module.StatisticsModule),
+        loadChildren: () => import('./statistics/statistics.module').then((m) => m.StatisticsModule),
       },
       { path: 'about-us', component: AboutUsComponent },
     ],

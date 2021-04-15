@@ -1,11 +1,18 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { StatisticsComponent } from './statistics.component';
-import { AccumulationChartModule, ChartModule } from '@syncfusion/ej2-angular-charts';
+import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared';
+import { StatisticsComponent } from './statistics.component';
 
 @NgModule({
   declarations: [StatisticsComponent],
-  imports: [CommonModule, AccumulationChartModule, ChartModule, SharedModule],
+  imports: [
+    SharedModule,
+    RouterModule.forChild([
+      {
+        path: '',
+        component: StatisticsComponent,
+      },
+    ]),
+  ],
 })
 export class StatisticsModule {}

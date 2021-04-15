@@ -1,4 +1,5 @@
-import {optional} from '../types'
+import { Optional } from '../types';
+
 export interface IStatsMiniGames {
-  optional: optional;
+  optional: Optional;
 }

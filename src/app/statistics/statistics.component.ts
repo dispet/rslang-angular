@@ -1,14 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ApiService } from '../shared';
-
-interface MiniStats {
-  nameMiniGame: string;
-  learnedWordsPerDay: number;
-  maxSeries?: number;
-  rightWords: number;
-  wrongWords: number;
-}
+import { ApiService, IMiniStats } from '../shared';
 
 @Component({
   selector: 'app-statistics',
@@ -24,7 +16,20 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   public primaryYAxis: Object;
   public primaryZAxis: Object;
   public isStatistics = false;
-  public data: MiniStats[] = [];
+  public data: IMiniStats[] = [];
+
+  private allLearnedWordsPerDay: number;
+  private allLearnedWords: number;
+  private allRightWords: number;
+  private allWrongWords: number;
+  private learnedWordsPerDay: number;
+  private learnedWords: number;
+  private rightWords: number;
+  private wrongWords: number;
+  private maxSeries: number;
+  private series: number;
+  private learnedWordsByIds: Set<string>;
+  private allLearnedWordsByIds: Set<string>;
 
   constructor(private apiService: ApiService) {
     this.titleAmount = 'Количество изученных слов по дням';
@@ -34,53 +39,43 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.statisticsSubscription = this.apiService.getUserStatistics().subscribe(
       (res) => {
-        const date = new Date(Date.now());
-        const dateNum = Number(
-          new Date(date.getFullYear(), date.getMonth(), date.getDate())
-            .toLocaleString('ru', {
-              year: '2-digit',
-              month: '2-digit',
-              day: '2-digit',
-            })
-            .split('.')
-            .join(''),
-        );
+        const dateNum = this.getDateNum();
         const allWords = [];
-        let allLearnedWordsPerDay = 0;
-        let allLearnedWords = 0;
-        let allLearnedWordsByIds = new Set();
-        let allRightWords = 0;
-        let allWrongWords = 0;
+        this.allLearnedWordsByIds = new Set();
+        this.allLearnedWordsPerDay = 0;
+        this.allLearnedWords = 0;
+        this.allRightWords = 0;
+        this.allWrongWords = 0;
         Object.entries(res.optional).map(([key, value]) => {
           if (key && value.words) {
             allWords.push(...value.words);
-            let learnedWordsPerDay = 0;
-            let learnedWords = 0;
-            let learnedWordsByIds = new Set();
-            let rightWords = 0;
-            let wrongWords = 0;
-            let maxSeries = 0;
+            this.learnedWordsByIds = new Set();
+            this.learnedWordsPerDay = 0;
+            this.learnedWords = 0;
+            this.rightWords = 0;
+            this.wrongWords = 0;
+            this.maxSeries = 0;
             value.words.forEach((item) => {
               if (item.timeStamp === dateNum) {
-                learnedWords = learnedWordsByIds.size;
-                allLearnedWords = allLearnedWordsByIds.size;
-                learnedWordsByIds = new Set([...learnedWordsByIds, ...item.wordsId]);
-                allLearnedWordsByIds = new Set([...allLearnedWordsByIds, ...item.wordsId]);
-                const learnedWordsInTraining = learnedWordsByIds.size - learnedWords;
-                const allLearnedWordsInTraining = allLearnedWordsByIds.size - allLearnedWords;
-                learnedWordsPerDay = (learnedWordsPerDay || 0) + learnedWordsInTraining;
-                allLearnedWordsPerDay = (allLearnedWordsPerDay || 0) + allLearnedWordsInTraining;
-                let series = 0;
-                item.answers.forEach((ans) => {
-                  if (ans === 'true') {
-                    series += 1;
-                    rightWords += 1;
-                    allRightWords += 1;
+                this.learnedWords = this.learnedWordsByIds.size;
+                this.allLearnedWords = this.allLearnedWordsByIds.size;
+                this.learnedWordsByIds = new Set([...this.learnedWordsByIds, ...item.wordsId]);
+                this.allLearnedWordsByIds = new Set([...this.allLearnedWordsByIds, ...item.wordsId]);
+                const learnedWordsInTraining = this.learnedWordsByIds.size - this.learnedWords;
+                const allLearnedWordsInTraining = this.allLearnedWordsByIds.size - this.allLearnedWords;
+                this.learnedWordsPerDay = (this.learnedWordsPerDay || 0) + learnedWordsInTraining;
+                this.allLearnedWordsPerDay = (this.allLearnedWordsPerDay || 0) + allLearnedWordsInTraining;
+                this.series = 0;
+                item.answers.forEach((answer) => {
+                  if (answer === 'true') {
+                    this.series += 1;
+                    this.rightWords += 1;
+                    this.allRightWords += 1;
                   } else {
-                    maxSeries = maxSeries > series ? maxSeries : series;
-                    series = 0;
-                    wrongWords += 1;
-                    allWrongWords += 1;
+                    this.maxSeries = this.maxSeries > this.series ? this.maxSeries : this.series;
+                    this.series = 0;
+                    this.wrongWords += 1;
+                    this.allWrongWords += 1;
                   }
                 });
               }
@@ -88,29 +83,28 @@ export class StatisticsComponent implements OnInit, OnDestroy {
 
             this.data.push({
               nameMiniGame: key,
-              learnedWordsPerDay: learnedWordsPerDay,
-              maxSeries: maxSeries,
-              rightWords: rightWords,
-              wrongWords: wrongWords,
+              learnedWordsPerDay: this.learnedWordsPerDay,
+              maxSeries: this.maxSeries,
+              rightWords: this.rightWords,
+              wrongWords: this.wrongWords,
             });
           }
         });
 
         this.data.push({
           nameMiniGame: 'Общая',
-          learnedWordsPerDay: allLearnedWordsPerDay,
-          rightWords: allRightWords,
-          wrongWords: allWrongWords,
+          learnedWordsPerDay: this.allLearnedWordsPerDay,
+          rightWords: this.allRightWords,
+          wrongWords: this.allWrongWords,
         });
 
         const learnedWordsPerDay: { [key: string]: number } = {};
-        let learnedWords = 0;
-        let learnedWordsByIds = new Set();
+        this.learnedWords = 0;
+        this.learnedWordsByIds = new Set();
         allWords.forEach((item) => {
-          learnedWords = learnedWordsByIds.size;
-          learnedWordsByIds = new Set([...learnedWordsByIds, ...item.wordsId]);
-          const learnedWordsInTraining = learnedWordsByIds.size - learnedWords;
-
+          this.learnedWords = this.learnedWordsByIds.size;
+          this.learnedWordsByIds = new Set([...this.learnedWordsByIds, ...item.wordsId]);
+          const learnedWordsInTraining = this.learnedWordsByIds.size - this.learnedWords;
           learnedWordsPerDay[item.timeStamp] = (learnedWordsPerDay[item.timeStamp] || 0) + learnedWordsInTraining;
         });
 
@@ -159,5 +153,19 @@ export class StatisticsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.statisticsSubscription.unsubscribe();
+  }
+
+  getDateNum(): number {
+    const date = new Date(Date.now());
+    return Number(
+      new Date(date.getFullYear(), date.getMonth(), date.getDate())
+        .toLocaleString('ru', {
+          year: '2-digit',
+          month: '2-digit',
+          day: '2-digit',
+        })
+        .split('.')
+        .join(''),
+    );
   }
 }

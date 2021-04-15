@@ -1,5 +1,5 @@
-import { training } from '../types';
+import { Training } from '../types';
 
 export interface IStatsMiniGamesItem {
-  words: Array<training>;
+  words: Array<Training>;
 }

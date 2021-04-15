@@ -1,1 +1,1 @@
-export type difficulty = 'normal' | 'hard';
+export type Difficulty = 'normal' | 'hard';
