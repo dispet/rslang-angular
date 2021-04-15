@@ -2,6 +2,7 @@ import { Component, ElementRef, Input, OnInit, EventEmitter, Output, OnDestroy, 
 import { IGameAnswer } from '../../models/game.model';
 import { moveTargetWord } from '../../animations/savanna-animations';
 import { IWord } from 'src/app/shared/models/word.model';
+import { GameUtilsService } from '../../services/game-utils.service';
 
 @Component({
 	selector: 'app-savanna-child',
@@ -45,7 +46,7 @@ export class SavannaChildComponent implements OnInit, OnDestroy {
 	correctSound = new Audio();
 	wrongSound = new Audio();
 
-	constructor(private el: ElementRef) {}
+	constructor(private el: ElementRef, private gameUtils: GameUtilsService) {}
 
 	ngOnInit(): void {
 		this.correctSound.src = '../../../../assets/savanna-game/correct.wav';
@@ -82,7 +83,7 @@ export class SavannaChildComponent implements OnInit, OnDestroy {
 			// change targetWord and options' values
 			// otherwise they will be changed after five second
 			this.changeWord();
-			this.options = this.shuffleArray(this.makeOptions());
+			this.options = this.gameUtils.shuffleArray(this.makeOptions());
 
 			// setInterval to change targetWord and options
 			this.changeWordsInterval = setInterval(() => {
@@ -90,7 +91,7 @@ export class SavannaChildComponent implements OnInit, OnDestroy {
 				// in order to make animation infinite we should change animation state every exact time
 				this.changeAnimationState();
 				this.changeWord();
-				this.options = this.shuffleArray(this.makeOptions());
+				this.options = this.gameUtils.shuffleArray(this.makeOptions());
 				// in order to animation happen we need tick
 				setTimeout(() => {
 					this.changeAnimationState();
@@ -110,21 +111,12 @@ export class SavannaChildComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	// we use this function to shuffle options and change words position in words arrray
-	shuffleArray(array: string[]) {
-		for (let i = array.length - 1; i > 0; i--) {
-			const j = Math.floor(Math.random() * (i + 1));
-			[array[i], array[j]] = [array[j], array[i]];
-		}
-		return array;
-	}
-
 	// this function is called every round of the game
 	// this function changes targetword and removes old button styles
 	changeWord() {
 		this.isClicked = false;
-		this.removeStyles(this.choosenButton);
-		this.removeStyles(this.correctButton);
+		this.gameUtils.removeStyles(this.choosenButton);
+		this.gameUtils.removeStyles(this.correctButton);
 		this.targetWord = this.englishWords[this.count++];
 
 		// if words count graeter than or equal 21 the 'changeWordsInterval' should be cleared;
@@ -154,7 +146,7 @@ export class SavannaChildComponent implements OnInit, OnDestroy {
 		);
 
 		// make random options and then push the answer
-		[options[0], options[1], options[2]] = this.shuffleArray(russianWords);
+		[options[0], options[1], options[2]] = this.gameUtils.shuffleArray(russianWords);
 		options.push(this.answer);
 
 		return options;
@@ -227,38 +219,13 @@ export class SavannaChildComponent implements OnInit, OnDestroy {
 		this.passGameAnswer(false);
 	}
 
-	removeStyles(button: Element) {
-		// beginning of the game button may be undefined
-		if (button) {
-			button.classList.remove('correct');
-			button.classList.remove('incorrect');
-		}
-	}
-
-	findAudio(choosenOption: string) {
-		// console.log(this.words, choosenOption);
-		let audioSrc = this.words.find((word) => {
-			return word.wordTranslate === choosenOption;
-		}).audio;
-		return audioSrc;
-	}
-
 	passGameAnswer(isCorrect: boolean) {
-		if (isCorrect) {
-			this.gameAnswer.isCorrect = true;
-			this.gameAnswer.answer = {
-				answer: this.choosenOption,
-				answerTranslate: this.targetWord,
-			};
-			this.gameAnswer.audio = this.findAudio(this.choosenOption);
-		} else {
-			this.gameAnswer.isCorrect = false;
-			this.gameAnswer.answer = {
-				answer: this.answer,
-				answerTranslate: this.targetWord,
-			};
-			this.gameAnswer.audio = this.findAudio(this.answer);
-		}
+		this.gameAnswer.isCorrect = isCorrect;
+		this.gameAnswer.answer = {
+			answer: this.answer,
+			answerTranslate: this.targetWord,
+		};
+		this.gameAnswer.audio = this.gameUtils.findAudio(this.answer, this.words);
 		this.passAnswer.emit(this.gameAnswer);
 	}
 }

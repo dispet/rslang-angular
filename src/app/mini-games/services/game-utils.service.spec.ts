@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SavannaService } from './savanna.service';
+import { GameUtilsService } from './game-utils.service';
 
-describe('SavannaService', () => {
-  let service: SavannaService;
+describe('GameUtilsService', () => {
+  let service: GameUtilsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(SavannaService);
+    service = TestBed.inject(GameUtilsService);
   });
 
   it('should be created', () => {
