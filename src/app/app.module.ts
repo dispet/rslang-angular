@@ -16,13 +16,11 @@ import { AppComponent } from './app.component';
 import { ElectronicTextbookComponent } from './electronic-textbook';
 import { RegistrationComponent } from './auth';
 import { HomePageComponent } from './home-page';
-import { MiniGamesComponent } from './mini-games';
 import { AboutUsComponent } from './about-us/about-us.component';
 import { WordsListModule } from './words-list/words-list.module';
-import { MiniGamesModule } from './mini-games/mini-games.module';
 
 @NgModule({
-  declarations: [AppComponent, ElectronicTextbookComponent, RegistrationComponent, HomePageComponent, MiniGamesComponent, AboutUsComponent],
+  declarations: [AppComponent, ElectronicTextbookComponent, RegistrationComponent, HomePageComponent, AboutUsComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -37,7 +35,6 @@ import { MiniGamesModule } from './mini-games/mini-games.module';
     AccumulationChartAllModule,
     ChartAllModule,
     StatisticsModule,
-    MiniGamesModule,
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, multi: true, useClass: TokenInterceptor }],
   bootstrap: [AppComponent],

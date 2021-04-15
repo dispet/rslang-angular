@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
 import { AuthGuard } from './shared';
-
 import { ElectronicTextbookComponent } from './electronic-textbook';
 import { MainLayoutComponent } from './core/';
 import { PageNotFoundComponent } from './core';
@@ -39,7 +37,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'mini-games',
-    loadChildren: () => import('./mini-games/mini-games-routing.module').then((m) => m.MiniGamesRoutingModule),
+    loadChildren: () => import('./mini-games/mini-games.module').then((m) => m.MiniGamesModule),
   },
   {
     path: '**',
