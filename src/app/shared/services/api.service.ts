@@ -104,8 +104,8 @@ export class ApiService {
     return this.http.get<IStatsMiniGamesResponse>(`${this.url}/users/${this.id}/statistics`);
   }
 
-  updateUserStatistics<T extends IStatsMiniGames>(statistic: T): Observable<T> {
-    return this.http.put<T>(`${this.url}/users/${this.id}/statistics`, statistic);
+  updateUserStatistics(statistic: IStatsMiniGamesResponse): Observable<IStatsMiniGamesResponse> {
+    return this.http.put<IStatsMiniGamesResponse>(`${this.url}/users/${this.id}/statistics`, statistic);
   }
 
   setUserId(id: string): void {

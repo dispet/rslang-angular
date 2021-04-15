@@ -15,19 +15,11 @@ import { ElectronicTextbookComponent } from './electronic-textbook';
 import { RegistrationComponent } from './auth';
 import { HomePageComponent } from './home-page';
 import { MiniGamesComponent } from './mini-games';
-import { StatisticsComponent } from './statistics';
 import { AboutUsComponent } from './about-us/about-us.component';
+import { AccumulationChartAllModule, ChartAllModule } from '@syncfusion/ej2-angular-charts';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ElectronicTextbookComponent,
-    RegistrationComponent,
-    HomePageComponent,
-    MiniGamesComponent,
-    StatisticsComponent,
-    AboutUsComponent,
-  ],
+  declarations: [AppComponent, ElectronicTextbookComponent, RegistrationComponent, HomePageComponent, MiniGamesComponent, AboutUsComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -38,6 +30,8 @@ import { AboutUsComponent } from './about-us/about-us.component';
     RegistrationModule,
     SharedModule,
     CoreModule,
+    AccumulationChartAllModule,
+    ChartAllModule,
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, multi: true, useClass: TokenInterceptor }],
   bootstrap: [AppComponent],

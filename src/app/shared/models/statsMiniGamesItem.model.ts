@@ -1,5 +1,5 @@
+import { training } from '../types';
+
 export interface IStatsMiniGamesItem {
-  words?: object[];
-  totalGamesCompleted: number;
-  errorRatePercent: number;
+  words: Array<training>;
 }

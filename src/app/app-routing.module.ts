@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { AuthGuard } from './shared/services';
+import { AuthGuard } from './shared';
 
 import { ElectronicTextbookComponent } from './electronic-textbook';
 import { MainLayoutComponent } from './core/';
@@ -27,7 +27,12 @@ const appRoutes: Routes = [
       { path: '', component: HomePageComponent },
       { path: 'text-book', component: ElectronicTextbookComponent },
       { path: 'mini-games', component: MiniGamesComponent },
-      { path: 'statistics', component: StatisticsComponent, canActivate: [AuthGuard] },
+      {
+        path: 'statistics',
+        component: StatisticsComponent,
+        canActivate: [AuthGuard],
+        loadChildren: () => import('./statistics/statistics.module').then((module) => module.StatisticsModule),
+      },
       { path: 'about-us', component: AboutUsComponent },
     ],
   },

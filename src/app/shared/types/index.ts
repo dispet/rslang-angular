@@ -4,3 +4,4 @@ export { optional } from './optional.type';
 export { AggregatedFilter } from './aggregatedFilter.type';
 export { difficulty } from './difficulty.type';
 export { query } from './query.type';
+export { training } from './training.type';
