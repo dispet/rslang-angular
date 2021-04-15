@@ -4,12 +4,12 @@
   "scripts": {
     "ng": "ng",
     "start": "node server.js",
-    "build": "ng build",
     "test": "ng test",
     "lint": "lint-staged",
     "e2e": "ng e2e",
     "pretty-quick": "pretty-quick --staged",
     "lint-css": "stylelint src/**/*css",
+    "postinstall": "ng build --aot -prod",
     "heroku-postbuild": "ng build --prod"
   },
   "private": true,
