@@ -1,4 +1,4 @@
-export type query = {
+export type Query = {
   $not?: any;
   $in?: Array<string | RegExp>;
   $nin?: Array<string | RegExp>;

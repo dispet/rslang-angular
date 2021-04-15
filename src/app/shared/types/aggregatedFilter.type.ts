@@ -1,6 +1,6 @@
 import { ITypeRegExp } from '../models';
-import { difficulty } from './difficulty.type';
-import { query } from './query.type';
+import { Difficulty } from './difficulty.type';
+import { Query } from './query.type';
 
 export type AggregatedFilter =
   | {
@@ -52,7 +52,7 @@ export type AggregatedFilter =
       $or?: never;
       $nor?: never;
       'userWord.optional.learned'?: never;
-      'userWord.difficulty': difficulty | query | ITypeRegExp;
+      'userWord.difficulty': Difficulty | Query | ITypeRegExp;
       'userWord.optional.deleted'?: boolean;
       'userWord.optional.hard'?: boolean;
       userWord?: never;
@@ -78,5 +78,5 @@ export type AggregatedFilter =
       'userWord.optional.hard'?: boolean;
       'userWord.difficulty'?: never;
       userWord?: never;
-      word: string | query | ITypeRegExp;
+      word: string | Query | ITypeRegExp;
     };

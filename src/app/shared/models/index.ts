@@ -16,3 +16,5 @@ export { IStatsMiniGamesResponse } from './statsMiniGamesResponse.model';
 export { IStatsMiniGames } from './statsMiniGames.model';
 export { IAggregatedWordResponse } from './aggregatedWordResponse.model';
 export { ITypeRegExp } from './typeRegExp.model';
+export { IMiniStats } from './miniStats.model';
+export { IPagination } from './pagination.model';
