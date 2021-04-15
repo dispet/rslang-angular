@@ -23,7 +23,6 @@ const appRoutes: Routes = [
     path: '',
     component: MainLayoutComponent,
     children: [
-      { path: '', component: HomePageComponent },
       { path: 'text-book', component: ElectronicTextbookComponent },
       { path: 'mini-games', component: MiniGamesComponent },
       {
@@ -32,6 +31,9 @@ const appRoutes: Routes = [
         loadChildren: () => import('./statistics/statistics.module').then((m) => m.StatisticsModule),
       },
       { path: 'about-us', component: AboutUsComponent },
+      { path: 'dictionary', loadChildren: () => import('./dictionary/dictionary.module').then((m) => m.DictionaryModule) },
+      { path: 'words-list', loadChildren: () => import('./words-list/words-list.module').then((m) => m.WordsListModule) },
+      { path: '', component: HomePageComponent },
     ],
   },
   {

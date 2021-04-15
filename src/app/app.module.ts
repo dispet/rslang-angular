@@ -18,6 +18,7 @@ import { RegistrationComponent } from './auth';
 import { HomePageComponent } from './home-page';
 import { MiniGamesComponent } from './mini-games';
 import { AboutUsComponent } from './about-us/about-us.component';
+import { WordsListModule } from './words-list/words-list.module';
 
 @NgModule({
   declarations: [AppComponent, ElectronicTextbookComponent, RegistrationComponent, HomePageComponent, MiniGamesComponent, AboutUsComponent],
@@ -29,6 +30,7 @@ import { AboutUsComponent } from './about-us/about-us.component';
     DictionaryModule,
     LoginModule,
     RegistrationModule,
+    WordsListModule,
     SharedModule,
     CoreModule,
     AccumulationChartAllModule,

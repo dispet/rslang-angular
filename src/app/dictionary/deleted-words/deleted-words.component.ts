@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
 	styleUrls: ['./deleted-words.component.scss'],
 })
 export class DeletedWordsComponent {
+  words = [];
 	constructor() {}
 }
