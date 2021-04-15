@@ -2,7 +2,10 @@
 	<div class="modal-window">
 		<div class="modal-content">
 			<h1>Pезультат</h1>
-			<div class="feedback"></div>
+			<div class="specific-parts">{{ specificParts }}</div>
+			<div class="feedback">
+				<h2>{{ feedback }}</h2>
+			</div>
 			<div class="statistics">{{ correct }} слов изучено, {{ incorrect }} не изучено.</div>
 			<div class="answers">
 				<h2>ОШИБОК: {{ incorrect }}</h2>

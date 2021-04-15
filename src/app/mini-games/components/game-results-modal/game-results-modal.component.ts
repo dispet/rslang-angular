@@ -12,11 +12,20 @@ export class GameResultsModalComponent implements OnInit {
 	currentUrl = this.router.url;
 	correct: number;
 	incorrect: number;
-
+	feedback: string;
+	specificParts = '';
 	constructor(private el: ElementRef, private router: Router) {}
 	ngOnInit(): void {
 		this.correct = this.data.correctAnswers.length;
 		this.incorrect = this.data.incorrectAnswers.length;
+
+		if (this.correct > 18) {
+			this.feedback = 'Отличный результат, не переставайте учиться!';
+		} else if (this.correct > 10 && this.correct < 18) {
+			this.feedback = 'Хороший результат, больше работай над собой.';
+		} else {
+			this.feedback = 'Узнайте больше и попробуйте еще раз.';
+		}
 	}
 
 	playWordAudio(audio: HTMLAudioElement) {
