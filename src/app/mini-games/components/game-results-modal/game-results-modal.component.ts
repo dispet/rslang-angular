@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { IGameAnswers } from '../../models/game.model';
 
@@ -14,7 +14,7 @@ export class GameResultsModalComponent implements OnInit {
 	incorrect: number;
 	feedback: string;
 	specificParts = '';
-	constructor(private el: ElementRef, private router: Router) {}
+	constructor(private router: Router) {}
 	ngOnInit(): void {
 		this.correct = this.data.correctAnswers.length;
 		this.incorrect = this.data.incorrectAnswers.length;

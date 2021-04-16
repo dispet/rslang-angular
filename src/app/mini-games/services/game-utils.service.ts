@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IWord } from 'src/app/shared/models';
 
-@Injectable({
-	providedIn: 'root',
-})
+@Injectable()
 export class GameUtilsService {
 	constructor() {}
 

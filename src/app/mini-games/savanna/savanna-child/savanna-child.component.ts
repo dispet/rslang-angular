@@ -96,8 +96,8 @@ export class SavannaChildComponent implements OnInit, OnDestroy {
 				setTimeout(() => {
 					this.changeAnimationState();
 				}, 0);
-			}, 5000);
-		}, 500);
+			}, 7500);
+		}, 1000);
 	}
 
 	changeAnimationState() {
@@ -105,9 +105,8 @@ export class SavannaChildComponent implements OnInit, OnDestroy {
 			this.targetWordState = 'bottom';
 		} else {
 			// when user doesn't choose any option we do
-			this.choosenOption = "You haven't choosen";
-			this.targetWordState = 'top';
 			this.inCaseTheAnswerFalse();
+			this.targetWordState = 'top';
 		}
 	}
 
@@ -211,6 +210,7 @@ export class SavannaChildComponent implements OnInit, OnDestroy {
 			) as Element;
 
 			this.correctButton.classList.add('correct');
+
 			if (this.choosenButton) {
 				this.choosenButton.classList.add('incorrect');
 			}

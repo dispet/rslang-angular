@@ -4,7 +4,6 @@ import { flyTopDown } from '../animations/savanna-animations';
 import { ApiService } from 'src/app/shared';
 import { IWord } from 'src/app/shared/models';
 import { Group, Page } from 'src/app/shared/types';
-import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 @Component({
 	selector: 'app-savanna',
@@ -33,7 +32,7 @@ export class SavannaComponent {
 		name: 'Саванна',
 		info: 'Вы можете выбрать ответ с помощью цифр 1, 2, 3 или 4 на клавиатуре или с помощью мыши.',
 	};
-	constructor(private apiService: ApiService, public dialog: MatDialog) {}
+	constructor(private apiService: ApiService) {}
 
 	beginTheGame(level: Group) {
 		this.getChoosenGroupWords(level);

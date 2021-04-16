@@ -1,5 +1,3 @@
-import '@angular/compiler';
-
 // Modules
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
