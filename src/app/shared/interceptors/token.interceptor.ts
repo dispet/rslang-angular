@@ -1,11 +1,11 @@
-import {Injectable} from '@angular/core';
-import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
-import {Router} from '@angular/router';
-import {Observable, throwError} from 'rxjs';
-import {catchError, switchMap} from 'rxjs/operators';
-import {AuthService, LocalStorageService, UserService, ApiService} from '../services';
-import {ITokenPayload} from '../models';
-import {Errors} from '../constants';
+import { Injectable } from '@angular/core';
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { Observable, throwError } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
+import { AuthService, LocalStorageService, UserService, ApiService } from '../services';
+import { ITokenPayload } from '../models';
+import { Errors } from '../constants';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -14,19 +14,14 @@ export class TokenInterceptor implements HttpInterceptor {
   constructor(
     private auth: AuthService,
     private router: Router,
-    private localStorageSevice: LocalStorageService,
+    private localStorageService: LocalStorageService,
     private userService: UserService,
     private apiService: ApiService,
-  ) {
-  }
+  ) {}
 
-  intercept(
-    req: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
-
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (this.auth.isAuthenticated()) {
-      const userId = this.localStorageSevice.getUserId();
+      const userId = this.localStorageService.getUserId();
       if (req.url.includes(`/users/${userId}/tokens`)) {
         req = this.addToken(req, this.auth.getRefreshToken());
       } else {
@@ -42,19 +37,14 @@ export class TokenInterceptor implements HttpInterceptor {
           return this.auth.updateTokens().pipe(
             switchMap(() => {
               this.isRefreshing = false;
-              return next
-                .handle(req)
-                .pipe(catchError((err: HttpErrorResponse) => this.handleAuthError(err)));
-            })
+              return next.handle(req).pipe(catchError((err: HttpErrorResponse) => this.handleAuthError(err)));
+            }),
           );
         }
-      } catch {
-      }
+      } catch {}
     }
 
-    return next
-      .handle(req)
-      .pipe(catchError((err: HttpErrorResponse) => this.handleAuthError(err)));
+    return next.handle(req).pipe(catchError((err: HttpErrorResponse) => this.handleAuthError(err)));
   }
 
   private addToken(req: HttpRequest<any>, token: string): HttpRequest<any> {
@@ -70,11 +60,10 @@ export class TokenInterceptor implements HttpInterceptor {
       this.auth.setToken(null);
       this.auth.setRefreshToken(null);
       this.apiService.setUserId(null);
-      this.localStorageSevice.clearAuthData();
+      this.localStorageService.clearAuthData();
       this.userService.setUser(null);
-      this.localStorageSevice.deleteUser();
-      const queryParam =
-        err.status === Errors.TOKEN_EXPIRED ? 'sessionFailed' : 'accessDenied';
+      this.localStorageService.deleteUser();
+      const queryParam = err.status === Errors.TOKEN_EXPIRED ? 'sessionFailed' : 'accessDenied';
       const queryParams = {};
       queryParams[queryParam] = true;
       this.router.navigate(['/login'], {

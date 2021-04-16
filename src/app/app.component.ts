@@ -1,15 +1,14 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {Title} from '@angular/platform-browser';
-import {filter} from 'rxjs/operators';
-import {AuthService, LocalStorageService, UserService, ApiService} from './shared';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+import { filter } from 'rxjs/operators';
+import { AuthService, LocalStorageService, UserService, ApiService } from './shared';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-
 export class AppComponent implements OnInit {
   title = 'rslang';
 
@@ -21,16 +20,17 @@ export class AppComponent implements OnInit {
     private router: Router,
     private titleService: Title,
     private userService: UserService,
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     const token = this.localStore.getToken();
     const refreshToken = this.localStore.getRefreshToken();
     const user = this.localStore.getUser();
     const userId = this.localStore.getUserId();
-    // this.auth.register({ "email": "hello1@user.com", "password": "wGfhjkm_123" })
-    //   .subscribe((user) => console.log('register ',user));
+
+    // this.auth.register({ "email": "hello3@user.com", "password": "q123" })
+    //   .subscribe((user) => console.log('register ',user),
+    //       err => console.log('error',err.error.error.errors[0].message));
     //  this.auth.login({ "email": "hello1@user.com", "password": "wGfhjkm_123" })
     //    .subscribe((user) => {console.log('login ',user)
     //     this.apiService.getWords(0,0).subscribe((words)=>console.log('words ',words))
@@ -52,11 +52,9 @@ export class AppComponent implements OnInit {
       this.apiService.setUserId(userId);
     }
 
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd),
-    ).subscribe(() => {
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
       const child = this.getChild(this.activatedRoute);
-      child.data.subscribe(data => {
+      child.data.subscribe((data) => {
         this.titleService.setTitle(data.title);
       });
     });
