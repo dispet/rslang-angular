@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
+import { GAMES_NAME } from '../shared/constants';
 
 @Component({
-	selector: 'app-mini-games',
-	templateUrl: './mini-games.component.html',
-	styleUrls: ['./mini-games.component.scss'],
+  selector: 'app-mini-games',
+  templateUrl: './mini-games.component.html',
+  styleUrls: ['./mini-games.component.scss'],
 })
 export class MiniGamesComponent {
-	constructor() {}
+  readonly gamesName = GAMES_NAME;
+  constructor() {}
 }

@@ -7,6 +7,7 @@ import { MainAudioCallComponent } from './audiocall/main-audio-call/main-audio-c
 const routes: Routes = [
   { path: 'audio-call', component: MainAudioCallComponent },
   { path: 'audio-call/:group', component: AudioCallComponent },
+  { path: 'audio-call/:group/:page', component: AudioCallComponent },
   { path: '', component: MiniGamesComponent },
 ];
 
