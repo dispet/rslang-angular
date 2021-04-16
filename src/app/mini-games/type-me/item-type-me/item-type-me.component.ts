@@ -1,18 +1,16 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IWord } from '../../../shared/models';
 
 @Component({
-  selector: 'app-item-audio-call',
-  templateUrl: './item-audio-call.component.html',
-  styleUrls: ['./item-audio-call.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-item-type-me',
+  templateUrl: './item-type-me.component.html',
+  styleUrls: ['./item-type-me.component.scss'],
 })
-export class ItemAudioCallComponent implements OnInit {
-  private url = 'https://dispet.github.io/rslang-data/';
+export class ItemTypeMeComponent implements OnInit {
+  url = 'https://dispet.github.io/rslang-data/';
   isAnswerButtonDisable = false;
   correctAnswer = '';
   isTrue: number;
-  @Input() getVariantsRu: string[];
   @Input() word: IWord;
   @Output() answer = new EventEmitter<number>();
 
@@ -29,15 +27,15 @@ export class ItemAudioCallComponent implements OnInit {
       if (audio.duration === audio.currentTime) {
         audio.play();
         audio.pause();
-        // audio.currentTime = 0.0;
+        audio.currentTime = 0.0;
       }
     });
   }
 
-  sendResult(v: string) {
-    this.isTrue = v === this.word.wordTranslate ? 1 : 0;
+  sendResult(answer: string) {
+    this.isTrue = answer.toLowerCase().trim() === this.word.word ? 1 : 0;
     this.isAnswerButtonDisable = true;
-    this.correctAnswer = this.word.wordTranslate;
+    this.correctAnswer = this.word.word;
     this.answer.emit(this.isTrue);
   }
 }

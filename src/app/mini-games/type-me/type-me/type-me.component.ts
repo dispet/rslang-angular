@@ -1,25 +1,22 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { IWord } from '../../../shared/models';
 import { ApiService } from '../../../shared/services';
-import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-audio-call',
-  templateUrl: './audio-call.component.html',
-  styleUrls: ['./audio-call.component.scss'],
+  selector: 'app-type-me',
+  templateUrl: './type-me.component.html',
+  styleUrls: ['./type-me.component.scss'],
 })
-export class AudioCallComponent implements OnInit, OnDestroy {
+export class TypeMeComponent implements OnInit, OnDestroy {
   private groupFromUrl: number;
   private pageFromUrl: number;
   private subscription1$: Subscription;
   private subscription2$: Subscription;
-  readonly MAX_VARIANTS_COUNT = 4;
   readonly MAX_WORDS_COUNT = 7;
   counterAnswers = 0;
   resultCounter = 0;
-  rusVariantsSubArray: string[][];
-  rusVariantsArray: string[];
   words: IWord[];
 
   constructor(private apiService: ApiService, private route: ActivatedRoute) {}
@@ -52,8 +49,6 @@ export class AudioCallComponent implements OnInit, OnDestroy {
     this.subscription1$ = this.apiService.getWords(group, page).subscribe(
       (words) => {
         this.words = this.getRandomWords(words, this.MAX_WORDS_COUNT);
-        this.rusVariantsArray = this.getAllVariantsRu(words);
-        this.rusVariantsSubArray = this.getVariantsRu(this.words, this.rusVariantsArray, this.MAX_VARIANTS_COUNT);
       },
       (error) => console.error(error),
     );
@@ -74,36 +69,6 @@ export class AudioCallComponent implements OnInit, OnDestroy {
       }
     }
     return result;
-  }
-
-  getAllVariantsRu(words: IWord[]) {
-    const collectionWords = [];
-    for (let i = 0; i < words.length; i++) {
-      collectionWords.push(words[i].wordTranslate);
-    }
-    return collectionWords;
-  }
-
-  getVariantsRu(words: IWord[], allVariantsRu: string[], variantsCount: number) {
-    let length = allVariantsRu.length;
-    let resultArr: Array<string[]> = [];
-    for (let i = 0; i < words.length; i++) {
-      let result: string[] = [];
-      result.push(words[i].wordTranslate);
-      let n = variantsCount;
-      while (n - 1) {
-        let x = Math.floor(Math.random() * length);
-        if (!result.includes(allVariantsRu[x])) {
-          result.push(allVariantsRu[x]);
-          n--;
-        }
-      }
-      result.sort(function () {
-        return Math.random() - 0.5;
-      });
-      resultArr.push(result);
-    }
-    return resultArr;
   }
 
   getAnswer(isTrue: number): void {

@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ItemTypemeComponent } from './item-typeme.component';
+import { TypeMeComponent } from './type-me.component';
 
-describe('ItemTypemeComponent', () => {
-  let component: ItemTypemeComponent;
-  let fixture: ComponentFixture<ItemTypemeComponent>;
+describe('TypeMeComponent', () => {
+  let component: TypeMeComponent;
+  let fixture: ComponentFixture<TypeMeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ItemTypemeComponent],
+      declarations: [TypeMeComponent],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ItemTypemeComponent);
+    fixture = TestBed.createComponent(TypeMeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
