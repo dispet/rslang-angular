@@ -1,24 +1,26 @@
-import {NgModule} from "@angular/core";
-import {RouterModule, Routes} from "@angular/router";
-import { DeletedWordsComponent } from "./deleted-words";
-import { DictionaryComponent } from "./dictionary.component";
-import { HardWordsComponent } from "./hard-words";
-import { WordsInLearningComponent } from "./words-in-learning";
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { DeletedWordsComponent } from './deleted-words';
+import { DictionaryComponent } from './dictionary.component';
+import { HardWordsComponent } from './hard-words';
+import { WordsInLearningComponent } from './words-in-learning';
 
 const routes: Routes = [
-  {path: '', component: DictionaryComponent,
-  children: [
-    {path: 'hard-words', component: HardWordsComponent},
-    {path: 'deleted-words', component: DeletedWordsComponent},
-    {path: '', component: WordsInLearningComponent}
-  ],
-  }
-]
+  {
+    path: '',
+    component: DictionaryComponent,
+    children: [
+      { path: 'hard-words', component: HardWordsComponent },
+      { path: 'deleted-words', component: DeletedWordsComponent },
+      { path: '', component: WordsInLearningComponent },
+    ],
+  },
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   declarations: [],
   exports: [RouterModule],
-  providers: []
+  providers: [],
 })
 export class DictionaryRoutingModule {}

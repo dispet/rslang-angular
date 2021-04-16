@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WordsListComponent } from './words-list.component';
+import { ItemAudioCallComponent } from './item-audio-call.component';
 
-describe('WordsListComponent', () => {
-  let component: WordsListComponent;
-  let fixture: ComponentFixture<WordsListComponent>;
+describe('ItemAudioCallComponent', () => {
+  let component: ItemAudioCallComponent;
+  let fixture: ComponentFixture<ItemAudioCallComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [WordsListComponent],
+      declarations: [ItemAudioCallComponent],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(WordsListComponent);
+    fixture = TestBed.createComponent(ItemAudioCallComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

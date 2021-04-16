@@ -9,11 +9,15 @@ import { DATA_URL } from '../shared/constants/';
 @Component({
   selector: 'app-words-list',
   templateUrl: './words-list.component.html',
-  styleUrls: ['./words-list.component.scss']
+  styleUrls: ['./words-list.component.scss'],
 })
 export class WordsListComponent implements OnInit, OnDestroy {
-  constructor(private stateFacade: FacadeService, private settingsFacade: SettingsFacade, private route: ActivatedRoute, private router: Router) {
-  }
+  constructor(
+    private stateFacade: FacadeService,
+    private settingsFacade: SettingsFacade,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {}
 
   isTranslationDisplay$ = this.settingsFacade.isTranslationDisplay$;
   isControlsDisplay$ = this.settingsFacade.isControlsDisplay$;
@@ -62,7 +66,7 @@ export class WordsListComponent implements OnInit, OnDestroy {
   }
 
   prevPage(): void {
-    if(!this.isFirstPage()) {
+    if (!this.isFirstPage()) {
       this.router.navigate(['words-list', this.group, +this.page - 1]);
     }
   }
@@ -80,17 +84,27 @@ export class WordsListComponent implements OnInit, OnDestroy {
   }
 
   loadDataFromRoute() {
-    this.route.params.pipe(switchMap((params) => {
-      if (+params['group'] < this.MIN_GROUP_COUNT && +params['group'] > this.MAX_GROUP_COUNT && +params['page'] < this.MIN_PAGE_COUNT && +params['page'] > this.MAX_PAGE_COUNT) {
-        this.group = this.MIN_GROUP_COUNT;
-        this.page = this.MIN_PAGE_COUNT;
-        this.setRouteValuesInWrongCase();
-      } else {
-        this.group = params['group'];
-        this.page = params['page'];
-        return this.stateFacade.loadWords(this.group, this.page);
-      }
-    }), takeUntil(this.destroy$)).subscribe();
+    this.route.params
+      .pipe(
+        switchMap((params) => {
+          if (
+            +params['group'] < this.MIN_GROUP_COUNT &&
+            +params['group'] > this.MAX_GROUP_COUNT &&
+            +params['page'] < this.MIN_PAGE_COUNT &&
+            +params['page'] > this.MAX_PAGE_COUNT
+          ) {
+            this.group = this.MIN_GROUP_COUNT;
+            this.page = this.MIN_PAGE_COUNT;
+            this.setRouteValuesInWrongCase();
+          } else {
+            this.group = params['group'];
+            this.page = params['page'];
+            return this.stateFacade.loadWords(this.group, this.page);
+          }
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
   }
 
   playAudio(url1: string, url2: string, url3: string): void {

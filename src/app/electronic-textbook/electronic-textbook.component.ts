@@ -8,5 +8,4 @@ import { FacadeService } from '../state';
 })
 export class ElectronicTextbookComponent {
   constructor(private stateFacade: FacadeService) {}
-
 }

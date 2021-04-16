@@ -5,17 +5,8 @@ import { WordsListComponent } from './words-list.component';
 import { WordsListRoutingModule } from './words-list-routing.module';
 import { SettingsComponent } from '../settings';
 
-
-
 @NgModule({
-  declarations: [
-    WordsListComponent,
-    SettingsComponent
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    WordsListRoutingModule
-  ]
+  declarations: [WordsListComponent, SettingsComponent],
+  imports: [CommonModule, SharedModule, WordsListRoutingModule],
 })
-export class WordsListModule { }
+export class WordsListModule {}

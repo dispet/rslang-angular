@@ -1,7 +1,6 @@
-import { Injectable } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
-import { IPagination, IWord } from "../shared/models";
-
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { IPagination, IWord } from '../shared/models';
 
 @Injectable({
   providedIn: 'root',
@@ -12,8 +11,8 @@ export class StateService {
   private readonly wordsSubject$ = new BehaviorSubject<IWord[]>(null);
   private readonly paginationSubject$ = new BehaviorSubject<IPagination>({
     group: 0,
-    page: 0
-  })
+    page: 0,
+  });
 
   readonly translationDisplay$ = this.translationDisplaySubject$.asObservable();
   readonly controlsDisplay$ = this.controlsDisplaySubject$.asObservable();
@@ -24,7 +23,6 @@ export class StateService {
   readonly MAX_PAGE_COUNT = 29;
   readonly MIN_PAGE_COUNT = 0;
 
-
   setTranslationDisplay(): void {
     this.translationDisplaySubject$.next(!this.translationDisplaySubject$.getValue());
   }
@@ -34,7 +32,7 @@ export class StateService {
   }
 
   setPaginationValues(navigate: any): void {
-    this.updatePagination(navigate)
+    this.updatePagination(navigate);
   }
 
   setWords(words: IWord[]): void {

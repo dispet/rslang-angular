@@ -1,6 +1,6 @@
-import { Group, Page } from "../types";
+import { Group, Page } from '../types';
 
 export interface IPagination {
-  group?: Group,
-  page?: Page,
+  group?: Group;
+  page?: Page;
 }
