@@ -1,26 +1,25 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ReplaySubject } from 'rxjs';
 import { IWord } from '../../../shared/models';
 import { ApiService } from '../../../shared/services';
-import { ReplaySubject } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { CommonFunctionsService } from '../../../shared/services/common-functions.service';
 import { takeUntil } from 'rxjs/operators';
+import { CommonFunctionsService } from '../../../shared/services/common-functions.service';
+import { IUsersWords } from '../../../shared/models/usersWords.model';
 
 @Component({
-  selector: 'app-audio-call',
-  templateUrl: './audio-call.component.html',
-  styleUrls: ['./audio-call.component.scss'],
+  selector: 'app-type-me',
+  templateUrl: './type-me.component.html',
+  styleUrls: ['./type-me.component.scss'],
 })
-export class AudioCallComponent implements OnInit, OnDestroy {
+export class TypeMeComponent implements OnInit, OnDestroy {
   private groupFromUrl: number;
   private pageFromUrl: number;
   private destroy$: ReplaySubject<any> = new ReplaySubject<any>();
-  readonly MAX_VARIANTS_COUNT = 4;
-  readonly MAX_WORDS_COUNT = 7;
+  private answersForStatistic: string[] = [];
+  readonly MAX_WORDS_COUNT = 3;
   answersCounter = 0;
   resultCounter = 0;
-  rusVariantsSubArray: string[][];
-  rusVariantsArray: string[];
   words: IWord[];
 
   constructor(private apiService: ApiService, private route: ActivatedRoute, private commonFunctions: CommonFunctionsService) {}
@@ -56,49 +55,43 @@ export class AudioCallComponent implements OnInit, OnDestroy {
       .subscribe(
         (words) => {
           this.words = this.commonFunctions.getRandomWords(words, this.MAX_WORDS_COUNT);
-          this.rusVariantsArray = this.getAllVariantsRu(words);
-          this.rusVariantsSubArray = this.getVariantsRu(this.words, this.rusVariantsArray, this.MAX_VARIANTS_COUNT);
         },
         (error) => console.error(error),
       );
   }
 
-  getAllVariantsRu(words: IWord[]) {
-    const collectionWords = [];
-    for (let i = 0; i < words.length; i++) {
-      collectionWords.push(words[i].wordTranslate);
-    }
-    return collectionWords;
-  }
-
-  getVariantsRu(words: IWord[], allVariantsRu: string[], variantsCount: number) {
-    let length = allVariantsRu.length;
-    let resultArr: Array<string[]> = [];
-    for (let i = 0; i < words.length; i++) {
-      let result: string[] = [];
-      result.push(words[i].wordTranslate);
-      let n = variantsCount;
-      while (n - 1) {
-        let x = Math.floor(Math.random() * length);
-        if (!result.includes(allVariantsRu[x])) {
-          result.push(allVariantsRu[x]);
-          n--;
-        }
-      }
-      result.sort(function () {
-        return Math.random() - 0.5;
-      });
-      resultArr.push(result);
-    }
-    return resultArr;
-  }
-
-  getAnswer(isCorrect: number): void {
+  getAnswer(isTrue: number): void {
     ++this.answersCounter;
-    this.resultCounter += isCorrect;
+    this.resultCounter += isTrue;
+    if (isTrue) {
+      this.answersForStatistic.push('true');
+    } else {
+      this.answersForStatistic.push('false');
+    }
+  }
+
+  sendDate(): void {
+    this.sendStatistic();
+    this.sendWordsForStudying();
   }
 
   sendStatistic() {
-    // заготовка
+    let arrIds: string[] = [];
+    for (let i = 0; i > this.words.length; i++) {
+      arrIds.push(this.words[i]._id);
+    }
+    this.words.map((word) => arrIds.push(word._id));
+    console.log(arrIds);
+    this.apiService.updateUserStatisticsByGame('ownGame', arrIds, this.answersForStatistic).pipe(takeUntil(this.destroy$)).subscribe();
+  }
+
+  sendWordsForStudying() {
+    const body: IUsersWords = {
+      difficulty: 'normal',
+      optional: {
+        learned: true,
+      },
+    };
+    this.words.map((word) => this.apiService.createUserWordByWordId(word._id, body).pipe(takeUntil(this.destroy$)).subscribe());
   }
 }

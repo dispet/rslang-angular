@@ -5,17 +5,16 @@ import { Observable } from 'rxjs';
 import {
   IAggregatedWord,
   IAggregatedWordResponse,
-  IStatsMiniGames,
   IStatsMiniGamesResponse,
   IUserSetting,
+  IUsersWords,
   IUserUpdate,
   IUserUpdateResponse,
-  IUsersWords,
   IWord,
 } from '../models';
 
 import { API_URL } from '../constants';
-import { Group, Page, AggregatedFilter } from '../types';
+import { AggregatedFilter, Group, Page } from '../types';
 
 @Injectable({
   providedIn: 'root',
@@ -110,5 +109,9 @@ export class ApiService {
 
   setUserId(id: string): void {
     this.id = id;
+  }
+
+  updateUserStatisticsByGame(game: string, wordsId: string[], answers: string[]): Observable<any> {
+    return;
   }
 }

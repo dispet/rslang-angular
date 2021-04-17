@@ -13,16 +13,21 @@ import { AudioCallComponent } from './audiocall/audio-call/audio-call.component'
 import { MainAudioCallComponent } from './audiocall/main-audio-call/main-audio-call.component';
 import { SavannaComponent } from './savanna/savanna.component';
 import { SavannaChildComponent } from './savanna/savanna-child/savanna-child.component';
+import { TypeMeComponent } from './type-me/type-me/type-me.component';
+import { ItemTypeMeComponent } from './type-me/item-type-me/item-type-me.component';
+import { MainTypeMeComponent } from './type-me/main-type-me/main-type-me.component';
 
 @NgModule({
   declarations: [
-    SavannaComponent,
     AudioCallComponent,
     MiniGamesComponent,
     ItemAudioCallComponent,
     MainAudioCallComponent,
     GameFirstModalComponent,
     SavannaChildComponent,
+    TypeMeComponent,
+    ItemTypeMeComponent,
+    MainTypeMeComponent,
   ],
   imports: [MiniGamesRoutingModule, SharedModule, MaterialModule, RouterModule],
   entryComponents: [GameResultsModalComponent],
