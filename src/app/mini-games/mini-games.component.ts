@@ -7,6 +7,6 @@ import { GAMES_NAME } from '../shared/constants';
   styleUrls: ['./mini-games.component.scss'],
 })
 export class MiniGamesComponent {
-  readonly gamesName = GAMES_NAME;
+  readonly gameNames = GAMES_NAME;
   constructor() {}
 }

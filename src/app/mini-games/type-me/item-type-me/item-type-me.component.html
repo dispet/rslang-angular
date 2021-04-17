@@ -3,7 +3,7 @@
   <button mat-icon-button (click)="playAudio(word.audio)">
     <mat-icon mat-list-icon>volume_up</mat-icon>
   </button>
-  <span [ngClass]="{ red: !isTrue, green: isTrue }">{{ correctAnswer }}</span>
+  <span [ngClass]="isTrue === 1 ? 'green' : 'red'">{{ correctAnswer }}</span>
   <hr />
   <p>
     <span [innerHTML]="word.wordTranslate"></span>
@@ -13,7 +13,7 @@
     <mat-form-field class="example-full-width">
       <mat-label>Написание</mat-label>
       <input matInput #answer id="answer" name="answer" />
-      <mat-hint align="start"><strong>Напишите слово по английски</strong> </mat-hint>
+      <mat-hint align="start"><strong>Напишите слово по-английски</strong> </mat-hint>
     </mat-form-field>
   </form>
   <button mat-raised-button color="primary" [disabled]="isAnswerButtonDisable" (click)="sendResult(answer.value)">Проверить</button>
