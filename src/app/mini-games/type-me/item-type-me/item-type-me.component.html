@@ -3,7 +3,7 @@
   <button mat-icon-button (click)="playAudio(word.audio)">
     <mat-icon mat-list-icon>volume_up</mat-icon>
   </button>
-  <span [ngClass]="isTrue === 1 ? 'green' : 'red'">{{ correctAnswer }}</span>
+  <span [ngClass]="isCorrect === 1 ? 'green' : 'red'">{{ correctAnswer }}</span>
   <hr />
   <p>
     <span [innerHTML]="word.wordTranslate"></span>

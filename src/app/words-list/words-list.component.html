@@ -13,7 +13,7 @@
 <mat-drawer-container>
   <mat-drawer #drawer position="end">
     <mat-button-toggle-group vertical>
-      <mat-button-toggle *ngFor="let game of gamesName" (click)="goGame(game[0])">{{ game[1] }}</mat-button-toggle>
+      <mat-button-toggle *ngFor="let game of gamesName" (click)="goGame(game.name)">{{ game.label }}</mat-button-toggle>
     </mat-button-toggle-group>
   </mat-drawer>
 
