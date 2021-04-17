@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { IWord } from '../models';
+import { IUsersWords, IWord } from '../models';
+import { takeUntil } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
