@@ -78,9 +78,9 @@ export class TypeMeComponent implements OnInit, OnDestroy {
   sendStatistic() {
     let arrIds: string[] = [];
     for (let i = 0; i > this.words.length; i++) {
-      arrIds.push(this.words[i].id);
+      arrIds.push(this.words[i]._id);
     }
-    this.words.map((word) => arrIds.push(word.id));
+    this.words.map((word) => arrIds.push(word._id));
     console.log(arrIds);
     this.apiService.updateUserStatisticsByGame('ownGame', arrIds, this.answersForStatistic).pipe(takeUntil(this.destroy$)).subscribe();
   }
@@ -92,6 +92,6 @@ export class TypeMeComponent implements OnInit, OnDestroy {
         learned: true,
       },
     };
-    this.words.map((word) => this.apiService.createUserWordByWordId(word.id, body).pipe(takeUntil(this.destroy$)).subscribe());
+    this.words.map((word) => this.apiService.createUserWordByWordId(word._id, body).pipe(takeUntil(this.destroy$)).subscribe());
   }
 }
