@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AccumulationChartAllModule, ChartAllModule } from '@syncfusion/ej2-angular-charts';
 import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core';
 
@@ -33,8 +32,6 @@ import { WordsListModule } from './words-list/words-list.module';
     WordsListModule,
     SharedModule,
     CoreModule,
-    AccumulationChartAllModule,
-    ChartAllModule,
     StatisticsModule,
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, multi: true, useClass: TokenInterceptor }],
