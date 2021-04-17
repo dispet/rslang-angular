@@ -5,6 +5,7 @@ import { ApiService } from '../../../shared/services';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { CommonFunctionsService } from '../../../shared/services/common-functions.service';
+import { IUsersWords } from '../../../shared/models/usersWords.model';
 
 @Component({
   selector: 'app-type-me',
@@ -15,7 +16,8 @@ export class TypeMeComponent implements OnInit, OnDestroy {
   private groupFromUrl: number;
   private pageFromUrl: number;
   private destroy$: ReplaySubject<any> = new ReplaySubject<any>();
-  readonly MAX_WORDS_COUNT = 7;
+  private answersForStatistic: string[] = [];
+  readonly MAX_WORDS_COUNT = 3;
   answersCounter = 0;
   resultCounter = 0;
   words: IWord[];
@@ -61,18 +63,35 @@ export class TypeMeComponent implements OnInit, OnDestroy {
   getAnswer(isTrue: number): void {
     ++this.answersCounter;
     this.resultCounter += isTrue;
+    if (isTrue) {
+      this.answersForStatistic.push('true');
+    } else {
+      this.answersForStatistic.push('false');
+    }
   }
 
-  sendDate() {
+  sendDate(): void {
     this.sendStatistic();
     this.sendWordsForStudying();
   }
 
   sendStatistic() {
-    // заготовка
+    let arrIds: string[] = [];
+    for (let i = 0; i > this.words.length; i++) {
+      arrIds.push(this.words[i]._id);
+    }
+    this.words.map((word) => arrIds.push(word._id));
+    console.log(arrIds);
+    this.apiService.updateUserStatisticsByGame('ownGame', arrIds, this.answersForStatistic).pipe(takeUntil(this.destroy$)).subscribe();
   }
 
   sendWordsForStudying() {
-    // заготовка
+    const body: IUsersWords = {
+      difficulty: 'normal',
+      optional: {
+        learned: true,
+      },
+    };
+    this.words.map((word) => this.apiService.createUserWordByWordId(word._id, body).pipe(takeUntil(this.destroy$)).subscribe());
   }
 }
