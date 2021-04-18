@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { switchMap, takeUntil } from 'rxjs/operators';
-import { SettingsFacade } from '../state/settings-facade.service';
+import { SettingsFacade } from '../state';
 import { FacadeService } from '../state';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DATA_URL, GAMES_NAME } from '../shared/constants/';
