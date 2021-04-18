@@ -2,17 +2,26 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
-import { IAggregatedWord, IUserSetting, IUserUpdate, IUserUpdateResponse, IUsersWords, IWord } from '../models';
+import {
+  IAggregatedWord,
+  IAggregatedWordResponse,
+  IStatsMiniGamesResponse,
+  IUserSetting,
+  IUsersWords,
+  IUserUpdate,
+  IUserUpdateResponse,
+  IWord,
+} from '../models';
 
 import { API_URL } from '../constants';
-import { Group, Page } from '../types';
+import { AggregatedFilter, Group, Page } from '../types';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private url = API_URL;
-  private id: string;
+  private url: string = API_URL;
+  private id = '';
 
   constructor(private http: HttpClient) {}
 
@@ -24,7 +33,7 @@ export class ApiService {
     return this.http.delete<void>(`${this.url}/users/${this.id}`);
   }
 
-  getWords(group: Group, page: Page): Observable<Array<IWord>> {
+  getWords(group: Group = 0, page: Page = 0): Observable<Array<IWord>> {
     let params = new HttpParams();
     params = params.append('group', group.toString());
     params = params.append('page', page.toString());
@@ -51,9 +60,33 @@ export class ApiService {
     return this.http.delete<void>(`${this.url}/users/${this.id}/words/${wordId}`);
   }
 
+  getUserAggregatedWords(
+    filter?: AggregatedFilter,
+    wordsPerPage?: number | null,
+    group?: number,
+  ): Observable<Array<IAggregatedWordResponse>> {
+    let params = new HttpParams();
+
+    if (wordsPerPage) {
+      params = params.append('wordsPerPage', wordsPerPage.toString());
+    }
+
+    if (group) {
+      params = params.append('group', group.toString());
+    }
+
+    if (filter) {
+      params = params.append('filter', JSON.stringify(filter));
+    }
+    return this.http.get<Array<IAggregatedWordResponse>>(`${this.url}/users/${this.id}/aggregatedWords/`, {
+      params,
+    });
+  }
+
   getUserAggregatedWordByWordId(wordId: string): Observable<IAggregatedWord> {
     return this.http.get<IAggregatedWord>(`${this.url}/users/${this.id}/aggregatedWords/${wordId}`);
   }
+
   getUserSettings(): Observable<IUserSetting> {
     return this.http.get<IUserSetting>(`${this.url}/users/${this.id}/settings`);
   }
@@ -66,7 +99,19 @@ export class ApiService {
     return this.http.post<IUserSetting>(`${this.url}/users/${this.id}/settings`, settings);
   }
 
+  getUserStatistics(): Observable<IStatsMiniGamesResponse> {
+    return this.http.get<IStatsMiniGamesResponse>(`${this.url}/users/${this.id}/statistics`);
+  }
+
+  updateUserStatistics(statistic: IStatsMiniGamesResponse): Observable<IStatsMiniGamesResponse> {
+    return this.http.put<IStatsMiniGamesResponse>(`${this.url}/users/${this.id}/statistics`, statistic);
+  }
+
   setUserId(id: string): void {
     this.id = id;
+  }
+
+  updateUserStatisticsByGame(game: string, wordsId: string[], answers: string[]): Observable<any> {
+    return;
   }
 }
