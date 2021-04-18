@@ -128,6 +128,10 @@ export class WordsListComponent implements OnInit, OnDestroy {
   }
 
   goGame(gameName: string) {
+    if (gameName === 'savanna') {
+      this.router.navigate(['/mini-games/savanna']);
+      return;
+    }
     this.router.navigate(['/mini-games', gameName, this.group, this.page]);
   }
 }
