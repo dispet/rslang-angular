@@ -28,6 +28,7 @@ import { MainTypeMeComponent } from './type-me/main-type-me/main-type-me.compone
     TypeMeComponent,
     ItemTypeMeComponent,
     MainTypeMeComponent,
+    SavannaComponent,
   ],
   imports: [MiniGamesRoutingModule, SharedModule, MaterialModule, RouterModule],
   entryComponents: [GameResultsModalComponent],
