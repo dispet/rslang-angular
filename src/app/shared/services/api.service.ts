@@ -111,7 +111,94 @@ export class ApiService {
     this.id = id;
   }
 
-  updateUserStatisticsByGame(game: string, wordsId: string[], answers: string[]): Observable<any> {
-    return;
+  getDateNum(): number {
+    const date = new Date(Date.now());
+    return Number(
+      new Date(date.getFullYear(), date.getMonth(), date.getDate())
+        .toLocaleString('ru', {
+          year: '2-digit',
+          month: '2-digit',
+          day: '2-digit',
+        })
+        .split('.')
+        .join(''),
+    );
+  }
+  updateUserStatisticsByGame(game: string, wordsId: string[], answers: string[]): void {
+    const dateNum = this.getDateNum();
+    const games = ['audioCall', 'savannah', 'sprint', 'ownGame'];
+    const nameGames = games.filter((item) => item !== game);
+    this.getUserStatistics().subscribe(
+      (stats) => {
+        if (stats.optional) {
+          const w = stats.optional[game]?.words || [];
+          w.push({
+            timeStamp: dateNum,
+            wordsId: wordsId,
+            answers: answers,
+          });
+
+          const updateStats: IStatsMiniGamesResponse = {
+            optional: {
+              [game]: { words: w },
+              [nameGames[0]]: stats.optional[nameGames[0]],
+              [nameGames[1]]: stats.optional[nameGames[1]],
+              [nameGames[2]]: stats.optional[nameGames[2]],
+            },
+          };
+          this.updateUserStatistics(updateStats).subscribe(
+            (res) => {
+              console.log(res.optional[game]);
+            },
+            (error) => {
+              console.log(error);
+            },
+          );
+        } else {
+          const w = [];
+          w.push({
+            timeStamp: dateNum,
+            wordsId: wordsId,
+            answers: answers,
+          });
+
+          const updateStats: IStatsMiniGamesResponse = {
+            optional: {
+              [game]: { words: w },
+            },
+          };
+          this.updateUserStatistics(updateStats).subscribe(
+            (res) => {
+              console.log(res.optional[game]);
+            },
+            (error) => {
+              console.log(error);
+            },
+          );
+        }
+      },
+      (error) => {
+        const w = [];
+        w.push({
+          timeStamp: dateNum,
+          wordsId: wordsId,
+          answers: answers,
+        });
+
+        const updateStats: IStatsMiniGamesResponse = {
+          optional: {
+            [game]: { words: w },
+          },
+        };
+        this.updateUserStatistics(updateStats).subscribe(
+          (res) => {
+            console.log(res.optional[game]);
+          },
+          (error) => {
+            console.log(error);
+          },
+        );
+      },
+    );
   }
 }

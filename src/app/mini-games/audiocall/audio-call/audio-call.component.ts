@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { IWord } from '../../../shared/models';
+import { IUsersWords, IWord } from '../../../shared/models';
 import { ApiService } from '../../../shared/services';
 import { ReplaySubject } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
@@ -22,6 +22,7 @@ export class AudioCallComponent implements OnInit, OnDestroy {
   rusVariantsSubArray: string[][];
   rusVariantsArray: string[];
   words: IWord[];
+  private answersForStatistic: string[] = [];
 
   constructor(private apiService: ApiService, private route: ActivatedRoute, private commonFunctions: CommonFunctionsService) {}
 
@@ -96,9 +97,33 @@ export class AudioCallComponent implements OnInit, OnDestroy {
   getAnswer(isCorrect: number): void {
     ++this.answersCounter;
     this.resultCounter += isCorrect;
+    if (isCorrect) {
+      this.answersForStatistic.push('true');
+    } else {
+      this.answersForStatistic.push('false');
+    }
+  }
+
+  sendDate(): void {
+    this.sendStatistic();
+    this.sendWordsForStudying();
   }
 
   sendStatistic() {
-    // заготовка
+    let arrIds: string[] = [];
+    console.log('this.words', this.words);
+    this.words.map((word) => arrIds.push(word.id));
+    console.log(arrIds);
+    this.apiService.updateUserStatisticsByGame('audioCall', arrIds, this.answersForStatistic);
+  }
+
+  sendWordsForStudying() {
+    const body: IUsersWords = {
+      difficulty: 'normal',
+      optional: {
+        learned: true,
+      },
+    };
+    this.words.map((word) => this.apiService.createUserWordByWordId(word.id, body).pipe(takeUntil(this.destroy$)).subscribe());
   }
 }
