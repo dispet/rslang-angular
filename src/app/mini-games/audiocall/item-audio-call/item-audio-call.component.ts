@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { IWord } from '../../../shared/models';
+import { CommonFunctionsService } from '../../../shared/services/common-functions.service';
 
 @Component({
   selector: 'app-item-audio-call',
@@ -7,37 +8,24 @@ import { IWord } from '../../../shared/models';
   styleUrls: ['./item-audio-call.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ItemAudioCallComponent implements OnInit {
-  private url = 'https://dispet.github.io/rslang-data/';
+export class ItemAudioCallComponent {
   isAnswerButtonDisable = false;
   correctAnswer = '';
-  isTrue: number;
+  isCorrect: number;
   @Input() getVariantsRu: string[];
   @Input() word: IWord;
   @Output() answer = new EventEmitter<number>();
 
-  constructor() {}
-
-  ngOnInit(): void {}
+  constructor(private commonFunctions: CommonFunctionsService) {}
 
   playAudio(url: string): void {
-    let audio = new Audio();
-    audio.src = this.url + url;
-    audio.load();
-    audio.play();
-    audio.addEventListener('ended', function () {
-      if (audio.duration === audio.currentTime) {
-        audio.play();
-        audio.pause();
-        audio.currentTime = 0.0;
-      }
-    });
+    this.commonFunctions.playAudio(url);
   }
 
-  sendResult(v: string) {
-    this.isTrue = v === this.word.wordTranslate ? 1 : 0;
+  sendResult(answer: string) {
+    this.isCorrect = answer === this.word.wordTranslate ? 1 : 0;
     this.isAnswerButtonDisable = true;
     this.correctAnswer = this.word.wordTranslate;
-    this.answer.emit(this.isTrue);
+    this.answer.emit(this.isCorrect);
   }
 }

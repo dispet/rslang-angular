@@ -11,5 +11,5 @@
     <h3>Результат: {{ resultCounter }} / {{ MAX_WORDS_COUNT }}</h3>
   </div>
 </div>
-
+<button *ngIf="answersCounter === MAX_WORDS_COUNT" mat-raised-button color="primary" (click)="sendStatistic()">Сохранить результат</button>
 <ng-template #loading>Слова не загрузились</ng-template>

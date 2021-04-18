@@ -1,8 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { IWord } from '../../../shared/models';
+import { IUsersWords, IWord } from '../../../shared/models';
 import { ApiService } from '../../../shared/services';
-import { Subscription } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { CommonFunctionsService } from '../../../shared/services/common-functions.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-audio-call',
@@ -12,28 +14,29 @@ import { ActivatedRoute } from '@angular/router';
 export class AudioCallComponent implements OnInit, OnDestroy {
   private groupFromUrl: number;
   private pageFromUrl: number;
-  private subscription1$: Subscription;
-  private subscription2$: Subscription;
+  private destroy$: ReplaySubject<any> = new ReplaySubject<any>();
   readonly MAX_VARIANTS_COUNT = 4;
   readonly MAX_WORDS_COUNT = 7;
+  answersCounter = 0;
   resultCounter = 0;
   rusVariantsSubArray: string[][];
   rusVariantsArray: string[];
   words: IWord[];
+  private answersForStatistic: string[] = [];
 
-  constructor(private apiService: ApiService, private route: ActivatedRoute) {}
+  constructor(private apiService: ApiService, private route: ActivatedRoute, private commonFunctions: CommonFunctionsService) {}
 
   ngOnInit(): void {
     this.loadDataFromRoute();
   }
 
   ngOnDestroy(): void {
-    this.subscription1$.unsubscribe();
-    this.subscription2$.unsubscribe();
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 
   loadDataFromRoute() {
-    this.subscription2$ = this.route.paramMap.subscribe((params) => {
+    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.groupFromUrl = +params.get('group');
       this.pageFromUrl = +params.get('page');
       if (this.groupFromUrl && this.pageFromUrl) {
@@ -48,31 +51,17 @@ export class AudioCallComponent implements OnInit, OnDestroy {
   }
 
   getWords(group, page) {
-    this.subscription1$ = this.apiService.getWords(group, page).subscribe(
-      (words) => {
-        this.words = this.getRandomWords(words, this.MAX_WORDS_COUNT);
-        this.rusVariantsArray = this.getAllVariantsRu(words);
-        this.rusVariantsSubArray = this.getVariantsRu(this.words, this.rusVariantsArray, this.MAX_VARIANTS_COUNT);
-      },
-      (error) => console.error(error),
-    );
-  }
-
-  getRandomWords(arr: IWord[], wordsCount: number): IWord[] {
-    const result: IWord[] = [];
-    let length = arr.length;
-    if (wordsCount > length) {
-      // для вывода информации в консоль при разработке
-      console.error('Заданное количество слов для теста превышает предоставленный набор');
-    }
-    while (wordsCount) {
-      let x = Math.floor(Math.random() * length);
-      if (!result.includes(arr[x])) {
-        result.push(arr[x]);
-        wordsCount--;
-      }
-    }
-    return result;
+    this.apiService
+      .getWords(group, page)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
+        (words) => {
+          this.words = this.commonFunctions.getRandomWords(words, this.MAX_WORDS_COUNT);
+          this.rusVariantsArray = this.getAllVariantsRu(words);
+          this.rusVariantsSubArray = this.getVariantsRu(this.words, this.rusVariantsArray, this.MAX_VARIANTS_COUNT);
+        },
+        (error) => console.error(error),
+      );
   }
 
   getAllVariantsRu(words: IWord[]) {
@@ -105,7 +94,34 @@ export class AudioCallComponent implements OnInit, OnDestroy {
     return resultArr;
   }
 
-  getAnswer(n: number) {
-    this.resultCounter += n;
+  getAnswer(isCorrect: number): void {
+    ++this.answersCounter;
+    this.resultCounter += isCorrect;
+    if (isCorrect) {
+      this.answersForStatistic.push('true');
+    } else {
+      this.answersForStatistic.push('false');
+    }
+  }
+
+  sendDate(): void {
+    this.sendStatistic();
+    this.sendWordsForStudying();
+  }
+
+  sendStatistic() {
+    let arrIds: string[] = [];
+    this.words.map((word) => arrIds.push(word.id));
+    this.apiService.updateUserStatisticsByGame('audioCall', arrIds, this.answersForStatistic);
+  }
+
+  sendWordsForStudying() {
+    const body: IUsersWords = {
+      difficulty: 'normal',
+      optional: {
+        learned: true,
+      },
+    };
+    this.words.map((word) => this.apiService.createUserWordByWordId(word.id, body).pipe(takeUntil(this.destroy$)).subscribe());
   }
 }

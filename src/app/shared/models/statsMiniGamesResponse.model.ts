@@ -1,4 +1,4 @@
-import {IStatsMiniGamesItem} from './statsMiniGamesItem.model';
+import { IStatsMiniGamesItem } from './statsMiniGamesItem.model';
 
 export interface IStatsMiniGamesResponse {
   optional: {

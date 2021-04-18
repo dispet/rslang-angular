@@ -6,13 +6,12 @@
   background: linear-gradient(to top, #1d976c, #93f9b9);
 
   .cards {
-    max-width: 50rem;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
 
     mat-card {
-      max-width: 20rem;
+      width: 10rem;
       margin: 1rem;
       display: flex;
       flex-direction: column;

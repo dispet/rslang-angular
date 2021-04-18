@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { switchMap, takeUntil } from 'rxjs/operators';
-import { SettingsFacade } from '../state/settings-facade.service';
+import { SettingsFacade } from '../state';
 import { FacadeService } from '../state';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DATA_URL } from '../shared/constants/';
+import { DATA_URL, GAMES_NAME } from '../shared/constants/';
 
 @Component({
   selector: 'app-words-list',
@@ -25,9 +25,8 @@ export class WordsListComponent implements OnInit, OnDestroy {
   pagination$ = this.stateFacade.pagination$;
   isLoading$ = this.stateFacade.isLoading$;
   url = DATA_URL;
-
   private destroy$ = new Subject<void>();
-
+  gamesName = GAMES_NAME;
   group: number;
   page: number;
 
@@ -126,5 +125,13 @@ export class WordsListComponent implements OnInit, OnDestroy {
         audio3.play();
       }
     });
+  }
+
+  goGame(gameName: string) {
+    if (gameName === 'savanna') {
+      this.router.navigate(['/mini-games/savanna']);
+      return;
+    }
+    this.router.navigate(['/mini-games', gameName, this.group, this.page]);
   }
 }
