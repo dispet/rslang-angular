@@ -13,7 +13,12 @@
         <h3 class="translation-subtitle">Хочу смотреть перевод</h3>
 
         <section class="slider-section">
-          <mat-slide-toggle class="slider-margin" color="primary" (toggleChange)="setTranslationDisplay()" [checked]="settings.translation">
+          <mat-slide-toggle
+            class="slider-margin"
+            color="primary"
+            (toggleChange)="changeTranslationDisplay()"
+            [checked]="settings.translation"
+          >
             <span *ngIf="settings.translation; else no">Да</span>
             <ng-template #no><span>Нет</span></ng-template>
           </mat-slide-toggle>
@@ -28,7 +33,7 @@
         <h3 class="buttons-subtitle">Хочу добавлять слова в "Сложные" "Удаленные"</h3>
 
         <section class="slider-section">
-          <mat-slide-toggle class="slider-margin" color="primary" [checked]="settings.controls" (toggleChange)="setControlsDisplay()">
+          <mat-slide-toggle class="slider-margin" color="primary" [checked]="settings.controls" (toggleChange)="changeControlsDisplay()">
             <span *ngIf="settings.controls; else no">Да</span>
             <ng-template #no><span>Нет</span></ng-template>
           </mat-slide-toggle>

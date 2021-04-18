@@ -28,14 +28,6 @@ export class AppComponent implements OnInit {
     const user = this.localStore.getUser();
     const userId = this.localStore.getUserId();
 
-    // this.auth.register({ "email": "hello3@user.com", "password": "q123" })
-    //   .subscribe((user) => console.log('register ',user),
-    //       err => console.log('error',err.error.error.errors[0].message));
-    //  this.auth.login({ "email": "hello1@user.com", "password": "wGfhjkm_123" })
-    //    .subscribe((user) => {console.log('login ',user)
-    //     this.apiService.getWords(0,0).subscribe((words)=>console.log('words ',words))
-    //    });
-
     if (token) {
       this.auth.setToken(token);
     }

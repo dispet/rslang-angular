@@ -6,7 +6,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core';
 
 import { SharedModule, TokenInterceptor } from './shared';
-import { DictionaryModule } from './dictionary';
 import { LoginModule } from './auth/login/login.module';
 import { RegistrationModule } from './auth/registration/registration.module';
 import { StatisticsModule } from './statistics/statistics.module';
@@ -16,7 +15,6 @@ import { ElectronicTextbookComponent } from './electronic-textbook';
 import { RegistrationComponent } from './auth';
 import { HomePageComponent } from './home-page';
 import { AboutUsComponent } from './about-us/about-us.component';
-import { WordsListModule } from './words-list/words-list.module';
 
 @NgModule({
   declarations: [AppComponent, ElectronicTextbookComponent, RegistrationComponent, HomePageComponent, AboutUsComponent],
@@ -25,10 +23,8 @@ import { WordsListModule } from './words-list/words-list.module';
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
-    DictionaryModule,
     LoginModule,
     RegistrationModule,
-    WordsListModule,
     SharedModule,
     CoreModule,
     StatisticsModule,
