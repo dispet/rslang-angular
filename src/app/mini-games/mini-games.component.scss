@@ -1,5 +1,5 @@
 .mini-games {
-  height: 84%;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -9,7 +9,7 @@
     max-width: 50rem;
     display: flex;
     justify-content: center;
-    flex-wrap: wrap;
+    //flex-wrap: wrap;
 
     mat-card {
       max-width: 20rem;
@@ -52,5 +52,8 @@
     height: unset;
     min-height: 84%;
     // flex-direction: column;
+  }
+  .game-cards {
+    flex-wrap: wrap;
   }
 }
