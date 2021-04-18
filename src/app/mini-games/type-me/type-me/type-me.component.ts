@@ -1,11 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
-import { IWord } from '../../../shared/models';
+import { IUsersWords, IWord } from '../../../shared/models';
 import { ApiService } from '../../../shared/services';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { CommonFunctionsService } from '../../../shared/services/common-functions.service';
-import { IUsersWords } from '../../../shared/models/usersWords.model';
 
 @Component({
   selector: 'app-type-me',
