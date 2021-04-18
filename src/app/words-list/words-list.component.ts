@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
-import { switchMap, takeUntil } from 'rxjs/operators';
-import { SettingsFacade } from '../state';
+import { EMPTY, Subject } from 'rxjs';
+import { first, switchMap, takeUntil } from 'rxjs/operators';
+import { SettingsFacade } from '../state/settings-facade.service';
 import { FacadeService } from '../state';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DATA_URL, GAMES_NAME } from '../shared/constants/';
@@ -21,7 +21,8 @@ export class WordsListComponent implements OnInit, OnDestroy {
 
   isTranslationDisplay$ = this.settingsFacade.isTranslationDisplay$;
   isControlsDisplay$ = this.settingsFacade.isControlsDisplay$;
-  words$ = this.stateFacade.words$;
+  listWords$ = this.stateFacade.listWords$;
+  userWords$ = this.stateFacade.userWords$;
   pagination$ = this.stateFacade.pagination$;
   isLoading$ = this.stateFacade.isLoading$;
   url = DATA_URL;
@@ -38,7 +39,8 @@ export class WordsListComponent implements OnInit, OnDestroy {
   readonly MIN_PAGE_COUNT = 1;
 
   ngOnInit(): void {
-    this.loadDataFromRoute();
+    this.loadDataFromRoute('list');
+    this.loadUserWords();
   }
 
   ngOnDestroy() {
@@ -82,28 +84,53 @@ export class WordsListComponent implements OnInit, OnDestroy {
     this.router.navigate(['words-list', this.MIN_GROUP_COUNT, this.MIN_PAGE_COUNT]);
   }
 
-  loadDataFromRoute() {
-    this.route.params
-      .pipe(
-        switchMap((params) => {
-          if (
-            +params['group'] < this.MIN_GROUP_COUNT &&
-            +params['group'] > this.MAX_GROUP_COUNT &&
-            +params['page'] < this.MIN_PAGE_COUNT &&
-            +params['page'] > this.MAX_PAGE_COUNT
-          ) {
-            this.group = this.MIN_GROUP_COUNT;
-            this.page = this.MIN_PAGE_COUNT;
-            this.setRouteValuesInWrongCase();
-          } else {
-            this.group = params['group'];
-            this.page = params['page'];
-            return this.stateFacade.loadWords(this.group, this.page);
-          }
-        }),
-        takeUntil(this.destroy$),
-      )
-      .subscribe();
+  convertToNum(value: string) {
+    return parseInt(value.trim());
+  }
+
+  isCorrectPassedGroupAndPage(group: string, page: string): boolean {
+    const isCorrectGroup = !isNaN(this.convertToNum(group)) ? this.checkGroupRange(group) : false;
+    const isCorrectPage = !isNaN(this.convertToNum(page)) ? this.checkPageRange(page) : false;
+    if(isCorrectGroup && isCorrectPage) return true;
+    return false;
+  }
+
+  checkGroupRange(group: string): boolean {
+    const groupNum = this.convertToNum(group);
+    return (groupNum >= this.MIN_GROUP_COUNT) && (groupNum <= this.MAX_GROUP_COUNT);
+  }
+
+  checkPageRange(page: string): boolean {
+    const pageNum = this.convertToNum(page);
+    return (pageNum >= this.MIN_PAGE_COUNT) && (pageNum <= this.MAX_PAGE_COUNT);
+  }
+
+
+  loadDataFromRoute(direction: string) {
+    this.route.params.pipe(switchMap((params) => {
+      if(this.isCorrectPassedGroupAndPage(params['group'], params['page'])) {
+        this.group = params['group'];
+        this.page = params['page'];
+        return this.stateFacade.loadListWords(this.group, this.page, direction);
+      } else {
+        this.setRouteValuesInWrongCase();
+        return EMPTY;
+      }
+    }), takeUntil(this.destroy$)).subscribe();
+  }
+
+  loadUserWords() {
+    return this.stateFacade.loadUserWords().pipe(first()).subscribe();
+  }
+
+  addToHard(id: string): void {
+    this.stateFacade.addWordToHard(id);
+    this.loadUserWords();
+  }
+
+  addToDeleted(id: string): void {
+    this.stateFacade.addWordToDeleted(id);
+    this.loadUserWords();
   }
 
   playAudio(url1: string, url2: string, url3: string): void {

@@ -19,7 +19,7 @@
 
   <ng-template #content>
     <ul class="list">
-      <li *ngFor="let item of words$ | async" class="list-item">
+      <li *ngFor="let item of listWords$ | async" class="list-item">
         <div class="list-item-container">
           <div class="item-image">
             <img src="{{ url }}/{{ item.image }}" alt="{{ item.word }}" />
@@ -51,10 +51,10 @@
           </div>
 
           <div class="item-controls" *ngIf="isControlsDisplay$ | async">
-            <button (click)="console.log('add to difficult')">
+            <button (click)="addToHard(item.id)">
               <mat-icon>new_label</mat-icon>
             </button>
-            <button (click)="console.log('add to difficult')">
+            <button (click)="addToDeleted(item.id)">
               <mat-icon>delete</mat-icon>
             </button>
           </div>

@@ -49,4 +49,28 @@ export class LocalStorageService {
   getUserId(): string {
     return localStorage.getItem('userId');
   }
+
+  getTranslateSetting() {
+    return localStorage.getItem('RSLangIsTranslateDisplay');
+  }
+
+  getControlsSetting() {
+    return localStorage.getItem('RSLangIsControlsDisplay');
+  }
+
+  createTranslateSetting() {
+    localStorage.setItem('RSLangIsTranslateDisplay', '1');
+  }
+
+  createControlsSetting() {
+    localStorage.setItem('RSLangIsControlsDisplay', '1');
+  }
+
+  setTranslateDisplay(isDisplay: number) {
+    localStorage.setItem('RSLangIsTranslateDisplay', `${isDisplay}`);
+  }
+
+  setControlsSetting(isDisplay: number) {
+    localStorage.setItem('RSLangIsControlsDisplay', `${isDisplay}`);
+  }
 }

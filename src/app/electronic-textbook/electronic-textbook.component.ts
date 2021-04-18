@@ -7,5 +7,5 @@ import { FacadeService } from '../state';
   styleUrls: ['./electronic-textbook.component.scss'],
 })
 export class ElectronicTextbookComponent {
-  constructor(private stateFacade: FacadeService) {}
+  constructor() {}
 }

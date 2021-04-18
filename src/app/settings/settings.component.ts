@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { first, map } from 'rxjs/operators';
 import { SettingsFacade } from '../state/settings-facade.service';
 import { Location } from '@angular/common';
 
@@ -12,6 +12,7 @@ import { Location } from '@angular/common';
 export class SettingsComponent implements OnInit {
   isTranslationDisplay$ = this.settingsFacade.isTranslationDisplay$;
   isControlsDisplay$ = this.settingsFacade.isControlsDisplay$;
+  // userSettings = this.settingsFacade.userSetting$;
   settings$: Observable<any>;
 
   constructor(private settingsFacade: SettingsFacade, private location: Location) {}
@@ -24,13 +25,25 @@ export class SettingsComponent implements OnInit {
     );
   }
 
-  setTranslationDisplay(): void {
-    this.settingsFacade.setTranslationDisplay();
+  changeTranslationDisplay() {
+    this.settingsFacade.changeTranslateSetting();
   }
 
-  setControlsDisplay(): void {
-    this.settingsFacade.setControlsDisplay();
+  changeControlsDisplay() {
+    this.settingsFacade.changeControlsSetting();
   }
+
+  // loadUserSettings() {
+  //   this.settingsFacade.loadUserSettings().pipe(first()).subscribe();
+  // }
+
+  // setTranslationDisplay(): void {
+  //   this.settingsFacade.setTranslationDisplay();
+  // }
+
+  // setControlsDisplay(): void {
+  //   this.settingsFacade.setControlsDisplay();
+  // }
 
   backToPreviousPage() {
     this.location.back();
