@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FacadeService } from '../state';
 
 @Component({
   selector: 'app-electronic-textbook',
@@ -7,5 +6,5 @@ import { FacadeService } from '../state';
   styleUrls: ['./electronic-textbook.component.scss'],
 })
 export class ElectronicTextbookComponent {
-  constructor(private stateFacade: FacadeService) {}
+  constructor() {}
 }

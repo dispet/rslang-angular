@@ -24,12 +24,12 @@ export class SettingsComponent implements OnInit {
     );
   }
 
-  setTranslationDisplay(): void {
-    this.settingsFacade.setTranslationDisplay();
+  changeTranslationDisplay() {
+    this.settingsFacade.changeTranslateSetting();
   }
 
-  setControlsDisplay(): void {
-    this.settingsFacade.setControlsDisplay();
+  changeControlsDisplay() {
+    this.settingsFacade.changeControlsSetting();
   }
 
   backToPreviousPage() {

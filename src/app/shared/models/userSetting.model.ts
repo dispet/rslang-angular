@@ -1,4 +1,7 @@
 export interface IUserSetting {
   wordsPerDay: number;
-  optional: object;
+  optional: {
+    isTranslateDisplay?: string;
+    isControlsDisplay?: string;
+  };
 }
