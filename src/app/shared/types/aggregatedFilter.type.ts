@@ -79,4 +79,15 @@ export type AggregatedFilter =
       'userWord.difficulty'?: never;
       userWord?: never;
       word: string | Query | ITypeRegExp;
+    }
+  | {
+      $and?: never;
+      $or?: never;
+      $nor?: never;
+      'userWord.optional.learned'?: boolean;
+      'userWord.optional.deleted'?: boolean;
+      'userWord.optional.hard'?: boolean;
+      'userWord.difficulty'?: never;
+      userWord?: never;
+      word?: never;
     };
