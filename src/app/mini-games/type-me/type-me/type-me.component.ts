@@ -16,7 +16,7 @@ export class TypeMeComponent implements OnInit, OnDestroy {
   private pageFromUrl: number;
   private destroy$: ReplaySubject<any> = new ReplaySubject<any>();
   private answersForStatistic: string[] = [];
-  readonly MAX_WORDS_COUNT = 3;
+  readonly MAX_WORDS_COUNT = 7;
   answersCounter = 0;
   resultCounter = 0;
   words: IWord[];
@@ -76,9 +76,7 @@ export class TypeMeComponent implements OnInit, OnDestroy {
 
   sendStatistic() {
     let arrIds: string[] = [];
-    console.log('this.words', this.words);
     this.words.map((word) => arrIds.push(word.id));
-    console.log(arrIds);
     this.apiService.updateUserStatisticsByGame('ownGame', arrIds, this.answersForStatistic);
   }
 

@@ -111,9 +111,7 @@ export class AudioCallComponent implements OnInit, OnDestroy {
 
   sendStatistic() {
     let arrIds: string[] = [];
-    console.log('this.words', this.words);
     this.words.map((word) => arrIds.push(word.id));
-    console.log(arrIds);
     this.apiService.updateUserStatisticsByGame('audioCall', arrIds, this.answersForStatistic);
   }
 
