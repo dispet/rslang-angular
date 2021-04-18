@@ -34,9 +34,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   submit(): void {
-    if (this.form.invalid) {
-      return;
-    }
+    // if (this.form.invalid) {
+    //   return;
+    // }
 
     // to disable button 'submit' if form was already submitted
     this.submitted = true;
