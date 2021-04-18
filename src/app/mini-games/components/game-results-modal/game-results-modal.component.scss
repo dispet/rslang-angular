@@ -1,73 +1,77 @@
 .results-modal {
-	width: 100%;
-	height: 100%;
-	top: 0;
-	bottom: 0;
-	background-color: rgba(0, 0, 0, 0.5);
-	position: fixed;
-	z-index: 99;
-	overflow: hidden;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  z-index: 99;
+  overflow: hidden;
 
-	.modal-window {
-		h1 {
-			font-size: 24px;
-			font-weight: 900;
-		}
+  .modal-window {
+    h1 {
+      font-size: 24px;
+      font-weight: 900;
+    }
 
-		h2 {
-			margin-top: 20px;
-		}
+    h2 {
+      margin-top: 20px;
+    }
 
-		padding: 40px;
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		background-color: white;
-		color: black;
-		height: 80vh;
-		font-size: 20px;
+    padding: 40px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    color: black;
+    height: 80vh;
+    font-size: 20px;
 
-		.modal-content {
-			box-shadow: inset 3px 3px 3px 3px white;
-			border-radius: 5px;
+    .modal-content {
+      box-shadow: inset 3px 3px 3px 3px white;
+      border-radius: 5px;
 
-			.answers {
-				height: 40vh;
-				overflow: auto;
-				margin: 20px 0;
-				.single-answer {
-					display: flex;
+      .answers {
+        height: 40vh;
+        overflow: auto;
+        margin: 20px 0;
 
-					.answer {
-						text-align: left;
-						padding-left: 20px;
-					}
+        .single-answer {
+          display: flex;
 
-					mat-icon {
-						display: block;
-						color: gainsboro;
+          //.answer {
+          //  text-align: left;
+          //  padding-left: 20px;
+          //}
 
-						&:hover {
-							cursor: pointer;
-						}
-						&:active {
-							opacity: 0.5;
-						}
-					}
-				}
-			}
+          //mat-icon {
+          //  display: block;
+          //  color: gainsboro;
+          //
+          //  &:hover {
+          //    cursor: pointer;
+          //  }
+          //
+          //  &:active {
+          //    opacity: 0.5;
+          //  }
+          //}
+        }
+      }
 
-			.action-buttons {
-				display: flex;
-				justify-content: space-between;
-				button {
-					margin: 10px;
-					a {
-						color: white;
-					}
-				}
-			}
-		}
-	}
+      .action-buttons {
+        display: flex;
+        justify-content: space-between;
+
+        button {
+          margin: 10px;
+
+          //a {
+          //  color: white;
+          //}
+        }
+      }
+    }
+  }
 }
