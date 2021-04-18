@@ -5,6 +5,7 @@ import { SettingsFacade } from '../state/settings-facade.service';
 import { FacadeService } from '../state';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DATA_URL, GAMES_NAME } from '../shared/constants/';
+import { playAudio } from '../shared/utils';
 
 @Component({
   selector: 'app-words-list',
@@ -24,6 +25,7 @@ export class WordsListComponent implements OnInit, OnDestroy {
   listWords$ = this.stateFacade.listWords$;
   userWords$ = this.stateFacade.userWords$;
   pagination$ = this.stateFacade.pagination$;
+  userStatistics$ = this.stateFacade.userStatistics$;
   isLoading$ = this.stateFacade.isLoading$;
   url = DATA_URL;
   private destroy$ = new Subject<void>();
@@ -41,6 +43,8 @@ export class WordsListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadDataFromRoute('list');
     this.loadUserWords();
+    this.loadUserSettings();
+    this.loadUserStatistics();
   }
 
   ngOnDestroy() {
@@ -120,7 +124,15 @@ export class WordsListComponent implements OnInit, OnDestroy {
   }
 
   loadUserWords() {
-    return this.stateFacade.loadUserWords().pipe(first()).subscribe();
+    this.stateFacade.loadUserWords().pipe(first()).subscribe();
+  }
+
+  loadUserSettings() {
+    this.settingsFacade.loadUserSettings();
+  }
+
+  loadUserStatistics() {
+    this.stateFacade.loadUserStatistics().pipe(first()).subscribe();
   }
 
   addToHard(id: string): void {
@@ -133,25 +145,8 @@ export class WordsListComponent implements OnInit, OnDestroy {
     this.loadUserWords();
   }
 
-  playAudio(url1: string, url2: string, url3: string): void {
-    const audio1 = new Audio();
-    const audio2 = new Audio();
-    const audio3 = new Audio();
-    audio1.src = this.url + url1;
-    audio2.src = this.url + url2;
-    audio3.src = this.url + url3;
-    audio1.load();
-    audio1.play();
-    audio1.addEventListener('ended', function () {
-      if (audio1.duration === audio1.currentTime) {
-        audio2.play();
-      }
-    });
-    audio2.addEventListener('ended', function () {
-      if (audio2.duration === audio2.currentTime) {
-        audio3.play();
-      }
-    });
+  playAudio(url1: string, url2: string, url3: string) {
+    playAudio(this.url, url1, url2, url3);
   }
 
   goGame(gameName: string) {

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { first, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { SettingsFacade } from '../state/settings-facade.service';
 import { Location } from '@angular/common';
 
@@ -18,12 +18,19 @@ export class SettingsComponent implements OnInit {
   constructor(private settingsFacade: SettingsFacade, private location: Location) {}
 
   ngOnInit(): void {
+    // this.loadUserSettings();
     this.settings$ = combineLatest([this.isTranslationDisplay$, this.isControlsDisplay$]).pipe(
       map(([translation, controls]) => {
         return { translation, controls };
       }),
     );
+
+    // this.loadUserSettings();
   }
+
+  // loadUserSettings() {
+  //   this.settingsFacade.loadUserSettings();
+  // }
 
   changeTranslationDisplay() {
     this.settingsFacade.changeTranslateSetting();

@@ -4,7 +4,7 @@ import { ApiService } from "../shared";
 import { Group, Page } from "../shared/types";
 import { StateService } from "./state.service";
 import { find, first, tap } from 'rxjs/operators';
-import { IPagination, IUsersWords, IWord } from "../shared/models";
+import { IPagination, IUser, IUsersWords, IWord } from "../shared/models";
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +16,10 @@ export class FacadeService {
   readonly listWords$ = this.stateService.listWords$;
   readonly userWords$ = this.stateService.userWords$;
   readonly wordsInLearning$ = this.stateService.wordsInLearning$;
+  readonly hardWords$ = this.stateService.hardWords$;
+  readonly deletedWords$ = this.stateService.deletedWords$;
+  readonly userStatistics$ = this.stateService.userStatistics$;
+
   isLoadingSubject$ = new BehaviorSubject<boolean>(false);
   isLoading$ = this.isLoadingSubject$.asObservable();
 
@@ -25,7 +29,6 @@ export class FacadeService {
     return this.apiService.getWords(pagination.group, pagination.page).pipe(
       tap({
         next: (data) => {
-          console.log(data);
           this.stateService.setWords(data, direction);
         },
         error: (err) => {
@@ -44,7 +47,6 @@ export class FacadeService {
     return this.apiService.getUserWords().pipe(
       tap({
         next: (data) => {
-          console.log(data);
           this.stateService.setWords(data, 'user');
         },
         error: (err) => {
@@ -55,16 +57,81 @@ export class FacadeService {
     )
   }
 
+  loadWordsInLearning() {
+    this.isLoadingSubject$.next(true);
+    return this.apiService.getUserAggregatedWords({ 'userWord.optional.learned': true })
+      .pipe(tap({
+        next: (data) => {
+          this.stateService.setWords(data[0].paginatedResults, 'learning');
+          this.isLoadingSubject$.next(false);
+        },
+        error: (err) => {
+          console.error(JSON.stringify(err));
+          alert('Не удалось загрузить изучаемые слова');
+        }
+      }));
+  }
+
+  loadHardWords() {
+    this.isLoadingSubject$.next(true);
+    return this.apiService.getUserAggregatedWords({ 'userWord.difficulty': 'hard', 'userWord.optional.hard': true })
+      .pipe(tap({
+        next: (data) => {
+          this.stateService.setWords(data[0].paginatedResults, 'hard');
+          this.isLoadingSubject$.next(false);
+        },
+        error: (err) => {
+          console.error(JSON.stringify(err));
+          alert('Не удалось загрузить сложные слова');
+        }
+      }));
+  }
+
+  loadDeletedWords() {
+    this.isLoadingSubject$.next(true);
+    return this.apiService.getUserAggregatedWords({ 'userWord.difficulty': 'normal', 'userWord.optional.deleted': true })
+      .pipe(tap({
+        next: (data) => {
+          this.stateService.setWords(data[0].paginatedResults, 'deleted');
+          this.isLoadingSubject$.next(false);
+        },
+        error: (err) => {
+          console.error(JSON.stringify(err));
+          alert('Не удалось загрузить удаленные слова');
+        }
+      }));
+  }
+
+  loadUserStatistics() {
+    return this.apiService.getUserStatistics().pipe(
+      tap({
+        next: (data) => {
+          this.stateService.setUserStatistics(data);
+        },
+        error: (err) => {
+          console.error(JSON.stringify(err));
+          alert('Не удалось загрузить статистику пользователя');
+        }
+      })
+    )
+  }
+
   addWordWithParams(id: string, body: IUsersWords) {
     this.apiService.createUserWordByWordId(id, body)
-    .pipe(first())
-    .subscribe(data => data);
+      .pipe(first())
+      .subscribe(data => data);
   }
 
   updateWordParams(id: string, body: IUsersWords) {
     this.apiService.updateUserWordByWordId(id, body)
       .pipe(first())
       .subscribe(data => data);
+  }
+
+  deleteUserWord(id: string) {
+    this.apiService.deleteUserWordByWordId(id)
+      .pipe(first())
+      .subscribe();
   }
 
   addWordToHard(id: string): void {
@@ -82,8 +149,7 @@ export class FacadeService {
         }
       }), first()
     ).subscribe();
-    console.log(words.findIndex(word => word.wordId === id));
-    if (words.findIndex(word => word.wordId === id) > 1) {
+    if (words.findIndex(word => word.wordId === id) > -1) {
       this.updateWordParams(id, body);
     } else {
       this.addWordWithParams(id, body);
@@ -97,10 +163,40 @@ export class FacadeService {
         deleted: true
       }
     };
-    if (!this.userWords$.pipe(find((word) => (word as any).wordId === id))) {
-      this.addWordWithParams(id, body);
-    } else {
+    let words: IUsersWords[];
+    this.userWords$.pipe(
+      tap({
+        next: (data) => {
+          words = data;
+        }
+      }), first()
+    ).subscribe();
+    if (words.findIndex(word => word.wordId === id) > -1) {
       this.updateWordParams(id, body);
+    } else {
+      this.addWordWithParams(id, body);
+    }
+  }
+
+  addWordToLearning(id: string) {
+    const body: IUsersWords = {
+      difficulty: 'normal',
+      optional: {
+        learned: true
+      }
+    };
+    let words: IUsersWords[];
+    this.userWords$.pipe(
+      tap({
+        next: (data) => {
+          words = data;
+        }
+      }), first()
+    ).subscribe();
+    if (words.findIndex(word => word.wordId === id) > -1) {
+      this.updateWordParams(id, body);
+    } else {
+      this.addWordWithParams(id, body);
     }
   }
 }

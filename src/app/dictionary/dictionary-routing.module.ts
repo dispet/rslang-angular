@@ -6,16 +6,15 @@ import { HardWordsComponent } from './hard-words';
 import { WordsInLearningComponent } from './words-in-learning';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: DictionaryComponent,
-    children: [
-      { path: 'hard-words', component: HardWordsComponent },
-      { path: 'deleted-words', component: DeletedWordsComponent },
-      { path: '', component: WordsInLearningComponent },
-    ],
-  },
-];
+  {path: '', component: DictionaryComponent,
+  children: [
+    {path: 'hard-words', component: HardWordsComponent},
+    {path: 'deleted-words', component: DeletedWordsComponent},
+    {path: 'words-in-learning', component: WordsInLearningComponent},
+    {path: '', redirectTo: 'words-in-learning', pathMatch: 'full'}
+  ],
+  }
+]
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

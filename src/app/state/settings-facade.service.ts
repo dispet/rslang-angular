@@ -11,21 +11,8 @@ export class SettingsFacade {
 
   readonly isTranslationDisplay$ = this.stateService.translationDisplay$;
   readonly isControlsDisplay$ = this.stateService.controlsDisplay$;
-  // readonly userSetting$ = this.stateService.userSettings$;
 
   loadUserSettings() {
-    // return this.apiService.getUserSettings().pipe(
-    //   tap({
-    //     next: (data) => {
-    //       console.log(data);
-    //       this.stateService.setUserSettings(data);
-    //     },
-    //     error: (err) => {
-    //       console.log(err);
-    //       alert('Не удалось загрузить настройки пользователя');
-    //     }
-    //   })
-    // )
     const translate = this.localStoage.getTranslateSetting();
     console.log('translate', translate);
     if (translate) {
@@ -55,8 +42,6 @@ export class SettingsFacade {
   }
 
   changeControlsSetting() {
-    // this.localStoage.getControlsSetting() ? this.localStoage.setControlsSetting(0) : this.localStoage.setControlsSetting(1);
-    // this.stateService.setControlsDisplay(this.localStoage.getControlsSetting());
     if(+this.localStoage.getControlsSetting()) {
       this.localStoage.setControlsSetting(0);
     } else {
@@ -64,23 +49,4 @@ export class SettingsFacade {
     }
     this.stateService.setControlsDisplay(this.localStoage.getControlsSetting());
   }
-
-  setUserSettings(settings: IUserSetting) {
-    // const body: IUserSetting = {
-    //   wordsPerDay: settings.wordsPerDay,
-    //   optional: {
-    //     isTranslateDisplay: settings.isTranslateDispaly,
-    //     isControlsDisplay: settings.isControlsDisplay,
-    //   }
-    // }
-    this.apiService.setUserSettings(settings);
-  }
-
-  // setTranslationDisplay(): void {
-  //   this.stateService.setTranslationDisplay();
-  // }
-
-  // setControlsDisplay(): void {
-  //   this.stateService.setControlsDisplay();
-  // }
 }

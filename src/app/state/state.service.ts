@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
-import { IPagination, IUserSetting, IWord } from "../shared/models";
+import { IPagination, IStatsMiniGamesResponse, IUserSetting, IWord } from "../shared/models";
 
 
 @Injectable({
@@ -18,6 +18,7 @@ export class StateService {
   private wordsInLearningSubject$ = new BehaviorSubject<Array<any>>(null);
   private hardWordsSubject$ = new BehaviorSubject<Array<any>>(null);
   private deletedWordsSubject$ = new BehaviorSubject<Array<any>>(null);
+  private userStatisticsSubject$ = new BehaviorSubject<IStatsMiniGamesResponse>(null);
 
   readonly translationDisplay$ = this.translationDisplaySubject$.asObservable();
   readonly controlsDisplay$ = this.controlsDisplaySubject$.asObservable();
@@ -28,6 +29,7 @@ export class StateService {
   readonly hardWords$ = this.hardWordsSubject$.asObservable();
   readonly deletedWords$ = this.deletedWordsSubject$.asObservable();
   readonly pagination$ = this.paginationSubject$.asObservable();
+  readonly userStatistics$ = this.userStatisticsSubject$.asObservable();
 
   readonly MAX_PAGE_COUNT = 29;
   readonly MIN_PAGE_COUNT = 0;
@@ -44,15 +46,21 @@ export class StateService {
     this.updatePagination(navigate);
   }
 
+  setUserStatistics(statistics: IStatsMiniGamesResponse) {
+    this.userStatisticsSubject$.next(statistics);
+  }
+
   setWords(words: IWord[] | any[], direction: string): void {
     switch (direction) {
       case 'user': this.userWordsSubject$.next(words);
       break;
       case 'list': this.listWordsSubject$.next(words);
       break;
+      case 'learning': this.wordsInLearningSubject$.next(words);
+      break
       case 'hard': this.hardWordsSubject$.next(words);
       break;
-      case 'delete': this.deletedWordsSubject$.next(words);
+      case 'deleted': this.deletedWordsSubject$.next(words);
       break;
     }
   }

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FacadeService } from '../state';
 
 @Component({
   selector: 'app-electronic-textbook',
