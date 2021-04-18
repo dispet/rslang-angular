@@ -3,29 +3,29 @@ import { IWord } from 'src/app/shared/models';
 
 @Injectable()
 export class GameUtilsService {
-	constructor() {}
+  constructor() {}
 
-	findAudio(answerWord: string, words: IWord[]) {
-		let audioSrc = words.find((word) => {
-			return word.wordTranslate === answerWord;
-		}).audio;
-		return audioSrc;
-	}
+  findAudio(answerWord: string, words: IWord[]) {
+    let audioSrc = words.find((word) => {
+      return word.wordTranslate === answerWord;
+    }).audio;
+    return audioSrc;
+  }
 
-	// we use this function to shuffle options and change words position in words arrray
-	shuffleArray(array: string[]) {
-		for (let i = array.length - 1; i > 0; i--) {
-			const j = Math.floor(Math.random() * (i + 1));
-			[array[i], array[j]] = [array[j], array[i]];
-		}
-		return array;
-	}
+  // we use this function to shuffle options and change words position in words arrray
+  shuffleArray(array: string[]) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
 
-	removeStyles(button: Element) {
-		// button may be undefined at the beginning of the game
-		if (button) {
-			button.classList.remove('correct');
-			button.classList.remove('incorrect');
-		}
-	}
+  removeStyles(button: Element) {
+    // button may be undefined at the beginning of the game
+    if (button) {
+      button.classList.remove('correct');
+      button.classList.remove('incorrect');
+    }
+  }
 }

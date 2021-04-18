@@ -8,9 +8,8 @@ describe('SavannaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SavannaComponent ]
-    })
-    .compileComponents();
+      declarations: [SavannaComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
