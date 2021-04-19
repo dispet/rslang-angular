@@ -3,14 +3,13 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "node server.js",
     "test": "ng test",
     "lint": "lint-staged",
     "e2e": "ng e2e",
     "pretty-quick": "pretty-quick --staged",
     "lint-css": "stylelint src/**/*css",
-    "postinstall": "husky install"
+    "heroku-postbuild": "ng build --prod"
   },
   "private": true,
   "dependencies": {
