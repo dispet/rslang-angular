@@ -84,5 +84,9 @@
   },
   "lint-staged": {
     "*.{js,scss,ts,html,md}": "prettier --write"
+  },
+  "engines": {
+    "node": "v12.19.0",
+    "npm": "7.7.4"
   }
 }
