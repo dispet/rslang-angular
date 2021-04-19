@@ -3,13 +3,14 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "node server.js",
+    "start": "ng serve",
+    "build": "ng build",
     "test": "ng test",
     "lint": "lint-staged",
     "e2e": "ng e2e",
     "pretty-quick": "pretty-quick --staged",
     "lint-css": "stylelint src/**/*css",
-    "heroku-postbuild": "ng build --prod"
+    "postinstall": "husky install"
   },
   "private": true,
   "dependencies": {
@@ -84,9 +85,5 @@
   },
   "lint-staged": {
     "*.{js,scss,ts,html,md}": "prettier --write"
-  },
-  "engines": {
-    "node": "v12.19.0",
-    "npm": "7.7.4"
   }
 }
